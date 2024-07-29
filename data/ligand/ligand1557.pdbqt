@@ -1,0 +1,42 @@
+REMARK  Name = 402
+REMARK  33 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: PB5_3  and  CB5_9
+REMARK    2  A    between atoms: PB5_4  and  CB5_10
+REMARK    3  A    between atoms: CB5_9  and  CA5_11
+REMARK    4  A    between atoms: CB5_10  and  CA5_12
+REMARK    5  A    between atoms: CA5_11  and  O15_15
+REMARK    6  A    between atoms: CA5_12  and  O15_16
+REMARK    7  A    between atoms: O15_15  and  C5A_17
+REMARK    8  A    between atoms: O15_16  and  C5A_18
+REMARK    9  A    between atoms: C5A_17  and  C4A_31
+REMARK   10  A    between atoms: C5A_17  and  O14_33
+REMARK   11  A    between atoms: C6A_19  and  C4A_31
+REMARK   12  A    between atoms: C6A_19  and  C1A_67
+REMARK   13  A    between atoms: C6A_20  and  O16_22
+REMARK   14  A    between atoms: O16_22  and  PA6_24
+REMARK   15  A    between atoms: C4A_32  and  O14_34
+REMARK   16  A    between atoms: O14_33  and  PA4_35
+REMARK   17  A    between atoms: O14_34  and  PA4_36
+REMARK   18  A    between atoms: PA4_35  and  O34_37
+REMARK   19  A    between atoms: PA4_36  and  O44_42
+REMARK   20  A    between atoms: O34_37  and  O43_52
+REMARK   21  A    between atoms: C3A_43  and  O13_45
+REMARK   22  A    between atoms: C3A_43  and  C2A_55
+REMARK   23  A    between atoms: C3A_44  and  O13_46
+REMARK   24  A    between atoms: O13_45  and  PA3_47
+REMARK   25  A    between atoms: O13_46  and  PA3_48
+REMARK   26  A    between atoms: PA3_48  and  O43_52
+REMARK   27  A    between atoms: C1A_67  and  CA1_71
+REMARK   28  A    between atoms: C1A_68  and  O11_70
+REMARK   29  A    between atoms: O11_70  and  CA1_72
+REMARK   30  A    between atoms: CA1_71  and  CB1_75
+REMARK   31  A    between atoms: CA1_72  and  CB1_76
+REMARK   32  A    between atoms: CB1_75  and  PB1_77
+REMARK   33  A    between atoms: CB1_76  and  PB1_78
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  O   HOH     1      10.000  19.314  17.451  0.00  0.00    +0.000 OA
+ENDROOT
+TORSDOF 0

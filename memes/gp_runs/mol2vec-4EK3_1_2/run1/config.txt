@@ -1,0 +1,6 @@
+periter:	10
+initial:	20
+feature:	mol2vec
+capital:   20
+eps:	0.05
+rec:	TEST1_2

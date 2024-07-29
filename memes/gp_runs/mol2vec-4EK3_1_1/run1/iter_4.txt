@@ -1,0 +1,5 @@
+COc1cnc2c(NCc3nnc4ccc(-c5ccccc5)nn34)ccnc2c1,-8.145
+Oc1ccc(Cc2nnc3ncc(-c4ccc(F)cc4)nn23)cc1,-7.838
+COc1ccc2c(OCc3nnc4ccc(-c5ccccc5)nn34)ccnc2c1,-11.476
+Clc1cccc(-c2cc(NCc3ccncc3)n3nccc3n2)c1Cl,-7.502
+Fc1cccc(COc2ccc(Nc3ncnc4ccccc34)cc2Cl)c1,-8.021

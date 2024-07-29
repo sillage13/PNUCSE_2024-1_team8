@@ -1,0 +1,24 @@
+REMARK  Name = 3zvv_ligand
+REMARK  2 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C1_1  and  C2_2
+REMARK    2  A    between atoms: C4_4  and  C5_5
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C   UNL     1      42.425  13.013  30.700  0.00  0.00    +0.122 C 
+ATOM      2  C   UNL     1      43.935  13.085  30.297  0.00  0.00    +0.011 A 
+ATOM      3  N   UNL     1      44.925  13.883  30.904  0.00  0.00    -0.293 NA
+ATOM      4  C   UNL     1      46.301  13.918  30.485  0.00  0.00    +0.135 A 
+ATOM      5  C   UNL     1      47.470  14.559  30.869  0.00  0.00    -0.016 A 
+ATOM      6  C   UNL     1      48.521  14.127  29.987  0.00  0.00    +0.065 A 
+ATOM      7  N   UNL     1      49.895  14.471  29.945  0.00  0.00    -0.339 N 
+ATOM      8  H   UNL     1      50.511  14.045  29.238  0.00  0.00    +0.169 HD
+ATOM      9  H   UNL     1      50.278  15.147  30.621  0.00  0.00    +0.169 HD
+ATOM     10  N   UNL     1      48.040  13.285  29.146  0.00  0.00    -0.216 NA
+ATOM     11  N   UNL     1      46.653  13.073  29.372  0.00  0.00    -0.149 N 
+ATOM     12  C   UNL     1      45.693  12.312  28.816  0.00  0.00    +0.120 A 
+ATOM     13  C   UNL     1      46.045  11.464  27.751  0.00  0.00    +0.173 C 
+ATOM     14  C   UNL     1      44.381  12.282  29.216  0.00  0.00    +0.050 A 
+ENDROOT
+TORSDOF 0

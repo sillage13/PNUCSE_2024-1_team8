@@ -1,0 +1,5 @@
+CN1N=C(c2cccc(-n3ncc4cc(C(C)(C)C)cc(F)c4c3=O)c2CO)CC(=Nc2ccc(C(=O)N3CCOCC3)cn2)C1=O,-9.343
+Cn1cc(-c2cccc(N3CCc4cc(C(C)(C)C#N)cc(F)c4C3=O)c2CO)cc(Nc2ccc(N3CC[NH+](C)CC3)cn2)c1=O,-8.755
+CN(C)c1ccc2c(c1)CCN(c1cccc(-c3cc(Nc4ccc(C(=O)N5CCOCC5)cn4)c(=O)n(C)c3)c1CO)C2=O,-8.589
+CCC1C(=O)N(C)C2=CNC(Nc3ccc(C(=O)NC4CCN(C)CC4)cc3OC)=NC2N1C1CCCC1,-7.806
+CC1=C(C(=O)N2CCCC2CN2CCCC2)C(C)C(C=C2C(=O)Nc3ccc(S(=O)(=O)Cc4c(Cl)cccc4Cl)cc32)=N1,-8.417

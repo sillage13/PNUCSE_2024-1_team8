@@ -1,0 +1,5 @@
+COc1cc(-c2nn(C3CCC(N4CCN(C)CC4)CC3)c3ncnc(N)c23)ccc1NC(=O)c1cc2ccccc2n1C,-10.441
+O=C(c1cccc(Cl)c1)C1CNCC1c1ccc2c(=O)[nH]cnc2c1,-6.782
+O=C(c1cccc(Cl)c1)C1CNCC1c1ccc2c(=O)[nH]cnc2c1,-8.133
+COc1cc(-c2nn(C3CCN(C4CCOCC4)CC3)c3ncnc(N)c23)ccc1NC(=O)c1cc2ccccc2n1C,-8.612
+O=C(c1ccc(Br)s1)C1CNCC1c1ccc2c(=O)[nH]cnc2c1,-6.598

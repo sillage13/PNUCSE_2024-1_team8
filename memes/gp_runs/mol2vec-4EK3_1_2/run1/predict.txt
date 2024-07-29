@@ -1,0 +1,4 @@
+ligand3422.pdbqt, 7.689335823059082, 8.786
+
+average predict score = 0.7689335942268372
+average score = 0.8785999999999999

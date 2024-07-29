@@ -1,0 +1,5 @@
+Brc1cnc2c(NCc3cncnc3)cc(-c3ccccc3)cn12,-6.952
+Clc1ccccc1Nc1ncc(-c2ccccc2)n2cncc12,-8.942
+CN(c1ccccc1)c1nccc(-c2cnn3ncccc23)n1,0.0
+Cn1cc(-c2ccc3ncc(Cc4ccc5ncccc5c4)n3n2)cn1,-9.324
+Cn1cc(-c2ccc3nnc(Sc4ccc5ncccc5c4)n3n2)cn1,-7.299

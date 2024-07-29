@@ -1,0 +1,5 @@
+Cn1c2c(cc(Nc3ccc(C(=O)N4CCOCC4)cn3)c1=O)-c1cccc(-n3ncc4cc(C(C)(C)C)cc(F)c4c3=O)c1CC(O)C2,-9.889
+CCC(=O)Nc1ccc2c(c1)n(C1CCN(Cc3ccc(-c4nc5c(cc4-c4ccccc4)C(=O)N=CC5)cc3)CC1)c(=O)n2C,-9.08
+Cc1c(NC(=O)c2cc3c(s2)CCCC3)cccc1-c1cn(C)c(=O)c(Nc2ccc(C3C(=O)N(C)CCN3C)cc2)n1,-9.859
+Cc1c(NC(=O)c2cc3c(s2)CCCC3)cccc1-c1cn(C)c(=O)c(Nc2ccc(C3C(=O)N(C)CCN3C)cc2)n1,-9.905
+CN1CCC(c2ccc(Nc3cc(-c4ccnc(-n5ncc6cc(C(C)(C)C)cc(F)c6c5=O)c4CO)nn(C)c3=O)nc2)CC1,-8.964

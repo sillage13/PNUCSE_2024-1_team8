@@ -1,0 +1,10 @@
+ligand3511.pdbqt,0.0
+ligand1851.pdbqt,-7.731
+ligand1546.pdbqt,-5.435
+ligand1487.pdbqt,-8.317
+ligand4150.pdbqt,-9.622
+ligand1085.pdbqt,-1.252
+ligand2993.pdbqt,-9.815
+ligand2368.pdbqt,-8.783
+ligand0945.pdbqt,0.0
+ligand1689.pdbqt,-8.915

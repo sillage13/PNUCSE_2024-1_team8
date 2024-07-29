@@ -1,0 +1,5 @@
+O=C1Nc2cc(Br)ccc2C1=C1Nc2ccccc2C1=NO,-7.658
+Fc1ccccc1-c1cc(NCc2ccncc2)n2nccc2n1,-7.322
+Cc1cccc(-c2nc(Nc3ccc4n[nH]cc4c3)c3ccccc3n2)n1,-7.934
+O=C1Nc2ccc(Br)cc2C1=C1Nc2ccccc2C1=O,-8.243
+Brc1cccc(-c2cc(NCc3ccncc3)n3nccc3n2)c1,-9.127

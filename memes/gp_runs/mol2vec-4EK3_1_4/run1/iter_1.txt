@@ -1,0 +1,5 @@
+O=c1[nH]cnc2cc(C3CNCC3C(O)c3cccc(I)c3)ccc12,-7.729
+CCC(=O)N1CCCC(n2nc(-c3ccc(OCc4cccc(C)n4)c(Cl)c3)c3c(N)ncnc32)C1,-6.606
+CC(C)C[C@H](NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1)C(=O)O,-8.123
+CC(C)CC(NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1)C(N)=O,-8.32
+Cc1n[nH]c2ncc(C(=O)N3CCCC3c3ccc(Cl)cc3)cc12,-7.4
