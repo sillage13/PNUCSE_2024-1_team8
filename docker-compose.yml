@@ -1,0 +1,16 @@
+version: "3.9"
+
+services:
+    app:
+        image: "ligand_search:latest"
+        platform: linux/amd64
+        build:
+            context: .
+            args:
+                - DEV=true
+        ports:
+            - "8000:8000"
+        volumes:
+            - ./app:/app
+        command: >
+            /bin/bash -c "python manage.py runserver 0.0.0.0:8000"
