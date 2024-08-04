@@ -2,7 +2,8 @@
 
 {% block content %}
 <div class="content">
-    <form id="search_form" action="#">
+    <form id="search_form" action="" method="POST">
+        {% csrf_token %}
         <ul class="form_ul">
             <!-- {{form.as_ul}} -->
             <li>

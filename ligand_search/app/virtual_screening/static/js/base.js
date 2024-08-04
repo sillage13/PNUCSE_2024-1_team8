@@ -31,14 +31,13 @@ $(document).ready(function() {
     })
 
     //폼에 element 추가
-    let uri = $(location).attr('pathname')
-    console.log(uri)
+    let path = $(location).attr('pathname')
         
-    if (uri == '/') {
+    if (path == '/') {
         $('.form_ul > li:first-child').prepend('<label class="label">Receptor</label>')
         $('.form_ul > li:first-child').append('<span class="material-symbols-outlined">upload</span>')
     }
-    else if (uri == '/ligand') {
+    else if (path == '/manage-ligand/') {
         $('.form_ul > li:first-child').prepend('<label class="label">Ligand</label>')
         $('.form_ul > li:first-child').append('<span class="material-symbols-outlined">upload</span>')
     }
