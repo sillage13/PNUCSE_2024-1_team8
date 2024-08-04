@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="content">
+    <form id="search_form" action="#">
+        <ul class="form_ul">
+            <!-- {{form.as_ul}} -->
+            <li>
+                <label for="id_receptor">Receptor</label>
+                <input type="file" name="receptor" id="id_receptor">
+            </li>
+            <!---->
+            <li>
+                <label class="label">Method</label>
+                <label for="method">Method</label>
+                <ul class="select_ul">
+                    <li class="select_li">Random</li>
+                    <li class="select_li">Clustering</li>
+                    <li class="select_li">MEMES</li>
+                </ul>
+                <select name="method" id="method">
+                    <option value="Random">Random</option>
+                    <option value="Clustering">Clustering</option>
+                    <option value="MEMES">MEMES</option>
+                </select>
+                <span class="material-symbols-outlined" id="arrow_drop_down">arrow_drop_down</span>
+            </li>
+            <li class="submit_li"><input class="submit_btn" type="submit" value="Search"></li>
+        </ul>
+    </form>   
+</div>
+{% endblock %}
