@@ -1,0 +1,5 @@
+NS(=O)(=O)c1ccc(NN=C2C(=O)Nc3ccc4nn[nH]c4c32)cc1,-7.749
+O=C(O)Cc1ccc2c(c1)NC(=O)c1ccc(Cl)cc1N2,-9.196
+O=C1Nc2ccc(Br)cc2C1=C1Nc2ccccc2C1=O,-8.243
+NS(=O)(=O)c1ccc(NC=C2C(=O)Nc3ccc4ncsc4c32)cc1,-5.954
+CNS(=O)(=O)c1ccc(NC=C2C(=O)Nc3ccccc32)cc1,-8.377

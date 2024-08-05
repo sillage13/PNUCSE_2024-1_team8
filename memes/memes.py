@@ -122,6 +122,8 @@ parser.add_argument('--save_eis', required=False,default="False")
 parser.add_argument('--eps',default='0.05')
 parser.add_argument("--ligand_path", default="./data/ligands.txt")
 parser.add_argument("--rec_path", default="receptor.pdbqt")
+parser.add_argument("--result_tail", default="1")
+parser.add_argument("--total_count", default=40)
 args = parser.parse_args()
 run = int(args.run)
 iters = int(args.iters)
@@ -133,6 +135,8 @@ eps = float(args.eps)
 rec = args.rec
 feat = args.feature
 features_path = args.features_path
+result_tail = args.result_tail
+total_count = int(args.total_count)
 device = args.cuda
 rec_path = args.rec_path
 receptor = rec_path.split('/')[-1].split('.')[0]
@@ -204,7 +208,7 @@ with open(args.smiles_path,'r') as f:
 ## making inital dataset 
 X_init = features[X_index]
 Y_init = []
-# print(f"1, {len(X_index)}")
+
 for index in X_index:
     check_dup[ligands[index]] = True
     score = scoring_function(smiles[index], index)
@@ -212,10 +216,13 @@ for index in X_index:
     docking_count += 1
     Y_init.append(score)
 
+tmp_sum = 0
 with open(directory_path+'/start_smiles.txt','w') as f:
     for index in X_index:
         f.write(str(ligands[index]) + ',' + str(all_scores[index]) + '\n')
+        tmp_sum += all_scores[index]
         smiles_set.add(smiles[index])
+    f.write('\naverage: ' + str(tmp_sum / len(X_index)))
     f.close()
 
 print("PHASE 2")
@@ -437,4 +444,4 @@ avg_score = sum(scores) / len(scores)
 print(f"Average score of top10 ligands: {avg_score: .2f}")
 
 save_data(docking_dict2, f"./../data/{receptor}_docking_result.dat")
-save_data(result_list, f"./../result/{receptor}/memes_result1_4.dat")
+save_data(result_list, f"./../result/{receptor}/{total_count}/memes_result{result_tail}.dat")

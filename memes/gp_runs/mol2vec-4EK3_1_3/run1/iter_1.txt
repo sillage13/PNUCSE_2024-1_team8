@@ -1,5 +1,5 @@
-COc1cc(C(=O)N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc2c(n1)N(C)c1ccccc1C(=O)N2C,-8.636
-COc1cc(C(=O)N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc2c(n1)N(C)c1ccccc1C(=O)N2C,-9.154
-COc1cc(C(=O)N2CCC(N3CCN(C)CC3)CC2)ccc1Nc1ncc2c(n1)N(C1CCCC1)c1ccccc1C(=O)N2C,-8.107
-Fc1ccc(C2NNC=C2c2ccnc(NC3CCCCC3)c2)cc1,-7.926
-CCN1C(=O)c2cccc3c(S(=O)(=O)NC4CCCCCC4)ccc1c23,-8.305
+CCOC(=O)C(CC(C)C)NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1,-7.826
+CC(C)CC(NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1)C(=O)N(C)C,-8.102
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4O,-0.623
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(O)=NC4,-7.887
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(O)=NC4,-7.736

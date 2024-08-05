@@ -1,6 +1,6 @@
-periter:	10
-initial:	20
+periter:	5
+initial:	10
 feature:	mol2vec
-capital:   20
+capital:   40
 eps:	0.05
-rec:	TEST1_2
+rec:	4EK3_1_2

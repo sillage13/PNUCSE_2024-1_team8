@@ -1,5 +1,5 @@
-Fc1ccc(-c2cnc3nnc(Cc4ccc5ncccc5c4)n3n2)cc1,-9.463
+C[SH](O)c1ccc(-c2nc(-c3ccncc3)c(-c3ccc(F)cc3)[nH]2)cc1,-9.673
+C[SH](O)c1ccc(-c2nc(-c3ccncc3)c(-c3ccc(F)cc3)[nH]2)cc1,-10.029
+C[SH](O)c1ccc(-c2nc(-c3ccncc3)c(-c3ccc(F)cc3)[nH]2)cc1,-9.756
 c1cc(-c2ccnc3ccc(-c4cnc5[nH]ncc5c4)cc23)ccn1,-8.525
-O=c1nc[nH]c2c1c(-c1ccccc1)cn2-c1ccc(Br)cc1,-5.961
-O=c1[nH]cnc2c1c(-c1ccc(Br)cc1)cn2-c1ccccc1,-5.553
-Clc1ccccc1Nc1ccnc(Nc2ccc(-c3nnn[nH]3)cc2)n1,-7.631
+COc1cc(-c2ccc3c(-c4nc5ccccc5[nH]4)n[nH]c3c2)ccc1O,-10.308

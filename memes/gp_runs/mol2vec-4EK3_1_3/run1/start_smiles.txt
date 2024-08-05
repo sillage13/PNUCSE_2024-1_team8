@@ -1,10 +1,12 @@
-ligand3511.pdbqt,0.0
-ligand1851.pdbqt,-7.731
-ligand1546.pdbqt,-5.435
-ligand1487.pdbqt,-8.317
-ligand4150.pdbqt,-9.622
-ligand1085.pdbqt,-1.252
-ligand2993.pdbqt,-9.815
-ligand2368.pdbqt,-8.783
-ligand0945.pdbqt,0.0
-ligand1689.pdbqt,-8.915
+ligand2917.pdbqt,0.0
+ligand4014.pdbqt,0.0
+ligand2766.pdbqt,-8.072
+ligand3544.pdbqt,-7.735
+ligand1342.pdbqt,-8.123
+ligand1079.pdbqt,-1.253
+ligand2589.pdbqt,-8.533
+ligand3148.pdbqt,-8.107
+ligand0950.pdbqt,0.0
+ligand3657.pdbqt,-8.105
+
+average: -4.9928

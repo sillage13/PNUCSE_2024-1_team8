@@ -69,16 +69,16 @@ if __name__ == "__main__":
 
     cluster = defaultdict(list)
 
-    # # 클러스터 개수에 따라 덴드로그램 점진적으로 자르기
-    # for cnt in [5, 10, 15, 20, 25, 30]:
-    #     filename = f'dendrogram_{cnt}_clusters.png'
-    #     plot_dendrogram(Z, cnt, sorted_keys, filename)
-    #     index = sch.cut_tree(Z, n_clusters=cnt).flatten()
-    #     # print(f"{cnt}개의 클러스터 라벨:", clusters)
-    #     for i, v in enumerate(sorted_keys):
-    #         cluster[v].append(index[i])
+    # 클러스터 개수에 따라 덴드로그램 점진적으로 자르기
+    for cnt in [5, 10, 15, 20, 25, 30, 35, 40]:
+        filename = f'dendrogram_{cnt}_clusters.png'
+        plot_dendrogram(Z, cnt, sorted_keys, filename)
+        index = sch.cut_tree(Z, n_clusters=cnt).flatten()
+        # print(f"{cnt}개의 클러스터 라벨:", clusters)
+        for i, v in enumerate(sorted_keys):
+            cluster[v].append(index[i])
     
-    # save_data(cluster, "cluster2.dat")
+    save_data(cluster, "cluster.dat")
 
     # # memes에 사용될 클러스터 txt파일 생성
     # cnt = 10

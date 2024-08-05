@@ -55,9 +55,11 @@ def load_data(filename):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Docking script")
     parser.add_argument('receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('count', type=str, help='Docking count')
     args = parser.parse_args()
     receptor = args.receptor
-    receptor_path = f"./../receptor/{receptor}.pdbqt"
+    count = int(args.count)
+    receptor_path = f"./../data/receptor/{receptor}.pdbqt"
     print(receptor_path)
 
     tmp_result = load_data(f'scoring_{receptor}_20.dat')
@@ -65,7 +67,7 @@ if __name__ == "__main__":
     
     docking_result = load_data(f'./../data/{receptor}_docking_result.dat')
 
-    candidate = tmp_result[:40]
+    candidate = tmp_result[:count]
     ligand_dir = './../data/ligand'
     vina_result = list()
     # for i, ligand_file in candidate:
@@ -78,6 +80,7 @@ if __name__ == "__main__":
             docking_result[ligand_file] = score
         else:
             score = docking_result[ligand_file]
+            print(score)
         vina_result.append((score, ligand_file))
     
     vina_result.sort(key=lambda x: x[0])
@@ -90,5 +93,5 @@ if __name__ == "__main__":
     scores = [ligand[0] for ligand in top_ligands]
     avg_score = sum(scores) / len(scores)
     print(f"Average score of top10 ligands: {avg_score: .2f}")
-    save_data(vina_result, f'./../result/{receptor}/scoring_result_20.dat')
+    save_data(vina_result, f'./../result/{receptor}/{count}/scoring_result_20.dat')
     save_data(docking_result, f'./../data/{receptor}_docking_result.dat')

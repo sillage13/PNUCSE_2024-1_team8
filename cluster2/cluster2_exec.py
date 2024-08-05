@@ -58,12 +58,18 @@ def cal_score(ligand, receptor):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Docking script")
     parser.add_argument('receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('count', type=str, help='Docking count')
+    parser.add_argument('result_tail', type=str, help='result_tail')
+    parser.add_argument('folder_name', type=str, help='folder_name')
     args = parser.parse_args()
     receptor = args.receptor
+    count = int(args.count)
+    result_tail = int(args.result_tail)
+    folder_name = args.folder_name
     receptor_path = f"./../data/receptor/{receptor}.pdbqt"
     print(receptor_path)
 
-    cluster = load_data("./2/cluster.dat")
+    cluster = load_data(f"./{folder_name}/cluster.dat")
     docking_result = load_data(f'./../data/{receptor}_docking_result.dat')
     smile_dict = load_data('./../data/smile_dict.dat')
     ligand_dir = './../data/ligand'
@@ -76,16 +82,15 @@ if __name__ == "__main__":
     last_cluster = -1
     for level in range(length):
         print(f"Level {level}")
-        check_index = defaultdict(bool)
-        best_cluster = None
-        best_score = float('inf')
+        check_index = defaultdict(int)
+        cluster_score = defaultdict(int)
 
         random.shuffle(ligands)
         for ligand in ligands:
             if excluded_ligands[ligand] is False:
                 cluster_id = cluster[ligand][level]
-                if check_index[cluster_id] is False:
-                    print(f"{ligand} {docking_cnt}/40, cluster index {cluster_id}")
+                if check_index[cluster_id] < 5:
+                    print(f"{ligand} {docking_cnt}/{count}, cluster index {cluster_id} ({check_index[cluster_id]+1}/5)")
                     docking_cnt += 1
                     if ligand not in docking_result:
                         ligand_path = os.path.join(ligand_dir, ligand)
@@ -96,13 +101,20 @@ if __name__ == "__main__":
                         print(score)
 
                     cluster_result.append((score, ligand))
+                    # 평균
+                    # cluster_score[cluster_id] += score
+                    # 최저값
+                    cluster_score[cluster_id] = min(cluster_score[cluster_id], score)
                     
-                    if score < best_score:
-                        best_score = score
-                        best_cluster = cluster_id
-
-                    check_index[cluster_id] = True
+                    check_index[cluster_id] += 1
                     excluded_ligands[ligand] = True
+
+        best_cluster = None
+        best_score = float('inf')
+        for cid, cscore in cluster_score.items():
+            if cscore < best_score:
+                best_score = cscore
+                best_cluster = cid
         
         print(f"Level {level}'s best cluster is {best_cluster}")
         for ligand in ligands:
@@ -119,13 +131,13 @@ if __name__ == "__main__":
         last_cluster = best_cluster
     
     print(f"docking count is {docking_cnt}")
-    if docking_cnt < 40:
+    if docking_cnt < count:
         random.shuffle(ligands)
         for ligand in ligands:
             if excluded_ligands[ligand] is False:
                 cluster_id = cluster[ligand][length-1]
                 if cluster_id == last_cluster:
-                    print(f"{ligand} {docking_cnt}/40")
+                    print(f"{ligand} {docking_cnt}/{count}")
                     docking_cnt += 1
                     if ligand not in docking_result:
                         ligand_path = os.path.join(ligand_dir, ligand)
@@ -136,7 +148,7 @@ if __name__ == "__main__":
                         print(score)
 
                     cluster_result.append((score, ligand))
-                    if docking_cnt == 41:
+                    if docking_cnt == count + 1:
                         break
     
     cluster_result.sort(key=lambda x: x[0])
@@ -150,7 +162,7 @@ if __name__ == "__main__":
     avg_score = sum(scores) / len(scores)
     print(f"Average score of top10 ligands: {avg_score: .2f}")
 
-    save_data(cluster_result, f"./../result/{receptor}/cluster2_result2_4.dat")
+    save_data(cluster_result, f"./../result/{receptor}/{count}/cluster2_result{result_tail}.dat")
     save_data(docking_result, f"./../data/{receptor}_docking_result.dat")
 
 
