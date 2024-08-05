@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block head %}
+<!-- 3Dmol.js를 사용하는 경우
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+    <script>
+        let receptorFile = {{ receptor.url }}
+        let ligandFile = {{ xyzFile }} docking한 리간드 pose의 xyz 파일
+    </script>
+-->
+{% endblock head %}
+
+{% block content %}
+    <div class="content half">   
+        <div class="visualization">
+            <span style="font-size: 50px;">visualization</span>
+        </div>
+        <div class="result">
+            <div class="category">Top10 Ligands</div>
+            <ul class="result_ul">
+                <!-- {% for ligand in result_list %}
+                <li>
+                    <a href="{% url "result" %}?ligand={{ ligand }}"><span class="material-symbols-outlined">play_circle</span></a>
+                    <div>name</div>
+                    <div>score</div>
+                </li>
+                {% endfor %}-->
+                {% for i in '0123456789' %}
+                <li>
+                    <a href="{% url "result" %}?ligand={{ i }}"><span class="material-symbols-outlined">play_circle</span></a>
+                    <div>name</div>
+                    <div>score</div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
