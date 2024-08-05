@@ -30,18 +30,6 @@ $(document).ready(function() {
         }
     })
 
-    //폼에 element 추가
-    let path = $(location).attr('pathname')
-        
-    if (path == '/') {
-        $('.form_ul > li:first-child').prepend('<label class="label">Receptor</label>')
-        $('.form_ul > li:first-child').append('<span class="material-symbols-outlined">upload</span>')
-    }
-    else if (path == '/manage-ligand/') {
-        $('.form_ul > li:first-child').prepend('<label class="label">Ligand</label>')
-        $('.form_ul > li:first-child').append('<span class="material-symbols-outlined">upload</span>')
-    }
-
     //드롭 다운 메뉴 구현
     $('label[for=method]').click(function() {
         $('.select_ul').toggle()

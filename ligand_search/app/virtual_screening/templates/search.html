@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block head %}
+    {% load static %}
+    <script src="{% static 'js/search.js' %}"></script>
+{% endblock head %}
+
 {% block content %}
 <div class="content">
     <form id="search_form" action="" method="POST">

@@ -231,11 +231,11 @@ input[type=file], select {
 
 
 /**result**/
-.visualization {
+#visualization {
     aspect-ratio: 1 / 1;
     position: relative;
 
-    border: 1px solid var(--green);
+    background-color: var(--container);
 }
 
 .visual-info > div {
