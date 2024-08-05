@@ -1,5 +1,0 @@
-NC(=O)c1ccc(Nc2nc(OCC3CCCCC3)c3nc[nH]c3n2)cc1,-7.828
-Clc1cccc(Nc2nc(OCC3CCCCC3)c3nc[nH]c3n2)c1,-9.427
-c1ccc(Nc2nc(OCC3CCCCC3)c3nc[nH]c3n2)cc1,-7.562
-CN(C)C(=O)c1cccc(Nc2nc(OCC3CCCCC3)c3nc[nH]c3n2)c1,-8.04
-Cc1ccccc1-c1nc2c(OCC3CCCCC3)nc(N)nc2[nH]1,-7.856

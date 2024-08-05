@@ -1,5 +1,5 @@
-O=C1Nc2cc(Br)ccc2C1=C1Nc2ccccc2C1=NO,-7.658
-Fc1ccccc1-c1cc(NCc2ccncc2)n2nccc2n1,-7.322
-Cc1cccc(-c2nc(Nc3ccc4n[nH]cc4c3)c3ccccc3n2)n1,-7.934
-O=C1Nc2ccc(Br)cc2C1=C1Nc2ccccc2C1=O,-8.243
-Brc1cccc(-c2cc(NCc3ccncc3)n3nccc3n2)c1,-9.127
+NC(=O)c1ccc(-c2cc(-c3cccc4c3OCO4)cnc2N)cc1,-7.393
+Cn1c(=O)c(Oc2ccccc2)cc2cnc(NC3CCOCC3)nc21,-8.556
+CCC(=O)N1CCCC(n2nc(-c3ccc(O)cc3)c3c(N)ncnc32)C1,-7.552
+Nc1nccc(-c2c(-c3ccc(F)cc3)ncn2C2CCCCC2)n1,-8.166
+Nc1nccc(-c2c(-c3ccc(F)cc3)ncn2C2CCCCC2)n1,-9.339

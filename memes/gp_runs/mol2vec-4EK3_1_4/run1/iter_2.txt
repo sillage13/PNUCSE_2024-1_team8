@@ -1,5 +1,0 @@
-CCOC(=O)C(CC(C)C)NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1,-7.826
-CC(C)CC(NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1)C(=O)N(C)C,-8.102
-CNC(=O)C(CC(C)C)NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1,-8.181
-O=C(Nc1cc(Nc2c(Cl)cnc3c2OCO3)ccn1)C1CC1,-6.988
-Oc1ccc(Nc2nc(OCC3CCCCC3)c3nc[nH]c3n2)cc1,-9.454

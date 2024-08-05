@@ -46,7 +46,7 @@ def load_data(filename):
 
 
 def main(result_filename):
-    smile_dict_filename = 'smile_dict.dat'
+    smile_dict_filename = './../data/smile_dict.dat'
     smile_dict = load_data(smile_dict_filename)
     tmp = load_data(result_filename)
     result = tmp[:10]

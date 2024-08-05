@@ -7,9 +7,9 @@ def load_data(filename):
         return pickle.load(f)
 
 # 데이터 로드
-a = load_data("./4EK3/vs_result_20.dat")
-b = load_data("./4EK3/random_result2.dat")
-c = load_data("./4EK3/random_result3.dat")
+a = load_data("./../4EK3/120/scoring_result_20.dat")
+b = load_data("./../4EK3/120/scoring_result_20.dat")
+c = load_data("./../4EK3/120/scoring_result_20.dat")
 
 # 각 리스트에서 값만 추출
 sample1_scores = [ligand[0] for ligand in a]
@@ -97,4 +97,4 @@ plt.annotate(f'{avg_top_score1:.2f}',
 plt.grid(True)
 
 # 그래프 저장
-plt.savefig('scoring_result.png')
+plt.savefig('scoring_result_120.png')

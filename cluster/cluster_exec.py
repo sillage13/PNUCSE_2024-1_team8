@@ -56,8 +56,12 @@ def cal_score(ligand, receptor):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Docking script")
     parser.add_argument('receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('count', type=str, help='Docking count')
+    parser.add_argument('result_tail', type=str, help='result_tail')
     args = parser.parse_args()
     receptor = args.receptor
+    count = int(args.count)
+    result_tail = int(args.result_tail)
     receptor_path = f"./../data/receptor/{receptor}.pdbqt"
     print(receptor_path)
 
@@ -78,40 +82,28 @@ if __name__ == "__main__":
     cnt = 0
     for label, cluster_ligands in clusters.items():
         cnt += 1
-        sample_ligands = random.sample(cluster_ligands, 2)
-
-        print(f'cluster{label} {cnt}/{len(clusters)}(1/2)')
-        print(f'{sample_ligands[0][0]}')
-        if sample_ligands[0][0] not in docking_result:
-            try:
-                a = cal_score(f'./../data/ligand/{sample_ligands[0][0]}', receptor_path)
-            except:
-                a = 0
-            docking_result[sample_ligands[0][0]] = a
-        else:
-            a = docking_result[sample_ligands[0][0]]
-        vina_result.append([a, sample_ligands[0][0]])
-        check_duplicate[sample_ligands[0][0]] = 1
-
-        print(f'cluster{label} {cnt}/{len(clusters)}(2/2)')
-        print(f'{sample_ligands[1][0]}')
-        if sample_ligands[1][0] not in docking_result:
-            try:
-                b = cal_score(f'./../data/ligand/{sample_ligands[1][0]}', receptor_path)
-            except:
-                b = 0
-            docking_result[sample_ligands[1][0]] = b
-        else:
-            b = docking_result[sample_ligands[1][0]]
-        vina_result.append([b, sample_ligands[1][0]])
-        check_duplicate[sample_ligands[1][0]] = 1
-
-        cluster_scores[label] = (a + b) / 2
+        sample_ligands = random.sample(cluster_ligands, (count-10) // 15)
+        cluster_score = 0
+        for i in range(len(sample_ligands)):
+            print(f'cluster{label} {cnt}/{len(clusters)}({i+1}/{(count-10) // 15})')
+            print(f'{sample_ligands[i][0]}')
+            if sample_ligands[i][0] not in docking_result:
+                result = cal_score(f'./../data/ligand/{sample_ligands[i][0]}', receptor_path)
+                docking_result[sample_ligands[i][0]] = result
+            else:
+                result = docking_result[sample_ligands[i][0]]
+                print(result)
+            vina_result.append([result, sample_ligands[i][0]])
+            check_duplicate[sample_ligands[i][0]] = 1
+            
+            cluster_score += result
+            
+        cluster_scores[label] = cluster_score / ((count-10) // 15)
         print(f'cluster{label}\'s score: {cluster_scores[label]}')
         print()
 
 
-    for i in range(10):
+    for i in range(count - ((count-10) // 15) * 15):
         highest_score_label = min(cluster_scores, key=cluster_scores.get)
         while True:
             sample_ligand = random.choice(clusters[highest_score_label])
@@ -119,17 +111,15 @@ if __name__ == "__main__":
                 check_duplicate[sample_ligand[0]] = 1
                 break
         
-        print(f'Round {i+1}')
+        print(f'Round {i+1}/{count - ((count-10) // 15) * 15}')
         print(f'Select cluster{highest_score_label}')
         print(f'{sample_ligand[0]}')
         if sample_ligand[0] not in docking_result:
-            try:
-                score = cal_score(f'./../data/ligand/{sample_ligand[0]}', receptor_path)
-            except:
-                score = 0
+            score = cal_score(f'./../data/ligand/{sample_ligand[0]}', receptor_path)
             docking_result[sample_ligand[0]] = score
         else:
             score = docking_result[sample_ligand[0]]
+            print(score)
         vina_result.append([score, sample_ligand[0]])
         cluster_scores[highest_score_label] = (cluster_scores[highest_score_label] + score) / 2
 
@@ -144,5 +134,5 @@ if __name__ == "__main__":
     avg_score = sum(scores) / len(scores)
     print(f"Average score of top10 ligands: {avg_score: .2f}")
 
-    save_data(vina_result, f"./../result/{receptor}/cluster_result4.dat")
+    save_data(vina_result, f"./../result/{receptor}/{count}/cluster_result{result_tail}.dat")
     save_data(docking_result, f"./../data/{receptor}_docking_result.dat")

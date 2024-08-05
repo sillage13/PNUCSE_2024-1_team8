@@ -54,8 +54,12 @@ def cal_score(ligand, receptor):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Docking script")
     parser.add_argument('receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('count', type=str, help='Docking count')
+    parser.add_argument('result_tail', type=str, help='result_tail')
     args = parser.parse_args()
     receptor = args.receptor
+    count = int(args.count)
+    result_tail = int(args.result_tail)
     receptor_path = f"./../data/receptor/{receptor}.pdbqt"
     print(receptor_path)
 
@@ -64,21 +68,22 @@ if __name__ == "__main__":
 
     ligand_dir = './../data/ligand'
     random_result = list()
-    random_ligands = random.sample(ligands, 120)
-    cnt = 1
+    random_ligands = random.sample(ligands, min(count, 4250))
+    index = 1
     for ligand_file, _ in random_ligands:
         try:
-            print(f"{ligand_file}, {cnt}/{40}")
+            print(f"{ligand_file}, {index}/{count}")
             ligand_path = os.path.join(ligand_dir, ligand_file)
             if ligand_file not in docking_result:
                 score = cal_score(ligand_path, receptor_path)
                 docking_result[ligand_file] = score
             else:
                 score = docking_result[ligand_file]
+                print(score)
             random_result.append((score, ligand_file))
-            cnt += 1
-            if cnt == 41:
-                break
+            index += 1
+            # if index == count + 1:
+            #     break
         except Exception as e:
             print(f"Error processing {ligand_file}: {e}")
             continue
@@ -94,5 +99,5 @@ if __name__ == "__main__":
     avg_score = sum(scores) / len(scores)
     print(f"Average score of top10 ligands: {avg_score: .2f}")
 
-    save_data(random_result, f"./../result/{receptor}/random_result5.dat")
+    save_data(random_result, f"./../result/{receptor}/{count}/random_result{result_tail}.dat")
     save_data(docking_result, f"./../data/{receptor}_docking_result.dat")

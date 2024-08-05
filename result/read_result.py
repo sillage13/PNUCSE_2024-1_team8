@@ -24,6 +24,7 @@ def main(filename):
     avg_sample_score = sum(sample_scores) / len(sample_scores)
     print(f"Average score of top10 ligands: {avg_top_score:.2f}")
     print(f"Average score of sample ligands: {avg_sample_score:.2f}")
+    print(f"len: {len(sample)}")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Load and process ligand data.')

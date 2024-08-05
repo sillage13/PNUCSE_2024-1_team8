@@ -1,15 +1,25 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import pickle
+import argparse
+
 
 def load_data(filename):
     with open(filename, 'rb') as f:
         return pickle.load(f)
 
+
+parser = argparse.ArgumentParser(description="Docking script")
+parser.add_argument('count', type=str, help='Docking count')
+parser.add_argument('method', type=str, help='method')
+args = parser.parse_args()
+count = int(args.count)
+method = args.method
+
 # 데이터 로드
-a = load_data("./4EK3/cluster2_result2_1.dat")
-b = load_data("./4EK3/cluster2_result2_2.dat")
-c = load_data("./4EK3/cluster2_result2_3.dat")
+a = load_data(f"./../4EK3/{count}/{method}_result1.dat")
+b = load_data(f"./../4EK3/{count}/{method}_result2.dat")
+c = load_data(f"./../4EK3/{count}/{method}_result3.dat")
 
 # 각 리스트에서 값만 추출
 sample1_scores = [ligand[0] for ligand in a]
@@ -80,7 +90,7 @@ plt.scatter([total_avg_top_score], [4], color=colors[4], marker='^', s=100, labe
 # x축 반전 설정
 
 # 그래프 제목과 라벨 설정
-plt.title('Hierarchical Clustering')
+plt.title(f'MEMES {count}')
 plt.xlabel('Scores')
 plt.yticks([1, 2, 3, 4], ['Case 1', 'Case 2', 'Case 3', 'Total'])
 plt.legend()
@@ -97,4 +107,4 @@ plt.annotate(f'{total_avg_top_score:.2f}',
 plt.grid(True)
 
 # 그래프 저장
-plt.savefig('hierarchical_cluster_result.png')
+plt.savefig(f'{method}_result_{count}.png')

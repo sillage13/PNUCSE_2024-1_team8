@@ -29,7 +29,14 @@ if __name__ == "__main__":
     for i, v in result.items():
         print(i, v)
         tmp += v
-
-    print(len(result))
-    print(tmp / len(result))
+    print()
+    print(f"count: {len(result)}")
+    print(f"average: {tmp / len(result): .2f}")
+    print()
+    tmp = 0
+    top10 = dict(sorted(result.items(), key=lambda item: item[1])[:10])
+    for i, v in top10.items():
+        print(i, v)
+        tmp += v
+    print(f"Average score of top10 ligands: {tmp/10: .2f}")
 
