@@ -5,15 +5,20 @@
         <div class="category">
             Add Ligand
         </div>
-        <form action="" method="POST">
+
+        {% if error_message %}
+        <div class="error_message" style="color: red; margin-top: 10px;">
+            {{ error_message }}
+        </div>
+        {% endif %}
+
+        <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <ul class="form_ul">
-            <!-- {{ form.as_ul }}--> 
                 <li>
                     <label for="id_ligand">Ligand</label>
-                    <input type="file" name="ligand" id="id_ligand">
+                    <input type="file" name="ligand_file" id="id_ligand">
                 </li>
-            <!----> 
                 <li class="submit_li"><input class="submit_btn" type="submit" value="Add"></li>
             </ul>
         </form>
@@ -23,8 +28,9 @@
             Ligand List
         </div>
         <ul class="ligand_ul">
-            <!-- {% for ligand in ligand_list %} -->
-            <!-- {% endfor %} -->
+            {% for ligand in ligands %}
+                <li>{{ ligand.ligand_name }} {{ ligand.created_at }} {{ ligand.ligand_file_name }}</li>
+            {% endfor %}
         </ul>
     </div>
 {% endblock content %}
