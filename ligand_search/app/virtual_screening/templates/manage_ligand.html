@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="content">
+        <div class="category">
+            Add Ligand
+        </div>
+        <form action="" method="POST">
+            {% csrf_token %}
+            <ul class="form_ul">
+            <!-- {{ form.as_ul }}--> 
+                <li>
+                    <label for="id_ligand">Ligand</label>
+                    <input type="file" name="ligand" id="id_ligand">
+                </li>
+            <!----> 
+                <li class="submit_li"><input class="submit_btn" type="submit" value="Add"></li>
+            </ul>
+        </form>
+    </div>
+    <div class="content">
+        <div class="category">
+            Ligand List
+        </div>
+        <ul class="ligand_ul">
+            <!-- {% for ligand in ligand_list %} -->
+            <!-- {% endfor %} -->
+        </ul>
+    </div>
+{% endblock content %}
+
+
+    
