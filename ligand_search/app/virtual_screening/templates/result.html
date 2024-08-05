@@ -13,7 +13,15 @@
 {% block content %}
     <div class="content half">   
         <div class="visualization">
-            <span style="font-size: 50px;">visualization</span>
+            <span style="font-size: 20px; padding: 5px;">visualization</span>
+            <div class="visual-info">
+                <div>Receptor<br>receptor name</div>
+                <div>
+                    <!-- {% if ligand %} -->
+                    Ligand<br>ligand name
+                    <!-- {% endif %}-->
+                </div>
+            </div>
         </div>
         <div class="result">
             <div class="category">Top10 Ligands</div>
@@ -28,8 +36,10 @@
                 {% for i in '0123456789' %}
                 <li>
                     <a href="{% url "result" %}"><span class="material-symbols-outlined">play_circle</span></a>
-                    <div>name{{ i }}</div>
-                    <div>score</div>
+                    <div class="ligand-info">
+                        <div>name{{ i }}</div>
+                        <div>score</div> 
+                    </div> 
                 </li>
                 {% endfor %}
             </ul>
