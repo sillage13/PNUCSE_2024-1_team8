@@ -20,15 +20,15 @@
             <ul class="result_ul">
                 <!-- {% for ligand in result_list %}
                 <li>
-                    <a href="{% url "result" %}?ligand={{ ligand }}"><span class="material-symbols-outlined">play_circle</span></a>
+                    <a href="{% url "result" %}"><span class="material-symbols-outlined">play_circle</span></a>
                     <div>name</div>
                     <div>score</div>
                 </li>
                 {% endfor %}-->
                 {% for i in '0123456789' %}
                 <li>
-                    <a href="{% url "result" %}?ligand={{ i }}"><span class="material-symbols-outlined">play_circle</span></a>
-                    <div>name</div>
+                    <a href="{% url "result" %}"><span class="material-symbols-outlined">play_circle</span></a>
+                    <div>name{{ i }}</div>
                     <div>score</div>
                 </li>
                 {% endfor %}
