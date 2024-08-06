@@ -11,18 +11,21 @@
             Add Ligand
         </div>
 
-        {% if error_message %}
-        <div class="error_message" style="color: red; margin-top: 10px;">
-            {{ error_message }}
-        </div>
-        {% endif %}
+        
 
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <ul class="form_ul">
                 <li>
+                    <label class="label">Ligand</label>
                     <label for="id_ligand">Ligand</label>
                     <input type="file" name="ligand_file" id="id_ligand">
+                    <span class="material-symbols-outlined">upload</span>
+                    {% if error_message %}
+                        <div class="error_message">
+                            {{ error_message }}
+                        </div>
+                    {% endif %}
                 </li>
                 <li class="submit_li"><input class="submit_btn" type="submit" value="Add"></li>
             </ul>

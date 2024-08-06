@@ -10,6 +10,7 @@
     --menu-hover: white;
     --on-menu-hover: #3b693a;
     --gray: #9aad9d;
+    --error: #dc3c3c;
 }
 
 :root[color-mode='dark'] {
@@ -24,6 +25,7 @@
     --menu-hover: #a5d89e;
     --on-menu-hover: #001b03;
     --gray: #9c9c9c;
+    --error: #ff9e93;
 }
 
 * {
@@ -152,10 +154,6 @@ input[type=file], select {
     padding-left: 10px;
 }
 
-.form_ul label[for=method] {
-    position: relative;
-}
-
 .select_ul {
     position: absolute;
     top: 100%;
@@ -217,6 +215,16 @@ input[type=file], select {
 
 #arrow_drop_down.flip {
     transform: scaleY(-1) translateY(50%);
+}
+
+.error_message {
+    position: absolute;
+    top: 100%;
+    background: none;
+    left: 20%;
+    font-size: 12px;
+    padding: 5px 15px;
+    color: var(--error);
 }
 
 
@@ -386,6 +394,7 @@ input[type=file], select {
 
     .form_ul > .submit_li {
         align-items: flex-end;
+        margin-top: 20px;
     }
 
     .form_ul .material-symbols-outlined {
@@ -394,6 +403,11 @@ input[type=file], select {
 
     .select_ul {
         width: 100%;
+    }
+
+    .error_message {
+        left: 0%;
+        padding: 5px;
     }
 
 
