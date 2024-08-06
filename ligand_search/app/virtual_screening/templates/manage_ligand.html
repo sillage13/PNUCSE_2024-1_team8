@@ -11,18 +11,17 @@
             Add Ligand
         </div>
 
-        {% if error_message %}
-        <div class="error_message" style="color: red; margin-top: 10px;">
-            {{ error_message }}
-        </div>
-        {% endif %}
-
         <form action="" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             <ul class="form_ul">
                 <li>
+                    <label class="label">Ligand</label>
                     <label for="id_ligand">Ligand</label>
                     <input type="file" name="ligand_file" id="id_ligand">
+                    <span class="material-symbols-outlined">upload</span>
+                    {% if error_message %}
+                        <div class="error_message">{{ error_message }}</div>
+                    {% endif %}
                 </li>
                 <li class="submit_li"><input class="submit_btn" type="submit" value="Add"></li>
             </ul>
@@ -34,8 +33,40 @@
         </div>
         <ul class="ligand_ul">
             {% for ligand in ligands %}
-                <li>{{ ligand.ligand_name }} {{ ligand.created_at }} {{ ligand.ligand_file_name }}</li>
+                <li>
+                    <div>{{ ligand.ligand_name }}</div>
+                    <div>
+                        <div>{{ ligand.created_at|date:'Y-m-d' }}</div>
+                        <div>{{ ligand.ligand_file_name }}</div>
+                        {% comment "" %}다운로드 링크로{% endcomment %}
+                        <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                    </div>
+                </li>
             {% endfor %}
+            <li>
+                <div>Name</div>
+                <div>
+                    <div>2024-08-06</div>
+                    <div>filename.pdbqt</div>
+                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                </div>
+            </li>
+            <li>
+                <div>Name</div>
+                <div>
+                    <div>2024-08-06</div>
+                    <div>filename.pdbqt</div>
+                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                </div>
+            </li>
+            <li>
+                <div>Name</div>
+                <div>
+                    <div>2024-08-06</div>
+                    <div>filename.pdbqt</div>
+                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                </div>
+            </li>
         </ul>
     </div>
 {% endblock content %}

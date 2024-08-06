@@ -1,8 +1,10 @@
 :root {
     --background: #f7fbf1;
     --on-background: #181d17;
+    --hover: #d5e3d0;
     --container: #d5e8cf;
     --on-container: #101f10;
+    --container-hover: #b8d1b1;
     --green: #51804e;
     --on-green: white;
     --menu: #3b693a;
@@ -10,20 +12,24 @@
     --menu-hover: white;
     --on-menu-hover: #3b693a;
     --gray: #9aad9d;
+    --error: #dc3c3c;
 }
 
 :root[color-mode='dark'] {
     --background: #212121;
     --on-background: white;
-    --container: #363636;
+    --hover: #313131;
+    --container: #3d3d3d;
     --on-container: white;
+    --container-hover: #585858;
     --green: #a5d89e;
     --on-green: #001b03;
-    --menu: #4c4c4c;
+    --menu: #575757;
     --on-menu: white;
     --menu-hover: #a5d89e;
     --on-menu-hover: #001b03;
     --gray: #9c9c9c;
+    --error: #ff9e93;
 }
 
 * {
@@ -152,10 +158,6 @@ input[type=file], select {
     padding-left: 10px;
 }
 
-.form_ul label[for=method] {
-    position: relative;
-}
-
 .select_ul {
     position: absolute;
     top: 100%;
@@ -219,6 +221,16 @@ input[type=file], select {
     transform: scaleY(-1) translateY(50%);
 }
 
+.error_message {
+    position: absolute;
+    top: 100%;
+    background: none;
+    left: 20%;
+    font-size: 12px;
+    padding: 5px 15px;
+    color: var(--error);
+}
+
 
 .category {
     border-bottom: 1px solid var(--green);
@@ -262,6 +274,7 @@ input[type=file], select {
 .half {
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .half > div {
@@ -279,46 +292,112 @@ input[type=file], select {
     flex-direction: column;
 }
 
+.result_ul {
+    margin-top: 5px;
+}
+
 .result_ul > li {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
-    justify-content: space-evenly;
+}
+
+.result_ul > li > div {
+    border-radius: 10px;
+    padding:  5px 15px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.result_ul > li > div:nth-child(1) {
+    flex: 0.3;
+    background-color: var(--green);
+    color: var(--on-green);
+    justify-content: center;
+}
+
+.result_ul > li > div:nth-child(2) {
+    flex: 0.7;
+    background-color: var(--container);
+    color: var(--on-container);
+    justify-content: flex-end;
+}
+
+.result_ul > li > div:nth-child(2) > div {
+    flex: 1;
 }
 
 .result_ul > li .material-symbols-outlined {
-    transform: scaleX(-1);
-    color: var(--green);
     padding: 3px;
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+    font-size: 20px;
+    font-variation-settings: 'opsz' 20;
+    color: var(--on-container);
 }
 
-.result_ul .ligand-info {
+.result_ul > li .material-symbols-outlined:hover {
+    background-color: var(--container-hover);
+    border-radius: 12px;
+}
+
+
+/**ligand**/
+.ligand_ul {
+    width: 60%;
+    max-width: 500px;
+    margin-top: 5px;
+}
+
+.ligand_ul > li {
     display: flex;
     flex-direction: row;
-    width: 80%;
+    margin: 20px 0;
 }
 
-.ligand-info > div {
+.ligand_ul > li > div {
+    padding:  5px 15px;
+    display: flex;
+    align-items: center;
     border: 1px solid var(--green);
-    text-align: center;
-    padding: 3px;
 }
 
-.ligand-info > div:first-child {
-    border-radius: 15px 0px 0px 15px;
-    flex: 0.6;
-}
-
-.ligand-info > div:last-child {
+.ligand_ul > li > div:nth-child(1) {
+    flex: 0.3;
     background-color: var(--green);
     color: var(--on-green);
-    border-radius: 0px 15px 15px 0px;
-    flex: 0.4;
+    border-radius: 10px 0 0 10px;
+    justify-content: center;
+}
+
+.ligand_ul > li > div:nth-child(2) {
+    flex: 0.7;
+    border-radius: 0 10px 10px 0;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.ligand_ul > li > div:nth-child(2) > div:nth-child(1) {
+    position: absolute;
+    bottom: 100%;
+    transform: translateY(50%);
+    left: 10px;
+    font-size: 12px;
+    background-color: var(--background);
+    padding: 0 5px;
+}
+
+.ligand_ul > li > div:nth-child(2) > div:nth-child(2) {
+    flex: 1;
+}
+
+.ligand_ul > li .material-symbols-outlined {
+    padding: 3px;
+    color: var(--on-background);
+}
+
+.ligand_ul > li .material-symbols-outlined:hover {
+    background-color: var(--hover);
+    border-radius: 12px;
 }
 
 
@@ -386,6 +465,7 @@ input[type=file], select {
 
     .form_ul > .submit_li {
         align-items: flex-end;
+        margin-top: 20px;
     }
 
     .form_ul .material-symbols-outlined {
@@ -394,6 +474,11 @@ input[type=file], select {
 
     .select_ul {
         width: 100%;
+    }
+
+    .error_message {
+        left: 0%;
+        padding: 5px;
     }
 
 

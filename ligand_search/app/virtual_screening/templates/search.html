@@ -10,12 +10,17 @@
     <form id="search_form" action="" method="POST">
         {% csrf_token %}
         <ul class="form_ul">
-            <!-- {{form.as_ul}} -->
             <li>
+                <label class="label">Receptor</label>
                 <label for="id_receptor">Receptor</label>
                 <input type="file" name="receptor" id="id_receptor">
+                <span class="material-symbols-outlined">upload</span>
+                {% if receptor_error_message %}
+                    <div class="error_message">
+                        {{ receptor_error_message }}
+                    </div>
+                {% endif %}
             </li>
-            <!---->
             <li>
                 <label class="label">Method</label>
                 <label for="method">Method</label>
@@ -24,6 +29,11 @@
                     <li class="select_li">Clustering</li>
                     <li class="select_li">MEMES</li>
                 </ul>
+                {% if method_error_message %}
+                    <div class="error_message">
+                        {{ method_error_message }}
+                    </div>
+                {% endif %}
                 <select name="method" id="method">
                     <option value="Random">Random</option>
                     <option value="Clustering">Clustering</option>
