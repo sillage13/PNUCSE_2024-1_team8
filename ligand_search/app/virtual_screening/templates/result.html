@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block head %}
-<!-- 3Dmol.js를 사용하는 경우
+<!--/** 3Dmol.js를 사용하는 경우
     <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
     <script>
         let receptorFile = {{ receptor.url }}
         let ligandFile = {{ xyzFile }} docking한 리간드 pose의 xyz 파일
     </script>
--->
+**/-->
     {% load static %}
     <script src="{% static 'js/result.js' %}"></script>
 {% endblock head %}
@@ -19,31 +19,41 @@
             <div class="visual-info">
                 <div>Receptor<br>receptor name</div>
                 <div>
-                    <!-- {% if ligand %} -->
+                    <!--/** {% if ligand %} **/-->
                     Ligand<br>ligand name
-                    <!-- {% endif %}-->
+                    <!--/** {% endif %}**/-->
                 </div>
             </div>
         </div>
         <div class="result">
             <div class="category">Top10 Ligands</div>
             <ul class="result_ul">
-                <!-- {% for ligand in result_list %}
-                <li>
-                    <a href="{% url "result" %}"><span class="material-symbols-outlined">play_circle</span></a>
-                    <div>name</div>
-                    <div>score</div>
+                <!--/** {% for result in result_list %}
+                    <li>
+                    <div>{{ result.ligand.name }}</div>
+                    <div>
+                        <div>{{ result.score }}</div>
+                        <a href="{% url "download" result.ligand.id %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                        <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
+                    </div>
                 </li>
-                {% endfor %}-->
-                {% for i in '0123456789' %}
+                {% endfor %}**/-->
                 <li>
-                    <a href="{% url "result" %}"><span class="material-symbols-outlined">play_circle</span></a>
-                    <div class="ligand-info">
-                        <div>name{{ i }}</div>
-                        <div>score</div> 
-                    </div> 
+                    <div>Name</div>
+                    <div>
+                        <div>Score</div>
+                        <a href="{% url "result" %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a><!--download 링크로-->
+                        <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
+                    </div>
                 </li>
-                {% endfor %}
+                <li>
+                    <div>Name</div>
+                    <div>
+                        <div>Score</div>
+                        <a href="{% url "result" %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a><!--download 링크로-->
+                        <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
+                    </div>
+                </li>
             </ul>
         </div>
     </div>

@@ -3,6 +3,7 @@
     --on-background: #181d17;
     --container: #d5e8cf;
     --on-container: #101f10;
+    --container-hover: #b8d1b1;
     --green: #51804e;
     --on-green: white;
     --menu: #3b693a;
@@ -16,11 +17,12 @@
 :root[color-mode='dark'] {
     --background: #212121;
     --on-background: white;
-    --container: #363636;
+    --container: #3d3d3d;
     --on-container: white;
+    --container-hover: #585858;
     --green: #a5d89e;
     --on-green: #001b03;
-    --menu: #4c4c4c;
+    --menu: #575757;
     --on-menu: white;
     --menu-hover: #a5d89e;
     --on-menu-hover: #001b03;
@@ -270,6 +272,7 @@ input[type=file], select {
 .half {
     flex-direction: row;
     justify-content: center;
+    align-items: flex-start;
 }
 
 .half > div {
@@ -287,48 +290,53 @@ input[type=file], select {
     flex-direction: column;
 }
 
+.result_ul {
+    margin-top: 5px;
+}
+
 .result_ul > li {
     display: flex;
     flex-direction: row;
     margin: 10px 0;
-    justify-content: space-evenly;
+}
+
+.result_ul > li > div {
+    border-radius: 10px;
+    padding:  5px 15px;
+    margin: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.result_ul > li > div:nth-child(1) {
+    flex: 0.3;
+    background-color: var(--green);
+    color: var(--on-green);
+    justify-content: center;
+}
+
+.result_ul > li > div:nth-child(2) {
+    flex: 0.7;
+    background-color: var(--container);
+    color: var(--on-container);
+    justify-content: flex-end;
+}
+
+.result_ul > li > div:nth-child(2) > div {
+    flex: 1;
 }
 
 .result_ul > li .material-symbols-outlined {
-    transform: scaleX(-1);
-    color: var(--green);
     padding: 3px;
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+    font-size: 20px;
+    font-variation-settings: 'opsz' 20;
+    color: var(--on-container);
 }
 
-.result_ul .ligand-info {
-    display: flex;
-    flex-direction: row;
-    width: 80%;
+.result_ul > li .material-symbols-outlined:hover {
+    background-color: var(--container-hover);
+    border-radius: 12px;
 }
-
-.ligand-info > div {
-    border: 1px solid var(--green);
-    text-align: center;
-    padding: 3px;
-}
-
-.ligand-info > div:first-child {
-    border-radius: 15px 0px 0px 15px;
-    flex: 0.6;
-}
-
-.ligand-info > div:last-child {
-    background-color: var(--green);
-    color: var(--on-green);
-    border-radius: 0px 15px 15px 0px;
-    flex: 0.4;
-}
-
 
 @media screen and (max-width: 700px) {
     /**title**/
