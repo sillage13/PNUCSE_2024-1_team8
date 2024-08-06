@@ -231,15 +231,37 @@ input[type=file], select {
 
 
 /**result**/
-.visualization {
+#visualization {
     aspect-ratio: 1 / 1;
-    background-color: var(--green);
+    position: relative;
+
+    background-color: var(--container);
+}
+
+.visual-info > div {
+    position: absolute;
+    bottom: 0px;
+    padding: 10px;
+    text-shadow:
+        -0.5px -0.5px 0 var(--background),
+        0.5px -0.5px 0 var(--background), 
+        -0.5px 0.5px 0 var(--background),
+        0.5px 0.5px 0 var(--background);
+}
+
+.visual-info > div:first-child {
+    text-align: left;
+    left: 0px;
+}
+
+.visual-info > div:last-child {
+    text-align: right;
+    right: 0px;
 }
 
 .half {
     flex-direction: row;
     justify-content: center;
-    align-items: start;
 }
 
 .half > div {
@@ -258,24 +280,46 @@ input[type=file], select {
 }
 
 .result_ul > li {
-    padding: 5px;
     display: flex;
-    align-items: center;
+    flex-direction: row;
+    margin: 10px 0;
+    justify-content: space-evenly;
 }
 
 .result_ul > li .material-symbols-outlined {
     transform: scaleX(-1);
     color: var(--green);
-    padding: 5px;
+    padding: 3px;
+    font-variation-settings:
+        'FILL' 1,
+        'wght' 400,
+        'GRAD' 0,
+        'opsz' 24;
 }
 
-.result_ul > li > div {
-    display: inline-block;
-    padding: 5px;
+.result_ul .ligand-info {
+    display: flex;
+    flex-direction: row;
+    width: 80%;
 }
 
+.ligand-info > div {
+    border: 1px solid var(--green);
+    text-align: center;
+    padding: 3px;
+}
 
+.ligand-info > div:first-child {
+    border-radius: 15px 0px 0px 15px;
+    flex: 0.6;
+}
 
+.ligand-info > div:last-child {
+    background-color: var(--green);
+    color: var(--on-green);
+    border-radius: 0px 15px 15px 0px;
+    flex: 0.4;
+}
 
 
 @media screen and (max-width: 700px) {
