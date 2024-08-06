@@ -1,6 +1,7 @@
 :root {
     --background: #f7fbf1;
     --on-background: #181d17;
+    --hover: #d5e3d0;
     --container: #d5e8cf;
     --on-container: #101f10;
     --container-hover: #b8d1b1;
@@ -17,6 +18,7 @@
 :root[color-mode='dark'] {
     --background: #212121;
     --on-background: white;
+    --hover: #313131;
     --container: #3d3d3d;
     --on-container: white;
     --container-hover: #585858;
@@ -337,6 +339,67 @@ input[type=file], select {
     background-color: var(--container-hover);
     border-radius: 12px;
 }
+
+
+/**ligand**/
+.ligand_ul {
+    width: 60%;
+    max-width: 500px;
+    margin-top: 5px;
+}
+
+.ligand_ul > li {
+    display: flex;
+    flex-direction: row;
+    margin: 20px 0;
+}
+
+.ligand_ul > li > div {
+    padding:  5px 15px;
+    display: flex;
+    align-items: center;
+    border: 1px solid var(--green);
+}
+
+.ligand_ul > li > div:nth-child(1) {
+    flex: 0.3;
+    background-color: var(--green);
+    color: var(--on-green);
+    border-radius: 10px 0 0 10px;
+    justify-content: center;
+}
+
+.ligand_ul > li > div:nth-child(2) {
+    flex: 0.7;
+    border-radius: 0 10px 10px 0;
+    justify-content: flex-end;
+    position: relative;
+}
+
+.ligand_ul > li > div:nth-child(2) > div:nth-child(1) {
+    position: absolute;
+    bottom: 100%;
+    transform: translateY(50%);
+    left: 10px;
+    font-size: 12px;
+    background-color: var(--background);
+    padding: 0 5px;
+}
+
+.ligand_ul > li > div:nth-child(2) > div:nth-child(2) {
+    flex: 1;
+}
+
+.ligand_ul > li .material-symbols-outlined {
+    padding: 3px;
+    color: var(--on-background);
+}
+
+.ligand_ul > li .material-symbols-outlined:hover {
+    background-color: var(--hover);
+    border-radius: 12px;
+}
+
 
 @media screen and (max-width: 700px) {
     /**title**/

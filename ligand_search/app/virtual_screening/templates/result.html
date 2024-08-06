@@ -1,13 +1,14 @@
 {% extends "base.html" %}
 
 {% block head %}
-<!--/** 3Dmol.js를 사용하는 경우
+    {% comment %}
+    <!--3Dmol.js를 사용하는 경우-->
     <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
     <script>
         let receptorFile = {{ receptor.url }}
         let ligandFile = {{ xyzFile }} docking한 리간드 pose의 xyz 파일
     </script>
-**/-->
+    {% endcomment %} 
     {% load static %}
     <script src="{% static 'js/result.js' %}"></script>
 {% endblock head %}
@@ -19,17 +20,20 @@
             <div class="visual-info">
                 <div>Receptor<br>receptor name</div>
                 <div>
-                    <!--/** {% if ligand %} **/-->
+                    {% comment %}
+                    {% if ligand %}
                     Ligand<br>ligand name
-                    <!--/** {% endif %}**/-->
+                    {% endif %}
+                    {% endcomment %}
                 </div>
             </div>
         </div>
         <div class="result">
             <div class="category">Top10 Ligands</div>
             <ul class="result_ul">
-                <!--/** {% for result in result_list %}
-                    <li>
+                {% comment %}
+                {% for result in result_list %}
+                <li>
                     <div>{{ result.ligand.name }}</div>
                     <div>
                         <div>{{ result.score }}</div>
@@ -37,19 +41,20 @@
                         <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
                     </div>
                 </li>
-                {% endfor %}**/-->
+                {% endfor %}
+                {% endcomment %}
                 <li>
-                    <div>Name</div>
+                    <div>TEST</div>
                     <div>
-                        <div>Score</div>
+                        <div>-11.0</div>
                         <a href="{% url "result" %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a><!--download 링크로-->
                         <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
                     </div>
                 </li>
                 <li>
-                    <div>Name</div>
+                    <div>NAME</div>
                     <div>
-                        <div>Score</div>
+                        <div>-10.8</div>
                         <a href="{% url "result" %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a><!--download 링크로-->
                         <a href="{% url "result" %}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
                     </div>
