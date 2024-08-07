@@ -54,6 +54,14 @@ ul {
     margin-top: 40px;
 }
 
+.material-symbols-outlined {
+    font-variation-settings:
+        'FILL' 0,
+        'wght' 300,
+        'GRAD' 0,
+        'opsz' 24;
+}
+
 
 /** title **/
 .menu {
@@ -100,11 +108,7 @@ ul {
 }
 
 .menu_icon:hover > .material-symbols-outlined {
-    font-variation-settings:
-        'FILL' 1,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
+    font-variation-settings:'FILL' 1;
 }
 
 #menu {
@@ -210,11 +214,6 @@ input[type=file], select {
     transform: translateY(-50%);
     pointer-events: none;
     color: var(--on-container);
-    font-variation-settings:
-        'FILL' 0,
-        'wght' 400,
-        'GRAD' 0,
-        'opsz' 24;
 }
 
 #arrow_drop_down.flip {
@@ -331,7 +330,6 @@ input[type=file], select {
 .result_ul > li .material-symbols-outlined {
     padding: 3px;
     font-size: 20px;
-    font-variation-settings: 'opsz' 20;
     color: var(--on-container);
 }
 
@@ -398,6 +396,23 @@ input[type=file], select {
 .ligand_ul > li .material-symbols-outlined:hover {
     background-color: var(--hover);
     border-radius: 12px;
+}
+
+
+/**pagination**/
+.pagination {
+    display: flex;
+    margin-bottom: 20px;
+}
+
+.pagination > a {
+    color: var(--on-background);
+    text-decoration-line: none;
+    margin: 0 5px;
+}
+
+.pagination .material-symbols-outlined {
+    font-variation-settings: 'wght' 200;
 }
 
 
