@@ -45,30 +45,16 @@
                     </div>
                 </li>
             {% endfor %}
-            <li>
-                <div>Name</div>
-                <div>
-                    <div>2024-08-06</div>
-                    <div>filename.pdbqt</div>
-                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
-                </div>
-            </li>
-            <li>
-                <div>Name</div>
-                <div>
-                    <div>2024-08-06</div>
-                    <div>filename.pdbqt</div>
-                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
-                </div>
-            </li>
-            <li>
-                <div>Name</div>
-                <div>
-                    <div>2024-08-06</div>
-                    <div>filename.pdbqt</div>
-                    <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
-                </div>
-            </li>
+            {% for i in '0123456789' %}
+                <li>
+                    <div>Name</div>
+                    <div>
+                        <div>2024-08-06</div>
+                        <div>filename.pdbqt</div>
+                        <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                    </div>
+                </li>
+            {% endfor %}            
         </ul>
         <div class="pagination">
             {% if page_obj.has_previous %}
