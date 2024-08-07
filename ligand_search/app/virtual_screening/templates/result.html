@@ -11,6 +11,7 @@
     {% endcomment %} 
     {% load static %}
     <script src="{% static 'js/result.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/result.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -22,7 +23,7 @@
                 <div>
                     {% comment %}
                     {% if ligand %}
-                    Ligand<br>ligand name
+                        Ligand<br>ligand name
                     {% endif %}
                     {% endcomment %}
                 </div>
@@ -33,14 +34,14 @@
             <ul class="result_ul">
                 {% comment %}
                 {% for result in result_list %}
-                <li>
-                    <div>{{ result.ligand.name }}</div>
-                    <div>
-                        <div>{{ result.score }}</div>
-                        <a href="{% url "download" result.ligand.id %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a>
-                        <a href="?ligand={{ forloop.counter0 }}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
-                    </div>
-                </li>
+                    <li>
+                        <div>{{ result.ligand.name }}</div>
+                        <div>
+                            <div>{{ result.score }}</div>
+                            <a href="{% url "download" result.ligand.id %}"><span class="material-symbols-outlined" id="download_ligand">download</span></a>
+                            <a href="?ligand={{ forloop.counter0 }}"><span class="material-symbols-outlined" id="view_ligand">view_in_ar</span></a>
+                        </div>
+                    </li>
                 {% endfor %}
                 {% endcomment %}
                 <li>

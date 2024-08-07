@@ -1,0 +1,149 @@
+form {
+    width: 100%;
+}
+
+.form_ul {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.form_ul > li {
+    margin: 20px 0px;
+    width: 60%;
+    max-width: 500px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+input[type=file], select {
+    display: none;
+}
+
+.form_ul label:not(.label) {
+    display: inline-block;
+    width: 80%;
+    max-width: 400px;
+    background-color: var(--container);
+    border: 0px;
+    border-radius: 10px;
+    padding: 10px 15px;
+    font-size: 15px;
+    text-align: left;
+    color: var(--gray);
+}
+
+.form_ul .label {
+    display: inline-block;
+    width: 20%;
+    max-width: 100px;
+    padding-left: 10px;
+}
+
+.select_ul {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 80%;
+    max-width: 400px;
+    background-color: var(--background);
+    display: none;
+    z-index: 3;
+}
+
+.select_ul > li {
+    padding: 10px 15px;
+    border: 1px solid var(--container);
+    border-top: 0;
+}
+
+.select_ul > li:first-child {
+    border-top: 1px;
+    border-radius: 10px 10px 0px 0px;
+}
+
+.select_ul > li:last-child {
+    border-radius: 0 0 10px 10px;
+}
+
+.select_ul > li:hover {
+    background-color: var(--container);
+}
+
+.form_ul > .submit_li {
+    justify-content: right;
+    z-index: 0;
+}
+
+.submit_btn {
+    width: 70px;
+    font-size: 12px;
+    padding: 8px;
+    background-color: var(--green);
+    color: var(--on-green);
+    border: 0px;
+    border-radius: 10px;
+}
+
+.form_ul .material-symbols-outlined {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+    color: var(--on-container);
+}
+
+#arrow_drop_down.flip {
+    transform: scaleY(-1) translateY(50%);
+}
+
+.error_message {
+    position: absolute;
+    top: 100%;
+    background: none;
+    left: 20%;
+    font-size: 12px;
+    padding: 5px 15px;
+    color: var(--error);
+}
+
+@media screen and (max-width: 700px) {
+    .form_ul > li {
+        margin: 10px 0;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .form_ul .label {
+        width: 100%;
+        padding: 10px 5px;
+        text-align: left;
+    }
+
+    .form_ul label:not(.label) {
+        width: 100%;
+        max-width:420px;
+    }
+
+    .form_ul > .submit_li {
+        align-items: flex-end;
+        margin-top: 20px;
+    }
+
+    .form_ul .material-symbols-outlined {
+        top: 75%;
+    }
+
+    .select_ul {
+        width: 100%;
+    }
+
+    .error_message {
+        left: 0%;
+        padding: 5px;
+    }
+}
