@@ -44,16 +44,6 @@
                         <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
                     </div>
                 </li>
-            {% endfor %}
-            {% for i in '0123456789' %}
-                <li>
-                    <div>Name</div>
-                    <div class="ligand-info">
-                        <div>2024-08-06</div>
-                        <div>filename.pdbqt</div>
-                        <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
-                    </div>
-                </li>
             {% endfor %}            
         </ul>
         <div class="pagination">
