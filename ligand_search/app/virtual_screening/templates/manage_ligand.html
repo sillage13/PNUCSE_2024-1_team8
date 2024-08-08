@@ -37,7 +37,7 @@
             {% for ligand in page_obj %}
                 <li>
                     <div>{{ ligand.ligand_name }}</div>
-                    <div>
+                    <div class="ligand-info">
                         <div>{{ ligand.created_at|date:'Y-m-d' }}</div>
                         <div>{{ ligand.ligand_file_name }}</div>
                         {% comment "" %}다운로드 링크로{% endcomment %}
@@ -48,7 +48,7 @@
             {% for i in '0123456789' %}
                 <li>
                     <div>Name</div>
-                    <div>
+                    <div class="ligand-info">
                         <div>2024-08-06</div>
                         <div>filename.pdbqt</div>
                         <a href={% url "manage-ligand" %}><span class="material-symbols-outlined" id="download_ligand">download</span></a>
