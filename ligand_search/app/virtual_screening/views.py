@@ -1,5 +1,5 @@
-from django.shortcuts import render, redirect
-from django.http import HttpResponseRedirect
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, FileResponse
 from django.urls import reverse
 from django.conf import settings
 from django.db import transaction
@@ -85,3 +85,11 @@ def manageLigand(request):
 
 def result(request):
     return render(request, 'result.html')
+
+def download(request, pk):
+    ligand = get_object_or_404(Ligand, pk=pk)
+    path = ligand.get_ligand_file_path
+
+    response = FileResponse(open(path, "rb"))
+
+    return response
