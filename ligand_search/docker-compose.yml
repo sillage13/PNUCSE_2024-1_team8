@@ -12,6 +12,8 @@ services:
             - "8000:8000"
         volumes:
             - ./app:/app
-            - ../:/rootDir
-        command: >
-            /bin/bash -c "python manage.py runserver 0.0.0.0:8000"
+            - ../cluster2:/screening/cluster
+            - ../data:/screening/data
+            - ../memes:/screening/memes
+            - ../random:/screening/random
+        command: /bin/bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"

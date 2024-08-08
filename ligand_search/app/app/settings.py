@@ -124,4 +124,4 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Ligand File Path
-LIGAND_FILE_PATH = "/rootDir/data/ligand/"
+LIGAND_FILE_PATH = "/screening/data/ligand"
