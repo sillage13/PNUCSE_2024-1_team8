@@ -48,12 +48,15 @@
         <div class="pagination">
             {% if page_obj.has_previous %}
                 <a href="?page={{ page_obj.previous_page_number }}"><span class="material-symbols-outlined">keyboard_arrow_left</span></a>
+            {% else %}
+                <a href="" style="visibility: hidden"><span class="material-symbols-outlined">keyboard_arrow_left</span></a>
             {% endif %}
             <a href ="?page={{ page_obj.number }}" class="current-page">{{ page_obj.number }}</a>
             {% if page_obj.has_next %}
                 <a href="?page={{ page_obj.next_page_number }}"><span class="material-symbols-outlined">keyboard_arrow_right</span></a>
+                {% else %}
+                <a href="" style="visibility: hidden"><span class="material-symbols-outlined">keyboard_arrow_right</span></a>
             {% endif %}
-            
         </div>
     </div>
 {% endblock content %}
