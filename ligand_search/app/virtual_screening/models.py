@@ -15,4 +15,4 @@ class Ligand(models.Model):
     
     @property
     def get_ligand_file_path(self):
-        return f"{settings.LIGAND_FILE_PATH}{self.ligand_file_name}"
+        return f"{settings.LIGAND_FILE_PATH}/{self.ligand_file_name}"

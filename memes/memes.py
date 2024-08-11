@@ -118,8 +118,10 @@ parser.add_argument('--capital',default='15000')
 parser.add_argument('--initial',default='5000')
 parser.add_argument('--periter',default='500')
 parser.add_argument('--n_cluster',default='20')
-parser.add_argument('--save_eis', required=False,default="False")
-parser.add_argument('--eps',default='0.05')
+parser.add_argument('--acquisition_func', default="ei")
+parser.add_argument('--save_af', required=False,default="False")
+parser.add_argument('--eps', default='0.05')
+parser.add_argument('--beta', default=1)
 parser.add_argument("--ligand_path", default="./data/ligands.txt")
 parser.add_argument("--rec_path", default="receptor.pdbqt")
 parser.add_argument("--result_tail", default="1")
@@ -131,7 +133,9 @@ capital = int(args.capital)
 initial = int(args.initial)
 periter = int(args.periter)
 n_cluster = int(args.n_cluster)
+af = args.acquisition_func
 eps = float(args.eps)
+beta = float(args.beta)
 rec = args.rec
 feat = args.feature
 features_path = args.features_path
@@ -147,10 +151,10 @@ if device == "cpu":
     device = torch.device("cpu")
 else:
     device = torch.device('cuda:{}'.format(device))
-save_eis = args.save_eis == "True"
+save_af = args.save_af == "True"
 print("Using device: ", device)
 
-directory_path = './gp_runs/{}-'.format(feat)+rec+'/run'+str(run)
+directory_path = './gp_runs/{}-'.format(feat)+rec+'/'+af+'/run'+str(run)
 
 try:
     os.makedirs(directory_path)
@@ -163,6 +167,7 @@ with open(directory_path+'/config.txt','w') as f:
     f.write("feature:	"+str(feat)+"\n")
     f.write("capital:   "+str(capital)+"\n")
     f.write("eps:	"+str(eps)+"\n")
+    f.write("beta:  "+str(beta)+"\n")
     f.write("rec:	"+str(rec)+"\n")
     f.close()
 
@@ -246,12 +251,24 @@ class ExactGPModel(gpytorch.models.ExactGP):
         return gpytorch.distributions.MultivariateNormal(mean_x, covar_x)
 
 class GP:
-    def __init__(self, train_x, train_y, eps=0.05):
+    def __init__(self, train_x, train_y, af, eps=0.05, beta=1):
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood()
         self.model = ExactGPModel(train_x, train_y, self.likelihood)
         self.train_x = train_x
         self.train_y = train_y
         self.eps = eps
+        self.beta = beta
+        
+        if af == "pi":
+            self.compute_af = self.compute_pi
+        elif af == "ucb":
+            self.compute_af = self.compute_ucb
+        elif af == "random":
+            self.compute_af = self.compute_random
+        elif af == "greedy":
+            self.compute_af = self.compute_greedy
+        else:
+            self.compute_af = self.compute_ei
 
     def train_gp(self,train_x, train_y):
         train_x = train_x.to(device)    
@@ -318,9 +335,90 @@ class GP:
         Z = imp/stds
         eis = imp * norm.cdf(Z) + stds * norm.pdf(Z)
         eis[stds == 0.0] = 0.0
-        if save_eis:
-            np.savetxt(directory_path+'/eis_' + str(id)+'.out',eis)
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out',eis)
         return eis
+    
+    def compute_pi(self, id, best_val):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 100
+        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
+        
+        z = (best_val - means)/stds
+        pis = norm.cdf(-z)
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', pis)
+        return pis
+    
+    def compute_ucb(self, id, _):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 100
+        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
+
+        ucb = means + beta * stds
+
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', ucb)
+        return ucb
+    
+    def compute_random(self, id, _):
+        random = np.random.rand(len(features))
+
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', random)
+    
+    def compute_greedy(self, id, _):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 100
+        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
+
+        greedy = means
+
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', greedy)
+        return greedy 
 
 
 
@@ -334,15 +432,15 @@ for i in range(iters):
     ## property 1
     print("Running")
     train_x, train_y = torch.FloatTensor(X_sample), torch.FloatTensor(Y_sample)
-    gp = GP(train_x, train_y,eps=eps)
+    gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
     gp.train_gp(train_x, train_y)
     print("Fit Done in :",time.time() - start_time)
     sys.stdout.flush()
 
-    print("Calculatin EI")
+    print("Calculatin " + af.upper())
     sys.stdout.flush()
     start_time = time.time()
-    eis = gp.compute_ei(i,max(Y_sample))
+    eis = gp.compute_af(i,max(Y_sample))
 
     next_indexes = eis.argsort()
     X_next = []
@@ -396,7 +494,7 @@ for i in range(iters):
 print("PHASE 3")
 # In[ ]:
 train_x, train_y = torch.FloatTensor(X_sample), torch.FloatTensor(Y_sample)
-gp = GP(train_x, train_y,eps=eps)
+gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
 gp.train_gp(train_x, train_y)
 
 torch.save(gp.model, directory_path+"/model.pt")
@@ -444,4 +542,4 @@ avg_score = sum(scores) / len(scores)
 print(f"Average score of top10 ligands: {avg_score: .2f}")
 
 save_data(docking_dict2, f"./../data/{receptor}_docking_result.dat")
-save_data(result_list, f"./../result/{receptor}/{total_count}/memes_result{result_tail}.dat")
+save_data(result_list, f"./../result/{receptor}/{total_count}/memes_{af}_result{result_tail}.dat")
