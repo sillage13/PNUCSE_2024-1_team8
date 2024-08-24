@@ -1,0 +1,5 @@
+Nc1cc(O)cc(-c2nc(N3CCOCC3)c3oc4ncccc4c3n2)c1,-7.567
+Nc1ncnc2c1c(-c1ccc(Oc3ccccc3)cc1)cn2C1CCOCC1,-8.285
+Nc1ncc(-c2nc(N3CCOCC3)nc3c2ccn3-c2cccnc2)cn1,-8.641
+COc1ccc2cc(-c3nn(CC4CC[NH2+]CC4)c4ncnc(N)c34)ccc2c1,-9.466
+Nc1ncnc2c1c(-c1ccc(Oc3ccccc3)cc1)cn2C1CCCC1,-7.87

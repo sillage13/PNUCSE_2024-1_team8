@@ -1,0 +1,5 @@
+CCOC(=O)C(CC(C)C)NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1,-7.826
+CC(C)CC(NC1CCC(n2cc(-c3ccc(Oc4ccccc4)cc3)c3c(N)ncnc32)CC1)C(=O)N(C)C,-8.102
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(=O)NC4O,-0.623
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(O)=NC4,-7.887
+CNC1CC2OC(C)(C1OC)n1c3ccccc3c3c4c(c5c6ccccc6n2c5c31)C(O)=NC4,-7.736
