@@ -1,5 +1,0 @@
-COc1cnc(-c2cnc3ccccc3c2)nc1-c1cc2c(=O)[nH]ccc2[nH]1,-10.614
-COc1ccc2c(OCc3nnc4ccc(-c5ccccc5)nn34)ccnc2c1,-11.476
-CC=Cn1nc(N)c2cc(-c3c(-c4ccccc4)[nH]c4ccccc34)nnc21,-7.265
-CCc1cc(O)ccc1-c1ccc2c(-c3nc4ccccc4[nH]3)n[nH]c2c1,-10.165
-CS(=O)c1ccc(-c2nc(-c3ccc(F)cc3)c(-c3ccncc3)[nH]2)cc1,-8.325
