@@ -1,5 +1,0 @@
-O=C1NCCc2[nH]c(-c3ccnc(-c4ccccc4F)c3)cc21,0.0
-COc1ccccc1S(=O)(=O)Nc1ccc2c(c1)CN(C)C(=O)N2,-7.018
-N=C(N)NS(=O)(=O)c1ccc(N=CC2C(=O)Nc3ccccc32)cc1,-7.79
-NC(=O)Nc1cc(-c2cccc(F)c2)sc1C(=O)NC1C=CCNC1,-9.039
-NC1=CC2NC(c3ccccc3)NC(NCc3cccs3)=C2C=C1,-9.887

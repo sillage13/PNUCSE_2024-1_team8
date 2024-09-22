@@ -1,0 +1,5 @@
+O=C1Nc2ccccc2C1=CNc1ccc(S(=O)(=O)Nc2nccs2)cc1,-7.905
+NC(=O)c1ccccc1-c1ccc2c(c1)Nc1ccccc1NC2=O,-9.804
+COc1cc(-c2ccc3c(c2)Nc2ccccc2NC3=O)ccc1C(=O)O,-8.343
+NC(=O)c1cccc2cc(-c3ccc(C=C4SC(=O)NC4=O)o3)ccc12,-8.245
+COc1ccccc1C1=C(Nc2ccc(C(=O)c3ccccc3)cc2)C(=O)NC1=O,0.0

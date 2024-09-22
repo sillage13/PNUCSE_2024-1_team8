@@ -1,0 +1,7 @@
+periter:	15
+initial:	40
+feature:	mol2vec
+capital:   120
+eps:	0.05
+beta:  1.0
+rec:	4EK3_120

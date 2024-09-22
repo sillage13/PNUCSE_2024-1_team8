@@ -1,0 +1,6 @@
+periter:	5
+initial:	10
+feature:	mol2vec
+capital:   40
+eps:	0.05
+rec:	4EK3_1_1
