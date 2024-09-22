@@ -1,5 +1,0 @@
-CC(c1ccc2ncccc2c1)c1nnc2ccc(-c3cnn(C)c3)nn12,-7.949
-CC(c1nc(-c2cnc(N)c(-n3nnc4ccccc43)n2)nn1C)N1CCOCC1,-5.314
-Fc1ccc(-c2cnc3nnc(Cc4ccc5ncccc5c4)n3n2)cc1,-9.463
-CCOc1ccc2cc(-c3nn(CC4CC[NH2+]CC4)c4ncnc(N)c34)ccc2c1,-8.252
-Nc1nccc(-c2c(-c3ccc(F)cc3)ncn2C2CC[NH2+]CC2)n1,-7.478
