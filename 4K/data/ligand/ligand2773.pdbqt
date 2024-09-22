@@ -1,0 +1,29 @@
+REMARK  Name = 3zls_ligand
+REMARK  3 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C7_7  and  C10_10
+REMARK    2  A    between atoms: C10_10  and  O12_12
+REMARK    3  A    between atoms: O12_12  and  C13_13
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C   UNL     1     -20.813  26.503  -3.013  0.00  0.00    +0.010 A 
+ATOM      2  C   UNL     1     -19.735  27.372  -2.929  0.00  0.00    +0.013 A 
+ATOM      3  C   UNL     1     -19.989  28.738  -2.820  0.00  0.00    +0.020 A 
+ATOM      4  C   UNL     1     -21.313  29.180  -2.809  0.00  0.00    +0.141 A 
+ATOM      5  N   UNL     1     -21.346  30.543  -2.743  0.00  0.00    -0.255 N 
+ATOM      6  H   UNL     1     -22.194  31.128  -2.722  0.00  0.00    +0.236 HD
+ATOM      7  C   UNL     1     -20.055  30.996  -2.710  0.00  0.00    +0.166 A 
+ATOM      8  N   UNL     1     -22.364  28.340  -2.899  0.00  0.00    -0.285 NA
+ATOM      9  C   UNL     1     -19.176  29.933  -2.755  0.00  0.00    +0.070 A 
+ATOM     14  C   UNL     1     -22.096  27.027  -2.991  0.00  0.00    +0.070 A 
+ENDROOT
+BRANCH   9  10
+ATOM     10  C   UNL     1     -17.692  29.948  -2.790  0.00  0.00    +0.237 C 
+ATOM     13  O   UNL     1     -16.999  28.959  -2.827  0.00  0.00    -0.376 OA
+BRANCH  10  11
+ATOM     11  O   UNL     1     -17.211  31.193  -2.801  0.00  0.00    -0.286 OA
+ATOM     12  C   UNL     1     -15.775  31.329  -2.699  0.00  0.00    +0.236 C 
+ENDBRANCH  10  11
+ENDBRANCH   9  10
+TORSDOF 2

@@ -1,0 +1,11 @@
+REMARK  Name = ASVQ
+REMARK  2 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C8_3  and  C7_4
+REMARK    2  A    between atoms: C7_4  and  C2_5
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1 CL   UNL     1      56.917  13.938  15.822  0.00  0.00    +0.000 Cl
+ENDROOT
+TORSDOF 0

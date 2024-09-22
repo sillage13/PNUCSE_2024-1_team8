@@ -1,0 +1,28 @@
+REMARK  Name = 3dpd_ligand
+REMARK  2 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C01_1  and  C02_2
+REMARK    2  A    between atoms: C02_2  and  C03_3
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C   UNL     1      24.190  63.515  17.378  0.00  0.00    +0.016 C 
+ATOM      2  C   UNL     1      24.155  63.182  18.873  0.00  0.00    -0.010 C 
+ATOM      3  C   UNL     1      25.170  62.027  19.161  0.00  0.00    +0.119 C 
+ATOM      4  C   UNL     1      24.996  61.213  20.438  0.00  0.00    +0.114 C 
+ATOM      5  O   UNL     1      25.915  60.580  20.930  0.00  0.00    -0.403 OA
+ATOM      6  C   UNL     1      23.661  61.217  21.016  0.00  0.00    +0.081 A 
+ATOM      7  S   UNL     1      23.206  60.371  22.461  0.00  0.00    +0.016 S 
+ATOM      8  C   UNL     1      21.580  61.003  22.257  0.00  0.00    +0.188 A 
+ATOM      9  N   UNL     1      21.416  61.776  21.209  0.00  0.00    -0.297 NA
+ATOM     10  N   UNL     1      20.590  60.684  23.142  0.00  0.00    -0.262 N 
+ATOM     11  C   UNL     1      19.275  61.288  22.764  0.00  0.00    +0.173 C 
+ATOM     12  C   UNL     1      18.264  61.013  23.851  0.00  0.00    +0.185 C 
+ATOM     13  O   UNL     1      18.139  59.619  24.117  0.00  0.00    -0.376 OA
+ATOM     14  C   UNL     1      19.379  59.063  24.528  0.00  0.00    +0.185 C 
+ATOM     15  C   UNL     1      20.476  59.265  23.494  0.00  0.00    +0.173 C 
+ATOM     16  C   UNL     1      22.585  61.909  20.508  0.00  0.00    +0.004 A 
+ATOM     17  C   UNL     1      22.695  62.741  19.251  0.00  0.00    +0.081 C 
+ATOM     18  C   UNL     1      24.571  64.431  19.653  0.00  0.00    +0.016 C 
+ENDROOT
+TORSDOF 0

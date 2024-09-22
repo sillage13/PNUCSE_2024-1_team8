@@ -1,0 +1,68 @@
+REMARK  Name = 3w33_ligand
+REMARK  7 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C12_12  and  N29_29
+REMARK    2  A    between atoms: C13_13  and  O33_33
+REMARK    3  A    between atoms: C14_14  and  O33_33
+REMARK    4  A    between atoms: C20_20  and  C21_21
+REMARK    5  A    between atoms: C24_24  and  C25_25
+REMARK    6  A    between atoms: C24_24  and  N30_30
+REMARK    7  A    between atoms: C25_25  and  O32_32
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM     15  N   UNL     1      16.639  34.299  13.000  0.00  0.00    -0.261 N 
+ATOM     16  H   UNL     1      17.506  34.611  13.461  0.00  0.00    +0.215 HD
+ATOM     17  C   UNL     1      15.423  34.319  13.754  0.00  0.00    +0.142 A 
+ATOM     18  N   UNL     1      14.331  33.828  13.171  0.00  0.00    -0.267 NA
+ATOM     19  C   UNL     1      13.206  33.879  13.892  0.00  0.00    +0.159 A 
+ATOM     20  N   UNL     1      13.087  34.359  15.127  0.00  0.00    -0.269 NA
+ATOM     21  C   UNL     1      14.195  34.843  15.716  0.00  0.00    +0.125 A 
+ATOM     22  N   UNL     1      13.954  35.300  17.025  0.00  0.00    -0.300 N 
+ATOM     23  H   UNL     1      12.990  35.246  17.384  0.00  0.00    +0.186 HD
+ATOM     24  C   UNL     1      14.981  35.845  17.906  0.00  0.00    +0.149 C 
+ATOM     25  C   UNL     1      16.242  34.990  17.968  0.00  0.00    +0.095 C 
+ATOM     26  C   UNL     1      17.056  35.495  16.845  0.00  0.00    +0.025 C 
+ATOM     35  C   UNL     1      16.666  35.410  15.571  0.00  0.00    +0.012 C 
+ATOM     36  C   UNL     1      15.416  34.831  15.041  0.00  0.00    +0.064 A 
+ENDROOT
+BRANCH  15  14
+ATOM     10  C   UNL     1      16.811  33.150   9.012  0.00  0.00    +0.120 A 
+ATOM     11  C   UNL     1      15.994  34.197   9.399  0.00  0.00    +0.065 A 
+ATOM     12 CL   UNL     1      15.045  35.036   8.221  0.00  0.00    -0.080 Cl
+ATOM     13  C   UNL     1      15.949  34.558  10.724  0.00  0.00    +0.021 A 
+ATOM     14  C   UNL     1      16.710  33.878  11.670  0.00  0.00    +0.056 A 
+ATOM     37  C   UNL     1      17.528  32.828  11.266  0.00  0.00    +0.007 A 
+ATOM     38  C   UNL     1      17.579  32.471   9.937  0.00  0.00    +0.017 A 
+BRANCH  10   9
+ATOM      9  O   UNL     1      16.866  32.825   7.666  0.00  0.00    -0.265 OA
+BRANCH   9   8
+ATOM      1  C   UNL     1      18.138  29.637   6.346  0.00  0.00    -0.025 A 
+ATOM      2  C   UNL     1      17.058  28.787   6.482  0.00  0.00    -0.014 A 
+ATOM      3  C   UNL     1      15.918  29.340   7.042  0.00  0.00    +0.030 A 
+ATOM      4  S   UNL     1      14.404  28.588   7.348  0.00  0.00    -0.045 S 
+ATOM      5  C   UNL     1      13.632  29.965   8.008  0.00  0.00    +0.066 A 
+ATOM      6  C   UNL     1      14.534  30.996   7.976  0.00  0.00    -0.022 A 
+ATOM      7  C   UNL     1      15.817  30.669   7.445  0.00  0.00    +0.011 A 
+ATOM      8  C   UNL     1      16.909  31.483   7.294  0.00  0.00    +0.113 A 
+ATOM     39  C   UNL     1      18.065  30.956   6.741  0.00  0.00    +0.009 A 
+ENDBRANCH   9   8
+ENDBRANCH  10   9
+ENDBRANCH  15  14
+BRANCH  26  27
+ATOM     27  C   UNL     1      18.350  36.181  17.117  0.00  0.00    +0.197 C 
+ATOM     28  O   UNL     1      18.538  36.839  18.137  0.00  0.00    -0.390 OA
+ATOM     29  N   UNL     1      19.290  36.032  16.134  0.00  0.00    -0.286 N 
+ATOM     30  H   UNL     1      19.319  35.193  15.591  0.00  0.00    +0.184 HD
+BRANCH  29  31
+ATOM     31  C   UNL     1      20.241  37.091  15.883  0.00  0.00    +0.161 C 
+BRANCH  31  32
+ATOM     32  C   UNL     1      21.650  36.633  16.170  0.00  0.00    +0.180 C 
+BRANCH  32  33
+ATOM     33  O   UNL     1      21.700  36.251  17.537  0.00  0.00    -0.393 OA
+ATOM     34  H   UNL     1      22.578  35.956  17.750  0.00  0.00    +0.209 HD
+ENDBRANCH  32  33
+ENDBRANCH  31  32
+ENDBRANCH  29  31
+ENDBRANCH  26  27
+TORSDOF 7
