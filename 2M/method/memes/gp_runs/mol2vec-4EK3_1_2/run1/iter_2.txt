@@ -1,5 +1,0 @@
-O=C1Cc2c([nH]c3ccc([N+](=O)[O-])cc23)-c2ccccc2N1,-7.75
-CC(=C1C(=O)Nc2ccc(NC(N)=O)cc21)c1ccc[nH]1,-9.083
-Cc1c[nH]c(C=C2C(=O)Nc3ccccc32)c1CCC(=O)O,-6.83
-O=C1Nc2ccc(S(O)(O)O)cc2C1=C1Nc2ccccc2C1=O,-8.134
-O=C1Nc2ccccc2C1=C1Nc2ccccc2C1=NO,-10.028
