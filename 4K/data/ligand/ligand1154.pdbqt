@@ -1,0 +1,22 @@
+REMARK  Name = 5KNJ
+REMARK  10 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_2  and  O_5
+REMARK    2  A    between atoms: O_5  and  C_6
+REMARK    3  A    between atoms: C_9  and  N_12
+REMARK    4  A    between atoms: N_15  and  C_16
+REMARK    5  A    between atoms: C_19  and  N_22
+REMARK    6  A    between atoms: N_22  and  C_23
+REMARK    7  A    between atoms: C_26  and  N_30
+REMARK    8  A    between atoms: C_33  and  S_37
+REMARK    9  A    between atoms: S_37  and  O_38
+REMARK   10  A    between atoms: S_37  and  O_39
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  N   UNL     1     -26.776  -0.410 -24.446  0.00  0.00    -0.344 NA
+ATOM      2  H   UNL     1     -27.742  -0.694 -24.084  0.00  0.00    +0.115 HD
+ATOM      3  H   UNL     1     -26.067  -1.174 -24.205  0.00  0.00    +0.115 HD
+ATOM      4  H   UNL     1     -26.480   0.509 -23.986  0.00  0.00    +0.115 HD
+ENDROOT
+TORSDOF 0

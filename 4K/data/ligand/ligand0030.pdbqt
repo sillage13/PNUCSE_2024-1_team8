@@ -1,0 +1,13 @@
+REMARK  Name = 6QAG
+REMARK  0 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  C   UNL     1       7.295   7.988  46.787  0.00  0.00    +0.000 A 
+ATOM      2  N   UNL     1       8.611   8.102  47.056  0.00  0.00    -0.400 NA
+ATOM      3  N   UNL     1       8.842   7.308  48.131  0.00  0.00    +0.000 NA
+ATOM      4  N   UNL     1       7.692   6.709  48.534  0.00  0.00    -0.100 NA
+ATOM      5  C   UNL     1       6.733   7.137  47.688  0.00  0.00    +0.000 A 
+ENDROOT
+TORSDOF 0

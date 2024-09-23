@@ -1,0 +1,28 @@
+REMARK  Name = DXK
+REMARK  1 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: CAA_6  and  C2_7
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      7  C   UNL     1      85.223 136.215  71.574  0.00  0.00    +0.366 C 
+ATOM      8  N   UNL     1      84.404 137.267  71.379  0.00  0.00    +0.014 NA
+ATOM      9  C   UNL     1      83.385 137.174  70.503  0.00  0.00    +0.267 A 
+ATOM     10  N   UNL     1      82.448 138.060  70.131  0.00  0.00    -0.213 N 
+ATOM     11  C   UNL     1      82.352 139.423  70.699  0.00  0.00    +0.157 C 
+ATOM     12  N   UNL     1      81.677 137.519  69.230  0.00  0.00    -0.165 NA
+ATOM     13  C   UNL     1      82.105 136.257  69.036  0.00  0.00    +0.127 A 
+ATOM     14  C   UNL     1      83.188 136.047  69.813  0.00  0.00    +0.125 A 
+ATOM     15  C   UNL     1      84.016 135.001  70.016  0.00  0.00    +0.335 C 
+ATOM     16  N   UNL     1      83.812 133.866  69.336  0.00  0.00    -0.073 NA
+ATOM     17  N   UNL     1      85.034 135.076  70.891  0.00  0.00    -0.041 NA
+ENDROOT
+BRANCH   7   6
+ATOM      1  C   UNL     1      87.002 135.116  72.767  0.00  0.00    +0.011 A 
+ATOM      2  C   UNL     1      88.082 135.138  73.650  0.00  0.00    +0.021 A 
+ATOM      3  C   UNL     1      88.467 136.336  74.233  0.00  0.00    +0.099 A 
+ATOM      4  N   UNL     1      87.769 137.518  73.936  0.00  0.00    -0.242 NA
+ATOM      5  C   UNL     1      86.680 137.490  73.034  0.00  0.00    +0.106 A 
+ATOM      6  C   UNL     1      86.294 136.278  72.469  0.00  0.00    +0.105 A 
+ENDBRANCH   7   6
+TORSDOF 1

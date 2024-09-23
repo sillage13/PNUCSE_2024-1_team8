@@ -1,0 +1,53 @@
+REMARK  Name = 3M42
+REMARK  6 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C_7  and  C_9
+REMARK    2  A    between atoms: C_13  and  O_15
+REMARK    3  A    between atoms: O_15  and  C_16
+REMARK    4  A    between atoms: C_16  and  C_17
+REMARK    5  A    between atoms: C_17  and  O_18
+REMARK    6  A    between atoms: O_18  and  C_19
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  N   UNL     1      38.053   5.893  18.450  0.00  0.00    -0.250 NA
+ATOM      2  C   UNL     1      38.496   6.412  19.564  0.00  0.00    +0.060 A 
+ATOM      3  C   UNL     1      37.884   6.234  20.939  0.00  0.00    +0.101 C 
+ATOM      4  C   UNL     1      38.890   6.623  22.074  0.00  0.00    +0.080 C 
+ATOM      5  N   UNL     1      39.931   7.611  21.711  0.00  0.00    -0.188 NA
+ATOM      6  C   UNL     1      40.294   7.882  20.424  0.00  0.00    +0.269 C 
+ATOM      7  O   UNL     1      41.161   8.700  20.174  0.00  0.00    -0.268 OA
+ATOM      8  C   UNL     1      39.598   7.156  19.331  0.00  0.00    +0.069 A 
+ATOM      9  C   UNL     1      39.874   7.056  17.845  0.00  0.00    +0.015 A 
+ATOM     10  C   UNL     1      40.853   7.560  16.959  0.00  0.00    +0.011 A 
+ATOM     11  C   UNL     1      40.745   7.225  15.582  0.00  0.00    +0.010 A 
+ATOM     12  C   UNL     1      39.673   6.408  15.119  0.00  0.00    +0.002 A 
+ATOM     13  C   UNL     1      39.540   6.065  13.753  0.00  0.00    +0.120 A 
+ATOM     14  N   UNL     1      38.493   5.285  13.341  0.00  0.00    -0.254 NA
+ATOM     15  C   UNL     1      37.534   4.798  14.187  0.00  0.00    +0.073 A 
+ATOM     27  C   UNL     1      37.618   5.101  15.566  0.00  0.00    +0.039 A 
+ATOM     28  C   UNL     1      38.683   5.903  16.034  0.00  0.00    +0.012 A 
+ATOM     29  C   UNL     1      38.822   6.243  17.399  0.00  0.00    +0.080 A 
+ENDROOT
+BRANCH  15  16
+ATOM     16  C   UNL     1      36.426   3.964  13.641  0.00  0.00    +0.022 A 
+ATOM     17  C   UNL     1      35.815   2.973  14.443  0.00  0.00    +0.058 A 
+ATOM     18  C   UNL     1      34.762   2.156  13.979  0.00  0.00    +0.139 A 
+ATOM     24  C   UNL     1      34.322   2.365  12.647  0.00  0.00    +0.156 A 
+ATOM     25  N   UNL     1      34.919   3.326  11.878  0.00  0.00    -0.259 NA
+ATOM     26  C   UNL     1      35.940   4.121  12.323  0.00  0.00    +0.121 A 
+BRANCH  18  19
+ATOM     19  O   UNL     1      34.209   1.191  14.844  0.00  0.00    -0.488 OA
+BRANCH  19  20
+ATOM     20  C   UNL     1      34.994   0.158  15.476  0.00  0.00    +0.257 C 
+BRANCH  20  21
+ATOM     21  C   UNL     1      34.224  -0.412  16.691  0.00  0.00    +0.200 C 
+BRANCH  21  22
+ATOM     22  O   UNL     1      34.348   0.503  17.800  0.00  0.00    -0.380 OA
+ATOM     23  C   UNL     1      33.131   0.653  18.564  0.00  0.00    +0.194 C 
+ENDBRANCH  21  22
+ENDBRANCH  20  21
+ENDBRANCH  19  20
+ENDBRANCH  18  19
+ENDBRANCH  15  16
+TORSDOF 5

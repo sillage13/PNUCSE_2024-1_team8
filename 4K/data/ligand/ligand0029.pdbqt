@@ -1,0 +1,16 @@
+REMARK  Name = 6QAH
+REMARK  1 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK    1  A    between atoms: C2_2  and  C3_3
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      3  C   UNL     1       6.082   9.520  41.060  0.00  0.00    +0.100 C 
+ATOM      4  N   UNL     1       4.851   9.083  40.824  0.00  0.00    -0.050 NA
+ATOM      5  N   UNL     1       6.927   9.821  40.090  0.00  0.00    -0.050 NA
+ENDROOT
+BRANCH   3   2
+ATOM      1  C   UNL     1       7.054   8.402  43.079  0.00  0.00    -0.150 C 
+ATOM      2  C   UNL     1       6.523   9.675  42.483  0.00  0.00    -0.100 C 
+ENDBRANCH   3   2
+TORSDOF 1

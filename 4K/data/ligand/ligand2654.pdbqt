@@ -1,0 +1,21 @@
+REMARK  Name = 4bda_ligand
+REMARK  0 active torsions:
+REMARK  status: ('A' for Active; 'I' for Inactive)
+REMARK                            x       y       z     vdW  Elec       q    Type
+REMARK                         _______ _______ _______ _____ _____    ______ ____
+ROOT
+ATOM      1  N   UNL     1     -38.050  33.892   5.334  0.00  0.00    -0.318 NA
+ATOM      2  C   UNL     1     -37.296  34.609   6.199  0.00  0.00    +0.265 A 
+ATOM      3  N   UNL     1     -37.343  33.944   7.419  0.00  0.00    -0.123 N 
+ATOM      4  C   UNL     1     -38.111  32.807   7.297  0.00  0.00    +0.105 A 
+ATOM      5  C   UNL     1     -38.416  31.778   8.178  0.00  0.00    +0.014 A 
+ATOM      6  C   UNL     1     -39.153  30.697   7.698  0.00  0.00    -0.029 A 
+ATOM      7  C   UNL     1     -39.586  30.656   6.373  0.00  0.00    -0.030 A 
+ATOM      8  C   UNL     1     -39.303  31.698   5.499  0.00  0.00    -0.020 A 
+ATOM      9  N   UNL     1     -36.598  34.655   8.334  0.00  0.00    -0.165 NA
+ATOM     10  C   UNL     1     -36.164  35.664   7.614  0.00  0.00    +0.262 A 
+ATOM     11  N   UNL     1     -36.545  35.693   6.309  0.00  0.00    -0.207 N 
+ATOM     12  H   UNL     1     -36.308  36.387   5.585  0.00  0.00    +0.237 HD
+ATOM     13  C   UNL     1     -38.554  32.773   5.975  0.00  0.00    +0.009 A 
+ENDROOT
+TORSDOF 0
