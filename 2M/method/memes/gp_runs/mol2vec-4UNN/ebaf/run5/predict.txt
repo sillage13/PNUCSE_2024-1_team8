@@ -1,0 +1,13 @@
+ligand0000100, Score:-11.6
+ligand0000110, Score:-11.5
+ligand0000149, Score:-11.5
+ligand0000200, Score:-11.4
+ligand0000213, Score:-11.4
+ligand0000425, Score:-11.2
+ligand0000635, Score:-11.1
+ligand0000682, Score:-11.1
+ligand0000733, Score:-11.1
+ligand0001098, Score:-10.9
+
+average: -11.279999999999998
+docking count: 21000
