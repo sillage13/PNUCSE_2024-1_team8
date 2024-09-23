@@ -1,0 +1,13 @@
+ligand0000001,-12.7
+ligand0000003,-12.3
+ligand0000004,-12.3
+ligand0000005,-12.2
+ligand0000006,-12.1
+ligand0000007,-12.1
+ligand0000008,-12.1
+ligand0000009,-12.1
+ligand0000011,-12.0
+ligand0000013,-12.0
+
+average: -12.19
+docking count: 21000
