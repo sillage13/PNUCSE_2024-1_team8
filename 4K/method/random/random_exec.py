@@ -1,11 +1,8 @@
 import argparse
 from vina import Vina
-import numpy as np
 import random
 import os
 import pickle
-from collections import defaultdict
-
 
 def calculate_center_of_mass(pdbqt_file):
     x_coords = []

@@ -1,0 +1,94 @@
+.result-list {
+    width: 80%;
+    max-width: 800px;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.result-list > li {
+    display: flex;
+    flex-direction: row;
+    margin: 15px 0;
+    border: 1px solid var(--green);
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.result-list > li > div {
+    padding: 10px 15px;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.result-list > li > div:nth-child(1) {
+    flex: 0.6;
+    background-color: var(--green);
+    color: var(--on-green);
+    justify-content: flex-start;
+    border-right: 1px solid var(--green);
+}
+
+.result-list > li > div:nth-child(2) {
+    flex: 0.4;
+    justify-content: flex-end;
+    color: var(--on-background);
+    text-align: right;
+}
+
+.result-list > li > div a {
+    text-decoration: none;
+    color: var(--on-background);
+}
+
+.result-list > li > div a:hover {
+    text-decoration: underline;
+    color: var(--hover);
+}
+
+.result-list > li .material-symbols-outlined {
+    color: var(--on-background);
+}
+
+.result-list > li .material-symbols-outlined:hover {
+    background-color: var(--hover);
+    border-radius: 50%;
+}
+
+/* Pagination Styles */
+.pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.pagination a {
+    color: var(--on-background);
+    padding: 8px 16px;
+    text-decoration: none;
+    border: 1px solid var(--green);
+    margin: 0 5px;
+    border-radius: 5px;
+}
+
+.pagination a:hover {
+    background-color: var(--hover);
+    color: var(--on-green);
+}
+
+/* Media Queries for responsiveness */
+@media screen and (max-width: 700px) {
+    .result-list > li > div:nth-child(1) {
+        flex: 0.7;
+    }
+
+    .result-list > li > div:nth-child(2) {
+        flex: 0.3;
+    }
+
+    .result-list > li > div {
+        font-size: 14px;
+        padding: 8px 10px;
+    }
+}

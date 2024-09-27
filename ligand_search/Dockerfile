@@ -61,19 +61,17 @@ RUN git clone https://github.com/openbabel/openbabel.git && \
     make install
 
 COPY ./requirements.txt /tmp/requirements.txt
-COPY ./requirements.dev.txt /tmp/requirements.dev.txt
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
     /py/bin/pip install -r /tmp/requirements.txt && \
-    if [ "$DEV" = "true" ]; \
-        then /py/bin/pip install -r /tmp/requirements.dev.txt; \
-    fi && \
     rm -rf /tmp/* && \
     adduser \
         --disabled-password \
         django-user
 
 ENV PATH="/py/bin:$PATH"
+
+ENV LD_LIBRARY_PATH="/usr/local/lib:$LD_LIBRARY_PATH"
 
 USER django-user

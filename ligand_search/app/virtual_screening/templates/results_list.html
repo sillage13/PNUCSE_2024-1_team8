@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% load static %}
+    <script src="{% static 'js/results_list.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/results_list.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="content">
+    <h2>Search Results</h2>
+
+    <ul class="result-list">
+        {% for result in page_obj %}
+        <li>
+            <div>
+                <a href="{% url 'result_detail' result.id %}">
+                    {{ result.receptor_name }} - {{ result.started_at|date:"Y-m-d H:i" }}
+                </a>
+            </div>
+            <div>Status: {{ result.get_status_display }}</div>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

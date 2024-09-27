@@ -1,0 +1,13 @@
+Top10 ligands
+File: Cc1ccc(Cc2c(C)c(C#N)c3nc4ccccc4n3c2N2CCC(Cc3ccccc3)CC2)cc1, Score: -10.0
+File: O=C(OCC(=O)c1ccc2c(c1)-c1ccccc1C2)C1=COCCO1, Score: -9.9
+File: Cc1ccc(S(=O)(=O)N2CCCCC2)cc1NC(=O)CSc1nnc2[nH]c3ccccc3n12, Score: -9.5
+File: COc1cccc(-n2cnnc2SCC(=O)N2CCCC2c2ccc3c(c2)OCCO3)c1, Score: -9.5
+File: O=C(OCc1ccc(C(=O)N2CCCC2)cc1)C1CCN(C(=O)c2ccco2)CC1, Score: -9.5
+File: NC(=O)Nc1ccc(C(=O)NCCC(c2ccccc2)c2ccccc2)cc1, Score: -9.4
+File: O=C(O)C1CCN(C(=O)c2cc(Oc3ccccc3)ccn2)C1, Score: -9.4
+File: Cc1ccc(Oc2cc(CNC(=O)c3cc(F)c(F)cc3Cl)ccn2)cc1C, Score: -9.3
+File: O=S(=O)(c1ccccc1F)N1CCN(Cc2c(O)ccc3ccccc23)CC1, Score: -9.2
+File: Cc1cccc(-c2nnc(SC3CCCCN(C(=O)c4ccc(Cl)cc4)C3=O)o2)c1, Score: -9.2
+
+Average score of top10 ligands: -9.49

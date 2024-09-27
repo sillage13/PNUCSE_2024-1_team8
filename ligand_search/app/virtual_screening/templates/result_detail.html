@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block head %}
+    {% comment %}
+    <!--3Dmol.js를 사용하는 경우-->
+    <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
+    <script>
+        let receptorFile = {{ receptor의 pdb 파일 }}
+        let ligandFile = {{ docking한 리간드 pose의 xyz 파일 }}
+    </script>
+    {% endcomment %} 
+    {% load static %}
+    <script src="{% static 'js/result_detail.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/result_detail.css' %}">
+{% endblock head %}
+
+{% block content %}
+    <div class="content half">   
+        <div id="visualization">
+            <span style="font-size: 20px; padding: 5px;">visualization</span>
+            <div class="visual-info">
+                <div>Receptor<br>{{ result.receptor_name }}</div>
+                <div>
+                    Ligand<br> {{ result.ligand_1 }}
+                    <!-- {% comment %}
+                    {% if ligand %}
+                        Ligand<br>ligand name
+                    {% endif %}
+                    {% endcomment %} -->
+                </div>
+            </div>
+        </div>
+        
+        <div class="result">
+            <div class="category">Top10 Ligands</div>
+            <ul class="result_ul">
+                {% for ligand_score in ligands_scores %}
+                    <li {% if forloop.counter == 4 %}class="selected"{% endif %}>
+                        <div>{{ ligand_score.ligand_smile }}</div>
+                        <div>
+                            <div>{{ ligand_score.score }}</div>
+                            <a href="?ligand={{ result.id }}"><span class="material-symbols-outlined">deployed_code</span></a>
+                        </div>
+                    </li>
+                {% endfor %}
+                
+
+
+                <!-- {% for result in result_list %}
+                    <li {% if ligand.id == result.ligand.id %} selected{% endif %}>
+                        <div>{{ result.ligand.name }}</div>
+                        <div>
+                            <div>{{ result.score }}</div>
+                            <a href="{% url "download" result.ligand.id %}"><span class="material-symbols-outlined">download</span></a>
+                            <a href="?ligand={{ result.igand.id }}"><span class="material-symbols-outlined">view_in_ar</span></a>
+                        </div>
+                    </li>
+                {% endfor %} -->
+
+                <!--
+                {% for i in '0123456789' %}
+                    <li {% if i == '3' %}class="selected"{% endif %}>
+                        <div>NAME</div>
+                        <div>
+                            <div>-10.8</div>
+                            <a href="{% url "result_detail" result.id %}"><span class="material-symbols-outlined">download</span></a>
+                            <a href="{% url "result_detail" result.id %}"><span class="material-symbols-outlined">deployed_code</span></a>
+                        </div>
+                    </li>
+                {% endfor %}
+                -->
+            </ul>
+        </div>
+    </div>
+{% endblock content %}
