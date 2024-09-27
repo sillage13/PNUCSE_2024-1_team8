@@ -1,7 +1,0 @@
-periter:	2000
-initial:	8000
-feature:	fingerprint
-capital:   30000
-eps:	0.05
-beta:  1.0
-rec:	pi_8000_6_2000_5
