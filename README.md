@@ -2,9 +2,11 @@
 
 ## 실행 준비:
 1. 적절한 위치에 이 리포지토리를 복제
+
 git clone https://github.com/sillage13/PNUCSE_2024-1_team8
 
 2. 아래 링크에서 필요한 데이터 압축 파일를 다운로드
+
 https://drive.google.com/file/d/1ECHdE6eA5Ap0lIV48M_w6OzO98KykY1Z/view?usp=sharing
 
 3. 압축 파일을 {복제된 리포지토리 경로}/2M/data 에 압축 해제
