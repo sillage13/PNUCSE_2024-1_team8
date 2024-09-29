@@ -10,15 +10,12 @@
 {% block content %}
 <div class="content">
     <div class="category">
-        Add Ligand From Pre-Made Database
+        Add Ligand
     </div>
 
-    <div class="add-ligand-from-db">
-        <button id="addFromDbBtn" class="add_btn">Add Ligands from Pre-Made Database</button>
-    </div>
-
-    <div class="category">
-        Add Ligand Manually
+    <div class="add_btn_div">
+        <button type="button" id="addFromDB" class="add_btn">Add Ligand From Pre-Made Database</button>
+        <span class="material-symbols-outlined">database</span>
     </div>
 
     <form action="" method="POST" enctype="multipart/form-data">
@@ -26,7 +23,7 @@
         <ul class="form_ul">
             <li>
                 <label class="label">Ligand</label>
-                <input type="text" name="ligand_smile" id="id_ligand">
+                <input type="text" name="ligand_smile" id="id_ligand" placeholder="SMILES">
                 {% if error_message %}
                 <div class="error_message">{{ error_message }}</div>
                 {% endif %}
@@ -35,18 +32,16 @@
         </ul>
     </form>
 </div>
+
 <div class="content">
     <div class="category">
         Ligand List
     </div>
     <ul class="ligand_ul">
         {% for ligand in page_obj %}
-        <li>
+        <li class="ligand_li">
+            <div>{{ ligand.created_at|date:'Y-m-d' }}</div>
             <div>{{ ligand.ligand_smile }}</div>
-            <div class="ligand-info">
-                <div>{{ ligand.created_at|date:'Y-m-d' }}</div>
-                <div>{{ ligand.ligand_smile }}</div>
-            </div>
         </li>
         {% endfor %}
     </ul>

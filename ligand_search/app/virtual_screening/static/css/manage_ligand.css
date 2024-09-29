@@ -1,39 +1,42 @@
+.add_btn_div {
+    width: 60%;
+    max-width: 500px;
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+.add_btn {
+    width: 100%;
+    background: var(--green);
+    color: var(--on-green);
+    padding: 10px 15px;
+    border: none;
+    border-radius: 10px;
+    font-size: 15px;
+}
+
+.add_btn_div .material-symbols-outlined {
+    position: absolute;
+    right: 20px;
+    pointer-events: none;
+    color: var(--on-green);
+}
+
 .ligand_ul {
     width: 60%;
     max-width: 500px;
     margin-top: 5px;
 }
 
-.ligand_ul > li {
-    display: flex;
-    flex-direction: row;
-    margin: 20px 0;
-}
-
-.ligand_ul > li > div {
-    padding:  7px 15px;
-    font-size: 15px;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--green);
-}
-
-.ligand_ul > li > div:nth-child(1) {
-    flex: 0.3;
-    background-color: var(--green);
-    color: var(--on-green);
-    border-radius: 10px 0 0 10px;
-    justify-content: center;
-}
-
-.ligand_ul .ligand-info {
-    flex: 0.7;
-    border-radius: 0 10px 10px 0;
-    justify-content: flex-end;
+.ligand_li {
+    margin: 20px 5px;
     position: relative;
 }
 
-.ligand_ul .ligand-info > div:nth-child(1) {
+.ligand_li > div:nth-child(1) {
     position: absolute;
     bottom: 100%;
     transform: translateY(50%);
@@ -43,36 +46,23 @@
     padding: 0 5px;
 }
 
-.ligand_ul .ligand-info > div:nth-child(2) {
-    flex: 1;
-}
-
-.ligand_ul > li .material-symbols-outlined {
-    color: var(--on-background);
-}
-
-.ligand_ul > li .material-symbols-outlined:hover {
-    background-color: var(--hover);
-    border-radius: 12px;
+.ligand_li > div:nth-child(2) {   
+    padding:  8px 15px;
+    font-size: 15px;
+    border: 3px double var(--green);
+    border-radius: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 
 @media screen and (max-width: 700px) {
-    .ligand_ul > li > div:nth-child(1) {
-        max-width: 30%;
-    }
-
-    .ligand_ul .ligand-info {
-        max-width: 70%;
+    .add_btn_div .material-symbols-outlined {
+        display: none;
     }
 
     .ligand_ul .ligand-info > div:nth-child(1) {
         display: none;
-    }
-
-    .ligand_ul .ligand-info > div:nth-child(2) {
-        overflow: hidden;
-        text-overflow: ellipsis;
     }
 
 }
