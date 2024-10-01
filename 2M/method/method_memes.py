@@ -1,123 +1,63 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[2]:
-
 # example excute 
 # python3 memes.py --run 1 --rec "greedy_8000_6_2000_shuffled_3" --cuda cpu --feature fingerprint --features_path ./data/fingerprints.dat --iters 6 --capital 30000 --initial 8000 --periter 2000 --n_cluster 4000 --save_af True --result_tail 3 --acquisition_func greedy --shuffle True 
 
 import numpy as np
 #from joblib import Parallel, delayed
 from scipy.stats import norm
-
-
-
 import sys
 import argparse
 import os
-
-import math
 import torch
 from torch.utils.data import DataLoader, TensorDataset
 import gpytorch
-#from matplotlib import pyplot as plt
 import numpy as np
-import pickle
 import time
 import tqdm
-#import ipdb
 from collections import defaultdict
 import joblib
-import random
+# import random
+from utils import *
 
-# from vina import Vina
 
 
-def load_data(filename):
-    # with open(filename, 'rb') as f:
-    #     return pickle.load(f)
-    return joblib.load(filename, mmap_mode='r')
+
+# def load_data(filename):
+#     # with open(filename, 'rb') as f:
+#     #     return pickle.load(f)
+#     return joblib.load(filename, mmap_mode='r')
     
-def save_data(target, filename):
-    # with open(filename, 'wb') as f:
-    #     pickle.dump(target, f)
-    joblib.dump(target, filename)
+# def save_data(target, filename):
+#     # with open(filename, 'wb') as f:
+#     #     pickle.dump(target, f)
+#     joblib.dump(target, filename)
 
-check_dup = defaultdict(bool)
-result_list = []
-docking_count = 1
-access_cnt = 0
-all_scores = {}
-smile_index_dict = load_data("./../../data/smile_index_dict.dat")
+
 
 def scoring_function(smile,index):
-    global docking_dict
+    global is_demo
     global docking_count
-    global smile_index_dict
-    print(docking_count)
-    print(f"{smile_index_dict[smile]}, {docking_dict[smile]}")
-    print()
-    return -1 * docking_dict[smile]
+    global check_dup
+    global docking_result
+    global all_scores
 
-    # ## add your scoring function here
-    # ## if want to search for molecules while optimize negative value multiply by -1 before returning
-    # ligand = ligands[index]
-    # global docking_count
-    # global access_cnt
-    # global receptor
-    # access_cnt += 1
-    # print(ligand, docking_count, access_cnt)
-    # global docking_dict2
-    # score = all_scores.get(index, 100)
-    # if ligand in docking_dict2:
-    #     print("HIT")
-    #     print(docking_dict2[ligand])
-    #     print()
-    #     return -1 * docking_dict2[ligand]
+    check_dup[smile] = True
+    docking_count += 1
 
-    # v = Vina(sf_name='vina')
-    # v.set_receptor(f'./../data/receptor/{receptor}.pdbqt')
-    # try:
-    #     v.set_ligand_from_file(f"./../data/ligand/{ligand}")
-    # except TypeError as e:
-    #     print(f"in {ligand}")
-    #     print(e)
+    if is_demo:
+        global docking_dict
+        print(docking_count)
+        print(f"{docking_dict[smile]}, {docking_dict[smile]}")
+        print()
+        result = docking_dict[smile]
+    else:
+        global receptor_file
+        score = cal_score(smile, receptor_file)
+        result = score
+    
+    docking_result.append((result, smile))
+    all_scores[smile] = result
 
-    #     all_scores[index] = 0
-    #     return 0
-
-    # x_coords = []
-    # y_coords = []
-    # z_coords = []
-
-    # with open(f"./../data/ligand/{ligand}", "r") as f:
-    #     for line in f:
-    #         if line.startswith("ATOM") or line.startswith("HETATM"):
-    #             x = float(line[30:38])
-    #             y = float(line[38:46])
-    #             z = float(line[46:54])
-    #             x_coords.append(x)
-    #             y_coords.append(y)
-    #             z_coords.append(z)
-
-    # center_x = sum(x_coords) / len(x_coords)
-    # center_y = sum(y_coords) / len(y_coords)
-    # center_z = sum(z_coords) / len(z_coords)
-
-    # v.compute_vina_maps(center=[center_x, center_y, center_z], box_size=[120, 120, 120])
-
-    # v.dock(exhaustiveness=32, n_poses=10)
-    # print()
-    # score = v.score()[0]
-
-    # docking_dict2[ligand] = score
-    # # pickle.dump(docking_dict, open("./data/docking_result.dat", "wb"))
-
-    # all_scores[index] = score
-    # ## optimizing for -ve value
-    # return -1*score
-    # ## optimizing for +ve value
-    # #return +1*score
+    return -1 * result
 
 
 parser = argparse.ArgumentParser()
@@ -136,10 +76,12 @@ parser.add_argument('--acquisition_func', default="ei")
 parser.add_argument('--save_af', required=False,default="False")
 parser.add_argument('--eps', default='0.05')
 parser.add_argument('--beta', default=1)
-# parser.add_argument("--ligand_path", default="./data/ligands.txt")
-# parser.add_argument("--rec_path", default="receptor.pdbqt")
+parser.add_argument("--ligand_path", default="./data/ligands.txt")
+parser.add_argument("--receptor", default="receptor.pdbqt")
 parser.add_argument("--result_tail", default="1")
 parser.add_argument("--total_count", default=40)
+parser.add_argument('is_demo', type=bool, help='Is demo')
+parser.add_argument('result_dir', type=str, help='Result directory')
 args = parser.parse_args()
 run = int(args.run)
 iters = int(args.iters)
@@ -156,11 +98,24 @@ features_path = args.features_path
 result_tail = args.result_tail
 total_count = int(args.total_count)
 device = args.cuda
-# rec_path = args.rec_path
-# receptor = rec_path.split('/')[-1].split('.')[0]
+receptor_file = args.receptor                                   #4UNN.pdbqt
+receptor_name = receptor_file.split('/')[-1].split('.')[0]     #4UNN
+is_demo = args.is_demo
+result_dir = args.result_dir
 
-# docking_dict = load_data(f"data/{receptor}_docking_result.dat")
-docking_dict = load_data(f"./../../data/smile_score_dict.dat")
+
+
+check_dup = defaultdict(bool)
+docking_result = list()
+all_scores = dict()
+docking_count = 0
+
+if is_demo:
+    docking_dict = load_data("/screening/data/smile_score_dict.dat")
+    smile_list = load_data("/screening/data/smile_list.dat")
+else:
+    smile_list = list(Ligand.objects.values_list('ligand_smile', flat=True))
+
 
 if device == "cpu":
     device = torch.device("cpu")
@@ -186,6 +141,7 @@ with open(directory_path+'/config.txt','w') as f:
     f.write("rec:	"+str(rec)+"\n")
     f.close()
 
+#TODO   feature 파일 연결
 pickle_obj = joblib.load(features_path, mmap_mode='r')
 features_ = np.array(pickle_obj)
 
@@ -202,16 +158,11 @@ features[:] = 2 * features - 1
 print(features.shape)
 
 
+#TODO   클러스터 파일 선택
 ## loading cluster labels
 labels = np.loadtxt(f"data/labels{n_cluster}.txt")
 
 
-##
-# with open(args.ligand_path,'r') as f:
-#     ligands = f.readlines()
-#     ligands = [i.strip('\n') for i in ligands]
-
-# print(ligands)
 
 
 ## selecting inital points
@@ -227,29 +178,19 @@ with open(args.smiles_path,'r') as f:
     smiles = [i.strip('\n') for i in smiles]
 
 
-##
-# docking_dict = pickle.load(open(f"./../data/{receptor}_docking_result.dat", "rb"))
-# for ligand, score in docking_dict.items():
-#         all_scores[smiles.index(ligand)] = score
-all_scores = np.array(list(docking_dict.values()))
-
 ## making inital dataset 
 X_init = features[X_index]
 Y_init = []
 
 for index in X_index:
-    check_dup[smiles[index]] = True
     score = scoring_function(smiles[index], index)
-    # result_list.append((-score, smiles[index]))
-    result_list.append((-score, smile_index_dict[smiles[index]]))
-    docking_count += 1
     Y_init.append(score)
 
 tmp_sum = 0
 with open(directory_path+'/start_smiles.txt','w') as f:
     for index in X_index:
-        f.write(str(smile_index_dict[smiles[index]]) + ',' + str(all_scores[index]) + '\n')
-        tmp_sum += all_scores[index]
+        f.write(str(smiles[index]) + ',' + str(all_scores[smiles[index]]) + '\n')
+        tmp_sum += all_scores[smiles[index]]
         smiles_set.add(smiles[index])
     f.write('\naverage: ' + str(tmp_sum / len(X_index)))
     f.close()
@@ -257,10 +198,6 @@ with open(directory_path+'/start_smiles.txt','w') as f:
 print("PHASE 2")
 
 # Initialize samples
-# X_init = np.array(X_init)
-# Y_init = np.array(Y_init)
-# X_sample = X_init.reshape((initial//periter, periter, X_init.shape[1]))
-# Y_sample = Y_init.reshape((initial//periter, periter))
 X_sample = X_init
 Y_sample = Y_init
 
@@ -284,8 +221,6 @@ class GP:
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood()
         self.dataset = TensorDataset(train_x, train_y)
         self.loader = DataLoader(self.dataset, batch_size=1000)
-        # self.train_x = train_x
-        # self.train_y = train_y
         self.train_x, self.train_y = next(iter(self.loader))
         self.model = ExactGPModel(self.train_x, self.train_y, self.likelihood)
         self.eps = eps
@@ -307,8 +242,6 @@ class GP:
             self.compute_af = self.compute_ei
 
     def train_gp(self,train_x, train_y):
-        # train_x = train_x.to(device)    
-        # train_y = train_y.to(device)
         model = self.model.to(device)
         likelihood = self.likelihood.to(device)
         
@@ -558,10 +491,6 @@ for i in range(iters):
     Y_next = []
     count = 0
     indices = []
-    # if len(X_sample) < 1000:
-    #     periter = 200
-    # else:
-    #     periter = int(args.periter)
     for index in next_indexes[::-1]:
         if smiles[index] in smiles_set:
             continue
@@ -569,12 +498,10 @@ for i in range(iters):
             count+=1
             indices.append(index)
             X_next.append(features[index])
-            score = scoring_function(smiles[index],index)
             if smiles[index] not in check_dup:
-                # result_list.append((-score, smiles[index]))
-                result_list.append((-score, smile_index_dict[smiles[index]]))
-                docking_count += 1
-            check_dup[smiles[index]] = True
+                score = scoring_function(smiles[index],index)
+            else:
+                score = all_scores[smiles[index]]
 
             Y_next.append(score)
         if count == periter:
@@ -587,7 +514,7 @@ for i in range(iters):
     with open(directory_path+'/iter_'+str(i)+'.txt','w') as f:
         for index in indices:
             if smiles[index] not in smiles_set:
-                f.write(smiles[index] + ',' + str(all_scores[index]) + '\n')
+                f.write(smiles[index] + ',' + str(all_scores[smiles[index]]) + '\n')
     for index in indices:
         smiles_set.add(smiles[index])
 
@@ -605,7 +532,6 @@ for i in range(iters):
     sys.stdout.flush()
 
 print("PHASE 3")
-# In[ ]:
 train_x, train_y = torch.FloatTensor(X_sample), torch.FloatTensor(Y_sample)
 gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
 gp.train_gp(train_x, train_y)
@@ -630,34 +556,23 @@ average_score = 0
 average_predict_top10 = 0
 average_top10 = 0
 predict_cnt = 0
-# with open(directory_path+"/predict.txt", "w") as f:
 for index in high_predict_idx:
-    score = scoring_function(smiles[index], index)
     if smiles[index] not in check_dup:
-        docking_count += 1
-        # result_list.append((-score, smiles[index]))
-        result_list.append((-score, smile_index_dict[smiles[index]]))
-    check_dup[smiles[index]] = True
+        score = scoring_function(smiles[index], index)
+    else:
+        score = all_scores[smiles[index]]
     average_predict += predicts[index]
     average_score += score
     if predict_cnt < 10:
         average_predict_top10 += predicts[index]
         average_top10 += score
     predict_cnt += 1
-    # f.write(f"{smiles[index]}, {predicts[index]}, {score}\n")
 
     if docking_count >= total_count:
         break
-    # f.write("\n")
-    # f.write(f"average top10 predict score = {average_predict_top10/10}\n")
-    # f.write(f"average top10 score = {average_top10/10}\n")
-    
-    # f.write("\n")
-    # f.write(f"average predict score = {average_predict/predict_cnt}\n")
-    # f.write(f"average score = {average_score/predict_cnt}")
 
-result_list.sort(key=lambda x: (x[0], x[1]))
-top_ligands = result_list[:10]
+docking_result.sort(key=lambda x: (x[0], x[1]))
+top_ligands = docking_result[:10]
 
 tmp_sum = 0
 with open(directory_path+'/predict.txt','w') as f:
@@ -677,6 +592,5 @@ scores = [ligand[0] for ligand in top_ligands]
 avg_score = sum(scores) / len(scores)
 print(f"Average score of top10 ligands: {avg_score: .2f}")
 
-# save_data(docking_dict2, f"./../data/{receptor}_docking_result.dat")
-# save_data(result_list, f"./../result/{receptor}/{total_count}/memes_{af}_result{result_tail}.dat")
-save_data(result_list, f"./../../result/4UNN/memes/{initial}_{iters}_{periter}/memes_{af}_fingerprint_result{result_tail}.dat")
+#TODO   resulr_dir
+# save_data(docking_result, f"./../../result/4UNN/memes/{initial}_{iters}_{periter}/memes_{af}_fingerprint_result{result_tail}.dat")

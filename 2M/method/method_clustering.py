@@ -1,14 +1,16 @@
+import os
+import sys
+import django
+import argparse
 import random
-import pickle
+from utils import cal_score, load_data, save_data
 
-# 나중에 사용할 저장/로드 함수
-def save_data(target, filename):
-    with open(filename, 'wb') as f:
-        pickle.dump(target, f)
 
-def load_data(filename):
-    with open(filename, 'rb') as f:
-        return pickle.load(f)
+# Set up Django environment
+sys.path.append("/app")  # Adjust to your Django project path
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "virtual_screening.settings")
+django.setup()
+
 
 # labels{n}.txt에서 클러스터 인덱스를 로드하는 함수
 def load_cluster_indices(filename):
@@ -17,6 +19,7 @@ def load_cluster_indices(filename):
 
 # 각 클러스터에서 2개의 무작위 SMILES에 대한 평균 점수를 계산하는 함수
 def assign_cluster_scores(smile_list, score_dict, cluster_indices):
+    global docking_result, receptor, is_demo
     cluster_scores = {}
     cluster_smiles = {}
     selected_smiles = set()  # 중복 방지를 위한 집합
@@ -34,16 +37,38 @@ def assign_cluster_scores(smile_list, score_dict, cluster_indices):
             random_smiles = random.sample(smiles, 2)
             # 중복 제거를 위해 선택된 SMILES 추가
             selected_smiles.update(random_smiles)
-            avg_score = (score_dict[random_smiles[0]] + score_dict[random_smiles[1]]) / 2
+            if is_demo:
+                avg_score = (score_dict[random_smiles[0]] + score_dict[random_smiles[1]]) / 2
+                docking_result.append((score_dict[random_smiles[0]], random_smiles[0]))
+                docking_result.append((score_dict[random_smiles[1]], random_smiles[1]))
+            else:
+                score0 = cal_score(random_smiles[0], receptor)
+                score1 = cal_score(random_smiles[1], receptor)
+                docking_result.append((score0, random_smiles[0]))
+                docking_result.append((score1, random_smiles[1]))
+                avg_score = (score0 + score1) / 2
+
             cluster_scores[cluster] = avg_score
         else:
             # 클러스터에 2개 미만의 SMILES가 있을 경우 처리
             selected_smiles.update(smiles)
-            cluster_scores[cluster] = score_dict[smiles[0]] if smiles else 0
+            if is_demo:
+                if smiles:
+                    cluster_scores[cluster] = score_dict[smiles[0]]
+                    docking_result.append((score_dict[smiles[0]], smiles[0]))
+                else:
+                    cluster_scores[cluster] = 0
+            else:
+                if smiles:
+                    cluster_scores[cluster] = cal_score(smiles[0], receptor)
+                    docking_result.append((cluster_scores[cluster], smiles[0]))
+                else:
+                    cluster_scores[cluster] = 0
 
     return cluster_scores, cluster_smiles, list(selected_smiles)
 
-def update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, selected_smiles, target_count=21000):
+def update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, selected_smiles, target_count):
+    global docking_result, receptor, is_demo
     while len(selected_smiles) < target_count:
         # 가장 낮은 점수를 가진 클러스터 찾기
         lowest_cluster = min(cluster_scores, key=cluster_scores.get)
@@ -74,52 +99,79 @@ def update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, sele
 
         # 새로운 SMILES가 추가된 경우에만 클러스터 점수 업데이트
         if added:
-            new_avg_score = (score_dict[random_smiles[0]] + score_dict[random_smiles[1]]) / 2
-            cluster_scores[lowest_cluster] = new_avg_score
+            if is_demo:
+                new_avg_score = (score_dict[random_smiles[0]] + score_dict[random_smiles[1]]) / 2
+                docking_result.append((score_dict[random_smiles[0]], random_smiles[0]))
+                docking_result.append((score_dict[random_smiles[1]], random_smiles[1]))
+            else:
+                score0 = cal_score(random_smiles[0], receptor)
+                score1 = cal_score(random_smiles[1], receptor)
+                docking_result.append((score0, random_smiles[0]))
+                docking_result.append((score1, random_smiles[1]))
+                new_avg_score = (score0 + score1) / 2
+            cluster_scores[lowest_cluster] = (cluster_scores[lowest_cluster] + new_avg_score) / 2
         else:
             # 새로운 SMILES가 추가되지 않았다면 다음 루프에서 이 클러스터 건너뛰기
             cluster_scores.pop(lowest_cluster, None)
 
     return cluster_scores, selected_smiles
 
-# (리간드_스마일, 점수) 튜플 리스트를 생성하고 점수로 정렬하는 함수
-def create_sorted_ligand_list(selected_smiles, score_dict):
-    ligand_score_list = [(smile, score_dict[smile]) for smile in selected_smiles]
-    # 점수로 오름차순 정렬
-    sorted_ligand_list = sorted(ligand_score_list, key=lambda x: x[1])
-    return sorted_ligand_list
+# # (리간드_스마일, 점수) 튜플 리스트를 생성하고 점수로 정렬하는 함수
+# def create_sorted_ligand_list(selected_smiles, score_dict):
+#     ligand_score_list = [(smile, score_dict[smile]) for smile in selected_smiles]
+#     # 점수로 오름차순 정렬
+#     sorted_ligand_list = sorted(ligand_score_list, key=lambda x: x[1])
+#     return sorted_ligand_list
+
 
 if __name__ == "__main__":
-    # 데이터 로드
-    score_dict = load_data("./../../data/smile_score_dict.dat")
-    smile_list = load_data("./../../data/smile_list.dat")
-    smile_lidex = load_data("./../../data/smile_index_dict.dat")
-    cluster_indices = load_cluster_indices("labels8000.txt")
+    parser = argparse.ArgumentParser(description="Docking script")
+    parser.add_argument('receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('count', type=str, help='Docking count')
+    parser.add_argument('is_demo', type=bool, help='Is demo')
+    parser.add_argument('result_dir', type=str, help='Result directory')
+    args = parser.parse_args()
+    receptor = args.receptor
+    count = int(args.count)
+    is_demo = args.is_demo
+    result_dir = args.result_dir
+
+
+    if is_demo:
+        if count >= 2104318:
+            print("Too large count")
+            exit(1)
+        score_dict = load_data("/screening/data/smile_score_dict.dat")
+        smile_list = load_data("/screening/data/smile_list.dat")
+        # smile_lidex = load_data("/screening/data/smile_index_dict.dat")
+        exist_cluster = [500, 1000, 2000, 4000, 8000]
+        selected_cluster = min(exist_cluster, key=lambda x: abs(x - count/4))
+        cluster_indices = load_cluster_indices(f"/screening/data/labels{selected_cluster}.dat")
+
+    else:
+        smile_list = list(Ligand.objects.values_list('ligand_smile', flat=True))
+        #TODO 데이터 연결
+        # 클러스터 파일 선택
+        # 
+    
+
+    docking_result = list()
 
     # 클러스터 별로 2개의 SMILES를 선택하고 초기 점수를 할당
     cluster_scores, cluster_smiles, selected_smiles = assign_cluster_scores(smile_list, score_dict, cluster_indices)
-    # 가장 점수가 낮은 클러스터의 점수를 2500번 갱신
-    updated_cluster_scores, final_selected_smiles = update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, selected_smiles)
+    # 가장 점수가 낮은 클러스터의 점수를 반복 갱신
+    updated_cluster_scores, final_selected_smiles = update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, selected_smiles, count)
 
-    # 최종 선택된 SMILES를 (리간드 스마일, 스코어) 형식으로 정렬
-    # 점수로 정렬하되, 점수가 같으면 인덱스가 낮은 순서로 정렬
-    sorted_ligands = sorted(
-        create_sorted_ligand_list(final_selected_smiles, score_dict),
-        key=lambda x: (x[1], smile_lidex[x[0]])  # 점수 -> 인덱스 순서로 정렬
-    )
+    # 최종 선택된 SMILES를 (스코어, 리간드 스마일) 형식으로 정렬
+    docking_result.sort(key=lambda x: x[0])
+    top_ligands = docking_result[:10]
 
-    # 가장 낮은 점수를 갖는 10개의 리간드 출력
-    print("가장 낮은 점수를 갖는 10개의 리간드:")
-    tmp = 0
-    for ligand, score in sorted_ligands[:10]:
-        print(f"{smile_lidex[ligand]}, {score}")
-        tmp += score
-    print(f"상위 10개 리간드의 평균 점수: {tmp / 10:.2f}")
+    print("Top10 ligands")
+    for ligand in top_ligands:
+        print(f"File: {ligand[1]}, Score: {ligand[0]}")
+    print()
+    scores = [ligand[0] for ligand in top_ligands]
+    avg_score = sum(scores) / len(scores)
+    print(f"Average score of top10 ligands: {avg_score: .2f}")
 
-    # 선택된 리간드의 총 개수 출력
-    print(f"총 선택된 리간드: {len(sorted_ligands)}")
-
-    # 전체 선택된 리간드의 점수 평균 계산
-    scores = [score for _, score in sorted_ligands]  # 점수만 추출
-    average_score = sum(scores) / len(scores)        # 평균 계산
-    print(f"선택된 리간드의 평균 점수: {average_score:.2f}")
+    #TODO resulr_dir
