@@ -12,7 +12,7 @@ def demo(request):
 
 def search(request):
     if request.method == "POST":
-        return HttpResponseRedirect(reverse('result'))
+        return HttpResponseRedirect(reverse('results-list'))
 
     return render(request, 'search.html')
 
@@ -67,19 +67,20 @@ def result_detail(request, result_id):
     result = get_object_or_404(Result, id=result_id)
 
     ligands_scores = [
-        {'ligand_smile': result.ligand_1, 'score': result.score_1},
-        {'ligand_smile': result.ligand_2, 'score': result.score_2},
-        {'ligand_smile': result.ligand_3, 'score': result.score_3},
-        {'ligand_smile': result.ligand_4, 'score': result.score_4},
-        {'ligand_smile': result.ligand_5, 'score': result.score_5},
-        {'ligand_smile': result.ligand_6, 'score': result.score_6},
-        {'ligand_smile': result.ligand_7, 'score': result.score_7},
-        {'ligand_smile': result.ligand_8, 'score': result.score_8},
-        {'ligand_smile': result.ligand_9, 'score': result.score_9},
-        {'ligand_smile': result.ligand_10, 'score': result.score_10},
+        {'ligand': result.ligand_1, 'score': result.score_1},
+        {'ligand': result.ligand_2, 'score': result.score_2},
+        {'ligand': result.ligand_3, 'score': result.score_3},
+        {'ligand': result.ligand_4, 'score': result.score_4},
+        {'ligand': result.ligand_5, 'score': result.score_5},
+        {'ligand': result.ligand_6, 'score': result.score_6},
+        {'ligand': result.ligand_7, 'score': result.score_7},
+        {'ligand': result.ligand_8, 'score': result.score_8},
+        {'ligand': result.ligand_9, 'score': result.score_9},
+        {'ligand': result.ligand_10, 'score': result.score_10},
     ]
 
     return render(request, 'result_detail.html', {
         'result': result,
         'ligands_scores': ligands_scores,
+        'ligand': result.ligand_1,
     })

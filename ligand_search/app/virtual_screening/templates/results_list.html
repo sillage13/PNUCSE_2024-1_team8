@@ -11,7 +11,7 @@
     <ul class="result_ul">
         {% for result in page_obj %}
         <li class="result_li">
-            <a href="{% url 'result_detail' result.id %}">
+            <a href="{% url 'result-detail' result.id %}">
                 <div class="result_receptor"><div><span class="hidden-overflow">{{ result.receptor_name }}</span></div></div>
                 <div class="result_method">
                     <div>{{ result.started_at|date:"Y-m-d" }}</div>
