@@ -4,6 +4,7 @@
     {% load static %}
     <script src="{% static 'js/results_list.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/results_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flow.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -12,13 +13,12 @@
         {% for result in page_obj %}
         <li class="result_li">
             <a href="{% url 'result-detail' result.id %}">
-                <div class="result_receptor"><div><span class="hidden-overflow">{{ result.receptor_name }}</span></div></div>
+                <div class="result_receptor"><div class="hidden-overflow_div"><span class="hidden-overflow">{{ result.receptor_name }}</span></div></div>
                 <div class="result_method">
                     <div>{{ result.started_at|date:"Y-m-d" }}</div>
-                    <div><span class="hidden-overflow">{{ result.search_method }} - {{ result.get_status_display }}</span></div>
+                    <div class="hidden-overflow_div"><span class="hidden-overflow">{{ result.search_method }} - {{ result.get_status_display }}</span></div>
                 </div>
             </a>
-        </li>
         {% endfor %}
     </ul>
 

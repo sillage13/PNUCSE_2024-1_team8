@@ -1,0 +1,22 @@
+@keyframes flow-text {
+    from { transform: translate3d(0, 0, 0); }
+    to { transform: translate3d(-100%, 0, 0); }
+}
+
+.hidden-overflow_div, .hidden-overflow {   
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.hidden-overflow {
+    display: block;
+}
+
+
+.flow-text {
+    overflow: visible;
+    display: flex;
+    animation: flow-text 10s linear infinite;
+    animation-delay: 0.3s;
+}
