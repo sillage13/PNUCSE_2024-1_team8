@@ -34,7 +34,7 @@
                 {% for ligand_score in ligands_scores %}
                     {% if ligand_score.ligand %}
                         <li {% if ligand_score.ligand.id == ligand.id %}class="selected"{% endif %}>
-                            <div class="hidden-overflow_div"><span class="hidden-overflow">{{ ligand_score.ligand.ligand_smile }}</span></div>
+                            <div><div class="hidden-overflow_div"><span class="hidden-overflow">{{ ligand_score.ligand.ligand_smile }}</span></div></div>
                             <div>
                                 <div>{{ ligand_score.score }}</div>
                                 <a href="?ligand={{ ligand_score.ligand.id }}"><span class="material-symbols-outlined">deployed_code</span></a>
