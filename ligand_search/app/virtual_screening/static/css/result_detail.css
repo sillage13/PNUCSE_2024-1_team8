@@ -10,7 +10,6 @@
 
 .visual-info > div {
     position: absolute;
-    bottom: 0px;
     padding: 10px;
     text-shadow:
         -0.5px -0.5px 0 var(--background),
@@ -21,12 +20,17 @@
 
 .visual-info > div:first-child {
     text-align: left;
+    top: 0px;
     left: 0px;
 }
 
 .visual-info > div:last-child {
     text-align: right;
+    bottom: 0px;
     right: 0px;
+    width: 100%;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .half {
@@ -68,14 +72,13 @@
 }
 
 .result_ul > li > div:nth-child(1) {
-    flex: 0.3;
+    width: 65%;
     background-color: var(--green);
-    color: var(--on-green);
-    justify-content: center;
+    color: var(--on-green);    
 }
 
 .result_ul > li > div:nth-child(2) {
-    flex: 0.7;
+    width: 35%;
     background-color: var(--container);
     color: var(--on-container);
     justify-content: flex-end;
@@ -87,7 +90,6 @@
 
 .result_ul > li .material-symbols-outlined {
     font-size: 20px;
-    margin: 0 3px;
     color: var(--on-container);
 }
 
