@@ -124,7 +124,7 @@ input[type=file], select {
         text-align: left;
     }
 
-    .form_ul label:not(.label), input[type=text] {
+    .form_ul label:not(.label), input[type=text], .select_ul {
         width: 100%;
         max-width:420px;
     }
@@ -136,10 +136,6 @@ input[type=file], select {
 
     .form_ul .material-symbols-outlined {
         top: 75%;
-    }
-
-    .select_ul {
-        width: 100%;
     }
 
     .error_message {
