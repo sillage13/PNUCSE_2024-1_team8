@@ -6,6 +6,9 @@
     {% block title %}<title>Virtual Screening</title>{% endblock %}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand&display=swap" rel="stylesheet">
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/base.css' %}">
     <script src="{% static 'js/base.js' %}"></script>
@@ -18,7 +21,7 @@
         <ul>
             <li class="menu_item"><a href="{% url "demo" %}">Demo</a></li>
             <li class="menu_item"><a href="{% url "search" %}">Search</a></li>
-            <li class="menu_item"><a href="{% url "results_list" %}">Results</a></li>
+            <li class="menu_item"><a href="{% url "results-list" %}">Results</a></li>
             <li class="menu_item"><a href="{% url "manage-ligand" %}">Manage Ligand</a></li>
         </ul>
         <div class="menu_icon"><span class="material-symbols-outlined" id="color_mode">light_mode</span></div>

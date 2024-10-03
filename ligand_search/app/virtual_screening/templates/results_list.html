@@ -4,21 +4,21 @@
     {% load static %}
     <script src="{% static 'js/results_list.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/results_list.css' %}">
+    <link rel="stylesheet" href="{% static 'css/flow.css' %}">
 {% endblock head %}
 
 {% block content %}
 <div class="content">
-    <h2>Search Results</h2>
-
-    <ul class="result-list">
+    <ul class="result_ul">
         {% for result in page_obj %}
-        <li>
-            <div>
-                <a href="{% url 'result_detail' result.id %}">
-                    {{ result.receptor_name }} - {{ result.started_at|date:"Y-m-d H:i" }}
-                </a>
-            </div>
-            <div>Status: {{ result.get_status_display }}</div>
+        <li class="result_li">
+            <a href="{% url 'result-detail' result.id %}">
+                <div class="result_receptor"><div class="hidden-overflow_div"><span class="hidden-overflow">{{ result.receptor_name }}</span></div></div>
+                <div class="result_method">
+                    <div>{{ result.started_at|date:"Y-m-d" }}</div>
+                    <div class="hidden-overflow_div"><span class="hidden-overflow">{{ result.search_method }} - {{ result.get_status_display }}</span></div>
+                </div>
+            </a>
         </li>
         {% endfor %}
     </ul>
@@ -26,11 +26,17 @@
     <!-- Pagination -->
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        <a href="?page={{ page_obj.previous_page_number }}"><span
+                class="material-symbols-outlined">keyboard_arrow_left</span></a>
+        {% else %}
+        <a href="" style="visibility: hidden"><span class="material-symbols-outlined">keyboard_arrow_left</span></a>
         {% endif %}
-        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <a href="?page={{ page_obj.number }}" class="current-page">{{ page_obj.number }}</a>
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        <a href="?page={{ page_obj.next_page_number }}"><span
+                class="material-symbols-outlined">keyboard_arrow_right</span></a>
+        {% else %}
+        <a href="" style="visibility: hidden"><span class="material-symbols-outlined">keyboard_arrow_right</span></a>
         {% endif %}
     </div>
 </div>

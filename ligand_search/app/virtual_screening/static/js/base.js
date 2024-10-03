@@ -30,17 +30,6 @@ $(document).ready(function() {
         }
     })
 
-    //파일 선택 시 이름 표시
-    $('#id_receptor, #id_ligand').change(function(event) {
-        let filename = $(this).val()
-        let id = event.target.id
-        if (filename) {
-            $('label[for='+id+']').text(filename)
-            $('label[for='+id+']').css({'color':'var(--on-container)'}) 
-        }
-        
-    })
-
     $('#color_mode').click(function() {
         if (mode == 'dark')
             mode = 'light'

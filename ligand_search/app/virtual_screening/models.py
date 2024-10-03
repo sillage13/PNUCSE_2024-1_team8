@@ -26,27 +26,27 @@ class Result(models.Model):
     receptor_name = models.CharField(max_length=255)
     receptor_file = models.FileField(upload_to='receptor_files/')  # Store pdbqt files
     result_directory = models.CharField(max_length=500)  # Directory path for log, output files, etc.
-    
+
     # Top 10 Ligand Smiles and Scores
-    ligand_1 = models.TextField()
+    ligand_1 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_1')
     score_1 = models.FloatField()
-    ligand_2 = models.TextField()
+    ligand_2 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_2')
     score_2 = models.FloatField()
-    ligand_3 = models.TextField()
+    ligand_3 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_3')
     score_3 = models.FloatField()
-    ligand_4 = models.TextField()
+    ligand_4 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_4')
     score_4 = models.FloatField()
-    ligand_5 = models.TextField()
+    ligand_5 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_5')
     score_5 = models.FloatField()
-    ligand_6 = models.TextField()
+    ligand_6 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_6')
     score_6 = models.FloatField()
-    ligand_7 = models.TextField()
+    ligand_7 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_7')
     score_7 = models.FloatField()
-    ligand_8 = models.TextField()
+    ligand_8 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_8')
     score_8 = models.FloatField()
-    ligand_9 = models.TextField()
+    ligand_9 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_9')
     score_9 = models.FloatField()
-    ligand_10 = models.TextField()
+    ligand_10 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_10')
     score_10 = models.FloatField()
 
     # Search Method and Execution Time

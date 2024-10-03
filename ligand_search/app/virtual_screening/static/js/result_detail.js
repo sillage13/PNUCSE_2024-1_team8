@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    /*
     let element = document.querySelector('#visalization');
     let config = {  };
     let viewer = $3Dmol.createViewer( element, config );
@@ -23,4 +24,18 @@ $(document).ready(function() {
             console.error( "Failed to load PDB " + ligandFile + ": " + err );
         },
     });
+    */
+
+    $('.hidden-overflow_div').hover(
+        function() {
+            var txt = $(this).find(".hidden-overflow")
+            if (txt[0].clientWidth < txt[0].scrollWidth) {
+                txt.addClass("flow-text")
+                $('.flow-text').css('animation-duration', txt[0].scrollWidth/30+'s')
+            }
+        },
+        function() {
+            $(this).find(".hidden-overflow").removeClass("flow-text")
+        }
+    )
 })
