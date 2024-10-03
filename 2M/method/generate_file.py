@@ -16,7 +16,6 @@ def load_pickle(filename):
 
 n_clusters = 2000
 
-data = dict()
 ligand_list = list()
 smiles_list = list()
 feature_list = list()
@@ -24,23 +23,36 @@ clusters = dict()
 
 all_smiles = load_pickle("./../../data/smile_list.dat")
 
-sentences = []
-for smiles in all_smiles:
+model = word2vec.Word2Vec.load("memes/data/model_300dim.pkl")
+feature_list = np.memmap("features.npy", dtype=np.float16, mode='w+', shape=(2104318, 300))
+for i, smiles in enumerate(all_smiles):
     mol = Chem.MolFromSmiles(smiles)
     if mol is not None:
+        mol = Chem.MolFromSmiles(smiles)
+        #fingerprint = Chem.RDKFingerprint(mol)
         sentence = MolSentence(mol2alt_sentence(mol, 1))
+        del mol
+
+        vec = sentences2vec([sentence], model, unseen="UNK")
+        del sentence
+        dfvec = DfVec(vec[0])
+        feature = dfvec.vec
+        del vec
+        del dfvec
+
+        #feature_list.append(fingerprint)
+        #sentences.append(sentence)
+        feature_list[i] = feature
+        del feature
         
         # 리간드 파일명 대신 인덱스를 사용
         # ligand = f"ligand_{i}"
         
         # ligand_list.append(ligand)
         smiles_list.append(smiles)
-        sentences.append(sentence)
 
-model = word2vec.Word2Vec.load("model_300dim.pkl")
-feature_list = [DfVec(x) for x in sentences2vec(sentences, model, unseen="UNK")]
-feature_list = [x.vec for x in feature_list]
-data["data"] = feature_list
+feature_list.flush()
+save_pickle(feature_list, "features.pkl")
 
 # # k-means clustering
 # clustering = KMeans(n_clusters, init="k-means++")
@@ -67,5 +79,3 @@ data["data"] = feature_list
 # with open("ligands.txt", "w") as f:
 #     for ligand in ligand_list:
 #         f.write(ligand+"\n")
-
-save_pickle(data, "features.pkl")
