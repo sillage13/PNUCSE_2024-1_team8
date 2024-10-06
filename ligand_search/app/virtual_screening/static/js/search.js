@@ -1,9 +1,10 @@
 $(document).ready(function() {
     //파일 선택 시 이름 표시
     $('#receptor').change(function(event) {
-        let filename = $(this).val()
+        let filepath = $(this).val()
         let id = event.target.id
-        if (filename) {
+        if (filepath) {
+            let filename = filepath.split("\\").at(-1)
             $('label[for='+id+']').text(filename)
             $('label[for='+id+']').css({'color':'var(--on-container)'}) 
         }
