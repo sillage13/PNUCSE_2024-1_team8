@@ -16,37 +16,49 @@ taskOutputs = ''
 
 
 def performTask(request):
-    global taskStatus
-    taskStatus = ''
+    global taskOutputs
+    taskOutputs = ''
 
     method = request.session.get('method')
     receptor = request.session.get('receptor')
     resultDir = request.session.get('resultDir')
     is_demo = request.session.get('is_demo')
 
-    scriptPath = ''
-    if method == 'Random':
-        scriptPath = '/screening/method/method_random.py'
-    elif method == 'Clustering':
-        scriptPath = '/screening/method/method_clustering.py'
-    elif method == 'MEMES':
-        scriptPath = '/screening/method/method_memes.py'
-
     def run_script():
         global taskOutputs
         
         try:
             receptorPath = os.path.join(resultDir, receptor)
-            count = '100'  # or any appropriate value
+            count = '200000000'  # or any appropriate value
+            cmd =[]
 
-            cmd = [
-                'python',
-                scriptPath,
-                receptorPath,
-                count,
-                is_demo,
-                resultDir
-            ]
+            scriptPath = ''
+            if method == 'Random':
+                scriptPath = '/screening/method/method_random.py'
+                cmd = [
+                    'python',
+                    scriptPath,
+                    receptorPath,
+                    count,
+                    is_demo,
+                    resultDir
+                ]
+            elif method == 'Clustering':
+                scriptPath = '/screening/method/method_clustering.py'
+                cmd = [
+                    'python',
+                    scriptPath,
+                    receptorPath,
+                    count,
+                    is_demo,
+                    resultDir                    
+                ]
+            elif method == 'MEMES':
+                scriptPath = '/screening/method/method_memes.py'
+                
+            
+
+            
 
             process = subprocess.Popen(
                 cmd,

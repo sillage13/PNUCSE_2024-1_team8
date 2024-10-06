@@ -146,7 +146,7 @@ if __name__ == "__main__":
         # smile_lidex = load_data("/screening/data/smile_index_dict.dat")
         exist_cluster = [500, 1000, 2000, 4000, 8000]
         selected_cluster = min(exist_cluster, key=lambda x: abs(x - count/4))
-        cluster_indices = load_cluster_indices(f"/screening/data/labels{selected_cluster}.dat")
+        cluster_indices = load_cluster_indices(f"/screening/data/labels{selected_cluster}.txt")
 
     else:
         smile_list = list(Ligand.objects.values_list('ligand_smile', flat=True))
