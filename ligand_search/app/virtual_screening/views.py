@@ -1,19 +1,131 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.conf import settings
 from .models import Ligand, Result
+import subprocess
+import threading
+import shutil
+import datetime
 import os
 
+
 # Create your views here.
+taskOutputs = ''
+
+
+def performTask(request):
+    global taskStatus
+    taskStatus = ''
+
+    method = request.session.get('method')
+    receptor = request.session.get('receptor')
+    resultDir = request.session.get('resultDir')
+    is_demo = request.session.get('is_demo')
+
+    scriptPath = ''
+    if method == 'Random':
+        scriptPath = '/screening/method/method_random.py'
+    elif method == 'Clustering':
+        scriptPath = '/screening/method/method_clustering.py'
+    elif method == 'MEMES':
+        scriptPath = '/screening/method/method_memes.py'
+
+    def run_script():
+        global taskOutputs
+        
+        try:
+            receptorPath = os.path.join(resultDir, receptor)
+            count = '100'  # or any appropriate value
+
+            cmd = [
+                'python',
+                scriptPath,
+                receptorPath,
+                count,
+                is_demo,
+                resultDir
+            ]
+
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                bufsize=1
+            )
+
+            # Read the output line by line
+            for line in process.stdout:
+                # Append the line to the task output
+                taskOutputs += line
+
+            process.stdout.close()
+            process.wait()
+
+            # After processing is complete, you might want to save results to the database
+            # and redirect or notify the user
+
+        except Exception as e:
+            taskOutputs += f"\nError: {str(e)}"
+        finally:
+            taskOutputs += "\nProcessing complete"
+
+    thread = threading.Thread(target=run_script)
+    thread.start()
+
+    return JsonResponse({'status': 'started'})
+
+
+def getTaskStatus(request):
+    global taskOutputs
+    return JsonResponse({'status': taskOutputs})
+
+
+def processing(request):
+    method = request.session.get('method')
+    receptor = request.session.get('receptor')
+    resultDir = request.session.get('resultDir')
+    is_demo = request.session.get('is_demo')
+
+    if not method or not receptor or not resultDir:
+        return redirect('demo')
+
+    return render(request, 'processing.html', {
+        'method': method,
+        'receptor': receptor,
+    })
+
+
 def demo(request):
+    if request.method == "POST":
+        method = request.POST.get('method')
+        receptor = request.POST.get('receptor')
+
+        if not method:
+            return render(request, 'demo.html', {'error_message': 'Please select a method.'})
+
+        timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        resultDirName = f"{receptor}_{timestamp}_{method}"
+        resultDir = os.path.join(settings.RESULT_DIR, resultDirName)
+        os.makedirs(resultDir, exist_ok=True)
+
+        receptor_source = os.path.join(settings.DATA_DIR, 'receptor', receptor)
+        receptor_dest = os.path.join(resultDir, receptor)
+        shutil.copyfile(receptor_source, receptor_dest)
+
+        request.session['method'] = method
+        request.session['receptor'] = receptor
+        request.session['resultDir'] = resultDir
+        request.session['is_demo'] = True
+
+        return redirect(processing)
+
     return render(request, 'demo.html')
 
 
 def search(request):
-    if request.method == "POST":
-        return HttpResponseRedirect(reverse('results-list'))
-
     return render(request, 'search.html')
 
 

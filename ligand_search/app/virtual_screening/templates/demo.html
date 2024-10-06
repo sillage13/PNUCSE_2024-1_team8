@@ -1,3 +1,5 @@
+<!-- demo.html -->
+
 {% extends "base.html" %}
 
 {% block head %}
@@ -8,12 +10,13 @@
 
 {% block content %}
 <div class="content">
-    <form id="search_form" action="" method="POST">
+    <form id="search_form" action="{% url 'demo' %}" method="POST">
         {% csrf_token %}
         <ul class="form_ul">
             <li>
                 <label class="label">Receptor</label>
                 <label for="id_receptor" style="color:var(--on-container)">4UNN.pdbqt</label>
+                <input type="hidden" name="receptor" value="4UNN.pdbqt">
                 {% if receptor_error_message %}
                     <div class="error_message">
                         {{ receptor_error_message }}
@@ -44,4 +47,4 @@
         </ul>
     </form>   
 </div>
-{% endblock %}
+{% endblock content %}

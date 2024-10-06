@@ -1,7 +1,9 @@
+// demo.js
+
 $(document).ready(function() {
     $('#method').val(null)
     
-    //드롭 다운 메뉴 구현
+    // Implement dropdown menu
     $('label[for=method]').click(function() {
         $('.select_ul').toggle()
         $('#arrow_drop_down').toggleClass('flip')

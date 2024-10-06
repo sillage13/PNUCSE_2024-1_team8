@@ -1,0 +1,17 @@
+<!-- processing.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+    {% load static %}
+    <script src="{% static 'js/processing.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div id="results" data-receptor="{{ receptor }}" data-method="{{ method }}"></div>
+<div>
+  <p>Receptor: {{ receptor }}</p>
+  <p>Method: {{ method }}</p>
+</div>
+{% endblock content %}
