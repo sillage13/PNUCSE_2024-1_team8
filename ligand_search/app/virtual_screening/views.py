@@ -125,7 +125,7 @@ def demo(request):
         receptor = request.POST.get('receptor')
 
         if not method:
-            return render(request, 'demo.html', {'error_message': 'Please select a method.'})
+            return render(request, 'demo.html', {'method_error_message': 'Please select a method.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -149,12 +149,15 @@ def demo(request):
 
 def search(request):
     if request.method == "POST":
+        if not request.FILES:
+            return render(request, 'search.html', {'receptor_error_message': 'Please upload receptor file'})
+        
         method = request.POST.get('method')
         receptor_file = request.FILES["receptor"]
         receptor = receptor_file.name
 
         if not method:
-            return render(request, 'search.html', {'error_message': 'Please select a method.'})
+            return render(request, 'search.html', {'method_error_message': 'Please select a method.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -167,7 +170,7 @@ def search(request):
         request.session['method'] = method
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
-        request.session['is_demo'] = "True"
+        request.session['is_demo'] = "False"
 
         return redirect(processing)
     return render(request, 'search.html')
