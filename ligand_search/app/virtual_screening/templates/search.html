@@ -25,7 +25,7 @@
             <li>
                 <label class="label">Method</label>
                 <label for="method">Method</label>
-                <ul class="select_ul">
+                <ul class="select_ul" id="method_select">
                     <li class="select_li">Random</li>
                     <li class="select_li">Clustering</li>
                     <li class="select_li">MEMES</li>
@@ -41,6 +41,38 @@
                     <option value="MEMES">MEMES</option>
                 </select>
                 <span class="material-symbols-outlined" id="arrow_drop_down">arrow_drop_down</span>
+            </li>
+            <li class="sub-input">
+                <ul class="radio_ul">
+                    <li>
+                        <input type='radio' name="representation" id="fp" value="Fingerprint">
+                        <label for="fp" class="label">Fingerprint</label>
+                    </li>
+                    <li>
+                        <input type='radio' name="representation" id="mol2vec" value="Mol2vec">
+                        <label for="mol2vec" class="label">Mol2vec</label>
+                    </li>
+                </ul> 
+            </li>
+            <li class="sub-input">
+                <label for="af">Acquisition Function</label>
+                <ul class="select_ul" id="af_select">
+                    <li class="select_li">EI</li>
+                    <li class="select_li">PI</li>
+                    <li class="select_li">UCB</li>
+                    <li class="select_li">Greedy</li>
+                    <li class="select_li">HAF</li>
+                    <li class="select_li">EBAF</li>
+                </ul> 
+                <select name="af" id="af" id="af_select">
+                    <option value="EI">EI</option>
+                    <option value="PI">PI</option>
+                    <option value="UCB">UCB</option>
+                    <option value="Greedy">Greedy</option>
+                    <option value="HAF">HAF</option>
+                    <option value="EBAF">EBAF</option>
+                </select>  
+                <span class="material-symbols-outlined" id="arrow_drop_down">arrow_drop_down</span>            
             </li>
             <li class="submit_li"><input class="submit_btn" type="submit" value="Search"></li>
         </ul>
