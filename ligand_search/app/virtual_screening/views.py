@@ -60,8 +60,9 @@ def performTask(request):
             for line in process.stdout:
                 # Append the line to the task output
                 taskOutputs += line
+                print(line, end='')
 
-            process.stdout.close()
+            # process.stdout.close()
             process.wait()
 
             # After processing is complete, you might want to save results to the database
@@ -69,8 +70,15 @@ def performTask(request):
 
         except Exception as e:
             taskOutputs += f"\nError: {str(e)}"
+            print(f"Error: {str(e)}")
         finally:
             taskOutputs += "\nProcessing complete"
+            print("Processing complete")
+            
+            logFilePath = os.path.join(resultDir, "log.txt")
+            
+            with open(logFilePath, 'w') as f:
+                f.write(taskOutputs)
 
     thread = threading.Thread(target=run_script)
     thread.start()
@@ -80,7 +88,7 @@ def performTask(request):
 
 def getTaskStatus(request):
     global taskOutputs
-    return JsonResponse({'status': taskOutputs})
+    return JsonResponse({'result': taskOutputs})
 
 
 def processing(request):
@@ -111,6 +119,7 @@ def demo(request):
         resultDir = os.path.join(settings.RESULT_DIR, resultDirName)
         os.makedirs(resultDir, exist_ok=True)
 
+        # 기존 리셉터 파일을 결과 폴더로 복사
         receptor_source = os.path.join(settings.DATA_DIR, 'receptor', receptor)
         receptor_dest = os.path.join(resultDir, receptor)
         shutil.copyfile(receptor_source, receptor_dest)
@@ -118,7 +127,7 @@ def demo(request):
         request.session['method'] = method
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
-        request.session['is_demo'] = True
+        request.session['is_demo'] = "True"
 
         return redirect(processing)
 
