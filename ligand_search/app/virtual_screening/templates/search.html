@@ -8,13 +8,13 @@
 
 {% block content %}
 <div class="content">
-    <form id="search_form" action="" method="POST">
+    <form id="search_form" action="" method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <ul class="form_ul">
             <li>
                 <label class="label">Receptor</label>
-                <label for="id_receptor">Receptor</label>
-                <input type="file" name="receptor" id="id_receptor">
+                <label for="receptor">Receptor</label>
+                <input type="file" name="receptor" id="receptor">
                 <span class="material-symbols-outlined">upload</span>
                 {% if receptor_error_message %}
                     <div class="error_message">

@@ -1,13 +1,12 @@
 $(document).ready(function() {
     //파일 선택 시 이름 표시
-    $('#id_receptor').change(function(event) {
+    $('#receptor').change(function(event) {
         let filename = $(this).val()
         let id = event.target.id
         if (filename) {
             $('label[for='+id+']').text(filename)
             $('label[for='+id+']').css({'color':'var(--on-container)'}) 
         }
-        
     })
     
     $('#method').val(null)

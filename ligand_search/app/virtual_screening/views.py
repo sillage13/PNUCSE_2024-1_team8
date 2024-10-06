@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from .models import Ligand, Result
 import subprocess
@@ -147,6 +148,28 @@ def demo(request):
 
 
 def search(request):
+    if request.method == "POST":
+        method = request.POST.get('method')
+        receptor_file = request.FILES["receptor"]
+        receptor = receptor_file.name
+
+        if not method:
+            return render(request, 'search.html', {'error_message': 'Please select a method.'})
+
+        timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
+        resultDirName = f"{receptor}_{timestamp}_{method}"
+        resultDir = os.path.join(settings.RESULT_DIR, resultDirName)
+        os.makedirs(resultDir, exist_ok=True)
+
+        fs = FileSystemStorage(location=resultDir)
+        fs.save(receptor, receptor_file)
+
+        request.session['method'] = method
+        request.session['receptor'] = receptor
+        request.session['resultDir'] = resultDir
+        request.session['is_demo'] = "True"
+
+        return redirect(processing)
     return render(request, 'search.html')
 
 
