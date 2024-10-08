@@ -5,13 +5,23 @@
 {% block head %}
     {% load static %}
     <script src="{% static 'js/processing.js' %}"></script>
-    <link rel="stylesheet" href="{% static 'css/form.css' %}">
+    <link rel="stylesheet" href="{% static 'css/processing.css' %}">
 {% endblock head %}
 
 {% block content %}
-<div id="results" data-receptor="{{ receptor }}" data-method="{{ method }}"></div>
-<div>
-  <p>Receptor: {{ receptor }}</p>
-  <p>Method: {{ method }}</p>
+<div class="content">
+  <ul class="info">
+    <li>
+      <div class='label'>Receptor</div>
+      <div>{{ receptor }}</div>
+    </li>
+    <li>
+      <div class='label'>Method</div>
+      <div>{{ method }}</div>
+    </li>
+  </ul>
+  <div id="results" data-receptor="{{ receptor }}" data-method="{{ method }}"></div>
+  <div class="btn_div"><a href="{% url 'results-list' %}"><button>Check the result</button></a></div>
 </div>
+
 {% endblock content %}
