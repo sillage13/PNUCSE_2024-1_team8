@@ -196,4 +196,7 @@ a {
         left: 15px
     }
 
+    .category {
+        width: 75%;
+    }
 }

@@ -72,6 +72,10 @@
 
 
 @media screen and (max-width: 700px) {
+    .info {
+        width: 60%;
+    }
+
     .info > li div.label {
         display: none;
     }
@@ -84,7 +88,8 @@
         border-radius: 10px;
     }
 
-    #results {
+    #results, .btn_div {
         font-size: 12px;
+        width: 75%;
     }
 }

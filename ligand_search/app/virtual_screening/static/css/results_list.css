@@ -49,6 +49,10 @@
 
 /* Media Queries for responsiveness */
 @media screen and (max-width: 700px) {
+    .result_ul {
+        width: 75%;
+    }
+    
     .result_receptor {
         max-width: 35%;
     }
