@@ -69,10 +69,6 @@ input[type=file], select {
     border-radius: 0 0 10px 10px;
 }
 
-.select_ul > li:hover {
-    background-color: var(--container);
-}
-
 .form_ul .sub-input {
     margin: 10px 0;
     display: flex;
@@ -176,5 +172,11 @@ input[type=file], select {
     .error_message {
         left: 0%;
         padding: 5px;
+    }
+}
+
+@media (hover:hover)  and (pointer:fine) {
+    .select_ul > li:hover {
+        background-color: var(--container);
     }
 }

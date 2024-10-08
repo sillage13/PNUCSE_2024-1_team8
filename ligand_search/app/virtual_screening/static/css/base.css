@@ -112,15 +112,6 @@ a {
     border-radius: 5px;
 }
 
-.menu_item:hover > a, .menu_icon:hover > .material-symbols-outlined {
-    background-color: var(--menu-hover);
-    color: var(--on-menu-hover);
-}
-
-.menu_icon:hover > .material-symbols-outlined {
-    font-variation-settings:'FILL' 1;
-}
-
 #menu {
     display: none;
 }
@@ -198,5 +189,16 @@ a {
 
     .category {
         width: 75%;
+    }
+}
+
+@media (hover:hover) and (pointer:fine) {
+    .menu_item:hover > a, .menu_icon:hover > .material-symbols-outlined {
+        background-color: var(--menu-hover);
+        color: var(--on-menu-hover);
+    }
+    
+    .menu_icon:hover > .material-symbols-outlined {
+        font-variation-settings:'FILL' 1;
     }
 }

@@ -93,11 +93,6 @@
     color: var(--on-container);
 }
 
-.result_ul > li .material-symbols-outlined:hover {
-    background-color: var(--container-hover);
-    border-radius: 12px;
-}
-
 .result_ul .selected .material-symbols-outlined{
     font-variation-settings: 'FILL'1;
 }
@@ -154,5 +149,12 @@
 @media screen and (min-width: 701px) and (max-width: 950px) {
     .result_ul > li > div:nth-child(1), .result_ul > li > div:nth-child(2) {
         width: 50%;
+    }
+}
+
+@media (hover:hover)  and (pointer:fine) {
+    .result_ul > li .material-symbols-outlined:hover {
+        background-color: var(--container-hover);
+        border-radius: 12px;
     }
 }
