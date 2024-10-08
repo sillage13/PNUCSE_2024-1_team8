@@ -13,12 +13,12 @@ import os
 
 
 # Create your views here.
-taskOutputs = ''
+taskOutputs = []
 
 
 def performTask(request):
     global taskOutputs
-    taskOutputs = ''
+    taskOutputs.clear()
 
     method = request.session.get('method')
     receptor = request.session.get('receptor')
@@ -30,7 +30,7 @@ def performTask(request):
         
         try:
             receptorPath = os.path.join(resultDir, receptor)
-            count = '200000000'  # or any appropriate value
+            count = '100'  # or any appropriate value
             cmd =[]
 
             scriptPath = ''
@@ -72,8 +72,7 @@ def performTask(request):
             # Read the output line by line
             for line in process.stdout:
                 # Append the line to the task output
-                taskOutputs += line
-                print(line, end='')
+                taskOutputs.append(line)
 
             # process.stdout.close()
             process.wait()
@@ -82,11 +81,9 @@ def performTask(request):
             # and redirect or notify the user
 
         except Exception as e:
-            taskOutputs += f"\nError: {str(e)}"
-            print(f"Error: {str(e)}")
+            taskOutputs.append(f"Error: {str(e)}")
         finally:
-            taskOutputs += "\nProcessing complete"
-            print("Processing complete")
+            taskOutputs.append("Processing complete")
             
             logFilePath = os.path.join(resultDir, "log.txt")
             
