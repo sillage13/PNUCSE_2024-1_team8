@@ -145,7 +145,7 @@ input[type=file], select {
 
     .form_ul label:not(.label), input[type=text], .select_ul, .radio_ul {
         width: 100%;
-        max-width:420px;
+        max-width:500px;
     }
 
     .form_ul > .submit_li {
