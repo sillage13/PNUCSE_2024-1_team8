@@ -29,7 +29,7 @@ from django.test import TestCase
 #         self.assertEqual(result.status, 'successed')
 #         self.assertEqual(result.execution_time, 15.32)
 
-from virtual_screening.models import Ligand
-class LigandModelTest(TestCase):
-    def test_create_ligand(self):
-        smiles = 
+# from virtual_screening.models import Ligand
+# class LigandModelTest(TestCase):
+#     def test_create_ligand(self):
+#         smiles = 

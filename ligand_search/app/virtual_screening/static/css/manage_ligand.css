@@ -57,6 +57,10 @@
 
 
 @media screen and (max-width: 700px) {
+    .add_btn_div, .ligand_ul {
+        width: 75%;
+    }
+
     .add_btn_div .material-symbols-outlined {
         display: none;
     }

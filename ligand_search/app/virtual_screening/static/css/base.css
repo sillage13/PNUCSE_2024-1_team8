@@ -7,6 +7,7 @@
     --container-hover: #b8d1b1;
     --green: #51804e;
     --on-green: white;
+    --green-hover: #83ab81;
     --menu: #3b693a;
     --on-menu: white;
     --menu-hover: white;
@@ -24,6 +25,7 @@
     --container-hover: #585858;
     --green: #a5d89e;
     --on-green: #001b03;
+    --green-hover: #82a87d;
     --menu: #575757;
     --on-menu: white;
     --menu-hover: #a5d89e;
@@ -112,15 +114,6 @@ a {
     border-radius: 5px;
 }
 
-.menu_item:hover > a, .menu_icon:hover > .material-symbols-outlined {
-    background-color: var(--menu-hover);
-    color: var(--on-menu-hover);
-}
-
-.menu_icon:hover > .material-symbols-outlined {
-    font-variation-settings:'FILL' 1;
-}
-
 #menu {
     display: none;
 }
@@ -196,4 +189,18 @@ a {
         left: 15px
     }
 
+    .category {
+        width: 75%;
+    }
+}
+
+@media (hover:hover) and (pointer:fine) {
+    .menu_item:hover > a, .menu_icon:hover > .material-symbols-outlined {
+        background-color: var(--menu-hover);
+        color: var(--on-menu-hover);
+    }
+    
+    .menu_icon:hover > .material-symbols-outlined {
+        font-variation-settings:'FILL' 1;
+    }
 }

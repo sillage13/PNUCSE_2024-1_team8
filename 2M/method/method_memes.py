@@ -20,26 +20,16 @@ import json
 import time
 # import random
 from utils import *
+import django
 
-
-# Set up Django environment
+#Set up Django environment
 sys.path.append("/app")  # Adjust to your Django project path
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "virtual_screening.settings")
 django.setup()
 
 from virtual_screening.models import Ligand
-# def load_data(filename):
-#     # with open(filename, 'rb') as f:
-#     #     return pickle.load(f)
-#     return joblib.load(filename, mmap_mode='r')
 
-# def save_data(target, filename):
-#     # with open(filename, 'wb') as f:
-#     #     pickle.dump(target, f)
-#     joblib.dump(target, filename)
-
-
-def scoring_function(smile, index):
+def scoring_function(smile,index):
     global is_demo
     global docking_count
     global check_dup
@@ -128,15 +118,19 @@ if __name__ == "__main__":
     except:
         pass
 
-    with open(directory_path+'/config.txt', 'w') as f:
-        f.write("periter:	"+str(periter)+"\n")
-        f.write("initial:	"+str(initial)+"\n")
-        f.write("feature:	"+str(feat)+"\n")
-        f.write("capital:   "+str(capital)+"\n")
-        f.write("eps:	"+str(eps)+"\n")
-        f.write("beta:  "+str(beta)+"\n")
-        f.write("rec:	"+str(rec)+"\n")
-        f.close()
+with open(directory_path+'/config.txt','w') as f:
+    f.write("rec:	"+str(receptor_name)+"\n")
+    f.write("feature:	"+str(feat)+"\n")
+    f.write("acquisition function:  "+af+"\n")
+    f.write("\n")
+    f.write("n_cluster: "+str(n_cluster)+"\n")
+    f.write("initial:	"+str(initial)+"\n")
+    f.write("periter:	"+str(periter)+"\n")
+    f.write("capital:   "+str(capital)+"\n")
+    f.write("total count:   "+str(total_count)+"\n")
+    f.write("eps:	"+str(eps)+"\n")
+    f.write("beta:  "+str(beta)+"\n")
+    f.close()
 
     # TODO fingerprint 및 is_demo False 구현
 
@@ -280,88 +274,94 @@ if __name__ == "__main__":
 
                 epoch_loss = epoch_loss/len(self.loader)
 
-                pbar.set_description('Iter %d/%d - Loss: %.3f ' % (
-                    i + 1, training_iter, epoch_loss,
-                ))
-                if epoch_loss < prev_best_loss:
-                    prev_best_loss = epoch_loss
-                    early_stopping = 0
-                else:
-                    early_stopping += 1
+            pbar.set_description('??Iter %d/%d - Loss: %.3f ' % (
+                i + 1, training_iter, epoch_loss,
+            ))
+            if epoch_loss < prev_best_loss:
+                prev_best_loss = epoch_loss
+                early_stopping = 0
+            else:
+                early_stopping += 1
 
                 if early_stopping >= 10:
                     break
 
-        def compute_ei(self, id, best_val):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            # 20000 is system dependent. Change according to space in GPU
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
+    def compute_ei(self,id,best_val):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
 
-            imp = means - best_val - self.eps
-            Z = imp/stds
-            eis = imp * norm.cdf(Z) + stds * norm.pdf(Z)
-            eis[stds == 0.0] = 0.0
-            if save_af:
-                np.savetxt(directory_path+'/' + af + 's_' + str(id)+'.out', eis)
-            return eis
-
-        def compute_pi(self, id, best_val):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            # 20000 is system dependent. Change according to space in GPU
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
-
-            z = (best_val - means)/stds
-            pis = norm.cdf(-z)
-            if save_af:
-                np.savetxt(directory_path+'/' + af + 's_' + str(id)+'.out', pis)
-            return pis
-
-        def compute_ucb(self, id, _):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            # 20000 is system dependent. Change according to space in GPU
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
+        imp = means - best_val - self.eps
+        Z = imp/stds
+        eis = imp * norm.cdf(Z) + stds * norm.pdf(Z)
+        eis[stds == 0.0] = 0.0
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out',eis)
+        return eis
+    
+    def compute_pi(self, id, best_val):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
+        
+        z = (best_val - means)/stds
+        pis = norm.cdf(-z)
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', pis)
+        return pis
+    
+    def compute_ucb(self, id, _):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
 
             ucb = means + beta * stds
 
@@ -372,27 +372,29 @@ if __name__ == "__main__":
         def compute_random(self, id, _):
             random = np.random.rand(len(features))
 
-            if save_af:
-                np.savetxt(directory_path+'/' + af + 's_' + str(id)+'.out', random)
-
-        def compute_greedy(self, id, _):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            # 20000 is system dependent. Change according to space in GPU
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
+        if save_af:
+            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', random)
+    
+    def compute_greedy(self, id, _):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        #20000 is system dependent. Change according to space in GPU
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means,m)
+            stds = np.append(stds,s)
 
             greedy = means
 
@@ -400,23 +402,26 @@ if __name__ == "__main__":
                 np.savetxt(directory_path+'/' + af + 's_' + str(id)+'.out', greedy)
             return greedy
 
-        def compute_haf(self, id, best_val, lambda_1=0.5, lambda_2=0.5):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
+
+    def compute_haf(self, id, best_val, lambda_1=0.5, lambda_2=0.5):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means, m)
+            stds = np.append(stds, s)
 
             # Expected Improvement (EI)
             imp = means - best_val - self.eps
@@ -436,23 +441,26 @@ if __name__ == "__main__":
 
             return haf
 
-        def compute_ebaf(self, id, _):
-            self.model.eval()
-            self.likelihood.eval()
-            means = np.array([])
-            stds = np.array([])
-            eval_bs_size = 1000
-            for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
-                test_x = features[i:i+eval_bs_size]
-                test_x = torch.FloatTensor(test_x).to(device)
-                with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                    observed_pred = self.likelihood(self.model(test_x))
-                    m = observed_pred.mean
-                    s = observed_pred.stddev
-                m = m.cpu().numpy()
-                s = s.cpu().numpy()
-                means = np.append(means, m)
-                stds = np.append(stds, s)
+
+    def compute_ebaf(self, id, _):
+        self.model.eval()
+        self.likelihood.eval()
+        means = np.array([])
+        stds = np.array([])
+        eval_bs_size = 1000
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
+            test_x = features[i:i+eval_bs_size]
+            test_x = torch.FloatTensor(test_x).to(device)
+            with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                observed_pred = self.likelihood(self.model(test_x))
+                m = observed_pred.mean
+                s = observed_pred.stddev
+            m = m.cpu().numpy()
+            s = s.cpu().numpy()
+            means = np.append(means, m)
+            stds = np.append(stds, s)
 
             # Entropy-Based Acquisition Function (EBAF)
             entropy = -0.5 * np.log(2 * np.pi * np.e * stds**2)
@@ -535,18 +543,20 @@ if __name__ == "__main__":
     gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
     gp.train_gp(train_x, train_y)
 
-    torch.save(gp.model, directory_path+"/model.pt")
-    print(gp.model)
+#torch.save(gp.model, directory_path+"/model.pt")
+print(gp.model)
 
-    predicts = np.array([])
-    gp.model.eval()
-    gp.likelihood.eval()
-    for i in tqdm.tqdm(range(0, len(features), 1000)):
-        pred_features = features[i:i+1000]
-        pred_features = torch.FloatTensor(pred_features).to(device)
-        with torch.no_grad(), gpytorch.settings.fast_pred_var():
-            pred = gp.likelihood(gp.model(pred_features))
-            predicts = np.append(predicts, pred.mean.numpy())
+predicts = np.array([])
+gp.model.eval()
+gp.likelihood.eval()
+pbar = tqdm.tqdm(range(0,len(features),1000))
+pbar.set_description('??')
+for i in pbar:
+    pred_features = features[i:i+1000]
+    pred_features = torch.FloatTensor(pred_features).to(device)
+    with torch.no_grad(), gpytorch.settings.fast_pred_var():
+        pred = gp.likelihood(gp.model(pred_features))
+        predicts = np.append(predicts, pred.mean.numpy())
 
     high_predict_idx = np.array(predicts).argsort()[::-1]
 

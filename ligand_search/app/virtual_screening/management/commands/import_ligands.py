@@ -16,7 +16,7 @@ class Command(BaseCommand):
             fingerprints = pickle.load(file)
         
         with open(settings.DATA_DIR / "demo/features.pkl", "rb") as file:
-            smile_score_dict = pickle
+            features = np.nan_to_num(np.array(joblib.load(features_path, mmap_mode='r')))
 
         batch_size = 100000
         total = len(smile_list)

@@ -15,12 +15,12 @@ import json
 
 
 # Create your views here.
-taskOutputs = ''
+taskOutputs = []
 
 
 def performTask(request):
     global taskOutputs
-    taskOutputs = ''
+    taskOutputs.clear()
 
     method = request.session.get('method')
     receptor = request.session.get('receptor')
@@ -74,8 +74,8 @@ def performTask(request):
             elif method == 'MEMES':
                 scriptPath = '/screening/method/method_memes.py'
                 # todo
-                # feature = request.session.get('feature')
-                # acquisitionFunc = request.session.get('af')
+                feature = request.session.get('representation')
+                acquisition_func = request.session.get('af')
                 featuresPath = '/screening/data/demo/features.pkl' # if is_demo == 'True' else '/screening/data/features.pkl'
                 cmd = [
                     'python',
@@ -83,14 +83,14 @@ def performTask(request):
                     '--run', '1',
                     '--rec', 'memes_data',
                     '--cuda', 'cpu',
-                    '--feature', 'mol2vec', # todo
+                    '--feature', feature,
                     '--features_path', featuresPath,
                     '--iter', '6',
                     '--capital', '30000',
                     '--initial', '8000',
                     '--periter', '2000',
                     '--n_cluster', '4000',
-                    '--acquisition_func', 'ei', # todo
+                    '--acquisition_func', acquisition_func,
                     '--receptor', receptorPath,
                     '--total_count', count,
                     '--is_demo', is_demo,
@@ -109,8 +109,7 @@ def performTask(request):
             # Read the output line by line
             for line in process.stdout:
                 # Append the line to the task output
-                taskOutputs += line
-                print(line, end='')
+                taskOutputs.append(line)
 
             # process.stdout.close()
             process.wait()
@@ -141,16 +140,16 @@ def performTask(request):
                 result.save()
 
         except Exception as e:
-            taskOutputs += f"\nError: {str(e)}"
-            print(f"Error: {str(e)}")
+            taskOutputs.append(f"Error: {str(e)}")
         finally:
-            taskOutputs += "\ncomplete"
+            taskOutputs.append("Processing complete")
             print("complete")
             
             logFilePath = os.path.join(resultDir, "log.txt")
             
             with open(logFilePath, 'w') as f:
-                f.write(taskOutputs)
+                for line in taskOutputs:
+                    f.write(line)
 
     thread = threading.Thread(target=run_script)
     thread.start()
@@ -184,6 +183,11 @@ def demo(request):
 
         if not method:
             return render(request, 'demo.html', {'method_error_message': 'Please select a method.'})
+        elif method == 'MEMES':
+            representation = request.POST.get('representation')
+            af = request.POST.get('af')
+            if not representation or not af:
+                return render(request, 'demo.html', {'method_error_message': 'Please select representation and acquisition function.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -199,6 +203,9 @@ def demo(request):
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
         request.session['is_demo'] = "True"
+        if method == 'MEMES':
+            request.session['representation'] = representation
+            request.session['af'] = af
 
         return redirect(processing)
 
@@ -216,6 +223,11 @@ def search(request):
         method = request.POST.get('method')
         if not method:
             return render(request, 'search.html', {'method_error_message': 'Please select a method.'})
+        elif method == 'MEMES':
+            representation = request.POST.get('representation')
+            af = request.POST.get('af')
+            if not representation or not af:
+                return render(request, 'search.html', {'method_error_message': 'Please select representation and acquisition function.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -229,6 +241,9 @@ def search(request):
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
         request.session['is_demo'] = "False"
+        if method == 'MEMES':
+            request.session['representation'] = representation
+            request.session['af'] = af
 
         return redirect(processing)
     return render(request, 'search.html')

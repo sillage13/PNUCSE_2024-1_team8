@@ -5,7 +5,6 @@
 }
 
 .result_li > a {
-    display: flex;
     justify-content: center;
     margin: 20px 0;
     width: 100%;
@@ -49,12 +48,8 @@
 
 /* Media Queries for responsiveness */
 @media screen and (max-width: 700px) {
-    .result_receptor {
-        max-width: 35%;
-    }
-
-    .result_method {
-        max-width: 65%;
+    .result_ul {
+        width: 75%;
     }
 
     .result_method > div:nth-child(1) {
@@ -63,5 +58,25 @@
 
     .show-text {
         max-width: 100%;
+    }
+}
+
+@media screen and (max-width: 700px) and ((hover:none) or (pointer:coarse)) {
+    .result_li > a {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .result_li > a > div {
+        border-radius: 10px;
+    }
+
+    .result_receptor {
+        width: 60%;
+        margin-bottom: 5px;
+    }
+
+    .result_method {
+        width: 100%;
     }
 }

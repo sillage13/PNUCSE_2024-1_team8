@@ -8,6 +8,14 @@
     background-color: var(--container);
 }
 
+#visualization > .material-symbols-outlined {
+    position: absolute;
+    margin: 8px;
+    padding: 2px;
+    top: 0;
+    right: 0;
+}
+
 .visual-info > div {
     position: absolute;
     padding: 10px;
@@ -73,15 +81,15 @@
 
 .result_ul > li > div:nth-child(1) {
     width: 65%;
-    background-color: var(--green);
-    color: var(--on-green);    
+    background-color: var(--container);
+    color: var(--on-container);
 }
 
 .result_ul > li > div:nth-child(2) {
     width: 35%;
-    background-color: var(--container);
-    color: var(--on-container);
     justify-content: flex-end;
+    background-color: var(--green);
+    color: var(--on-green);    
 }
 
 .result_ul > li > div:nth-child(2) > div {
@@ -90,12 +98,7 @@
 
 .result_ul > li .material-symbols-outlined {
     font-size: 20px;
-    color: var(--on-container);
-}
-
-.result_ul > li .material-symbols-outlined:hover {
-    background-color: var(--container-hover);
-    border-radius: 12px;
+    color: var(--on-green);
 }
 
 .result_ul .selected .material-symbols-outlined{
@@ -115,8 +118,36 @@
     }
 
     #visualization, .result {
-        width: 60%;
+        width: 75%;
         max-width: 500px;
         margin: 20px;
+    }
+
+    .result_ul > li > div:nth-child(1) {
+        width: 60%;
+        max-width: 300px;
+    }
+
+    .result_ul > li > div:nth-child(2) {
+        width: 40%;
+        max-width: 200px;
+    }
+}
+
+@media screen and (((min-width: 701px) and (max-width: 950px))  or (max-width: 400px)){
+    .result_ul > li > div:nth-child(1), .result_ul > li > div:nth-child(2) {
+        width: 50%;
+    }
+}
+
+@media (hover:hover)  and (pointer:fine) {
+    #visualization > .material-symbols-outlined:hover {
+        background-color: var(--container-hover);
+        border-radius: 12px;
+    }
+
+    .result_ul > li .material-symbols-outlined:hover {
+        background-color: var(--green-hover);
+        border-radius: 12px;
     }
 }

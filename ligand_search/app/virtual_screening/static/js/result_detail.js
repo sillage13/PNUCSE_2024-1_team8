@@ -38,4 +38,14 @@ $(document).ready(function() {
             $(this).find(".hidden-overflow").removeClass("flow-text")
         }
     )
+
+    $('#info_icon').click(function() {
+        $('.visual-info').toggle()
+        
+        var txt = $(this).text()
+        if (txt == "subtitles")
+            $(this).text('subtitles_off')
+        else
+            $(this).text('subtitles')
+    })
 })
