@@ -17,21 +17,14 @@ from collections import defaultdict
 import joblib
 # import random
 from utils import *
+import django
 
+#Set up Django environment
+sys.path.append("/app")  # Adjust to your Django project path
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "virtual_screening.settings")
+django.setup()
 
-
-
-# def load_data(filename):
-#     # with open(filename, 'rb') as f:
-#     #     return pickle.load(f)
-#     return joblib.load(filename, mmap_mode='r')
-    
-# def save_data(target, filename):
-#     # with open(filename, 'wb') as f:
-#     #     pickle.dump(target, f)
-#     joblib.dump(target, filename)
-
-
+from virtual_screening.models import Ligand
 
 def scoring_function(smile,index):
     global is_demo
@@ -45,9 +38,9 @@ def scoring_function(smile,index):
 
     if is_demo:
         global docking_dict
-        print(docking_count)
-        print(f"{docking_dict[smile]}, {docking_dict[smile]}")
-        print()
+        # print(docking_count)
+        # print(f"{docking_dict[smile]}, {docking_dict[smile]}")
+        # print()
         result = docking_dict[smile]
     else:
         global receptor_file
@@ -61,29 +54,30 @@ def scoring_function(smile,index):
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--run', required=True)
-parser.add_argument('--rec', required=True)
-parser.add_argument('--cuda',required=True)
-parser.add_argument('--feature', default='mol2vec')
-parser.add_argument('--features_path', default='data/features.pkl')
-parser.add_argument('--smiles_path', default='data/all.txt')
+#parser.add_argument('--run', required=True)
+#parser.add_argument('--rec', required=True)
+parser.add_argument('--cuda', default='cpu')
+parser.add_argument('--feature', default='Mol2vec')
+parser.add_argument('--features_path', default='/screening/data/features.pkl')
+parser.add_argument('--smiles_path', default='/screening/data/all.txt')
 parser.add_argument('--iters',default='40')
 parser.add_argument('--capital',default='15000')
 parser.add_argument('--initial',default='5000')
 parser.add_argument('--periter',default='500')
 parser.add_argument('--n_cluster',default='20')
+parser.add_argument('--batch_size', default='1000')
 parser.add_argument('--acquisition_func', default="ei")
-parser.add_argument('--save_af', required=False,default="False")
+parser.add_argument('--save_af', default="False")
 parser.add_argument('--eps', default='0.05')
 parser.add_argument('--beta', default=1)
-parser.add_argument("--ligand_path", default="./data/ligands.txt")
-parser.add_argument("--receptor", default="receptor.pdbqt")
-parser.add_argument("--result_tail", default="1")
-parser.add_argument("--total_count", default=40)
-parser.add_argument('is_demo', type=bool, help='Is demo')
-parser.add_argument('result_dir', type=str, help='Result directory')
+#parser.add_argument("--ligand_path", default="/screening/data/ligands.txt")
+parser.add_argument('--receptor', default="receptor.pdbqt")
+#parser.add_argument("--result_tail", default="1")
+parser.add_argument('--total_count', default=40)
+parser.add_argument('--is_demo', type=bool, help='Is demo')
+parser.add_argument('--result_dir', type=str, help='Result directory')
 args = parser.parse_args()
-run = int(args.run)
+#run = int(args.run)
 iters = int(args.iters)
 capital = int(args.capital)
 initial = int(args.initial)
@@ -92,17 +86,17 @@ n_cluster = int(args.n_cluster)
 af = args.acquisition_func
 eps = float(args.eps)
 beta = float(args.beta)
-rec = args.rec
+batch_size = int(args.batch_size)
+#rec = args.rec
 feat = args.feature
 features_path = args.features_path
-result_tail = args.result_tail
+#result_tail = args.result_tail
 total_count = int(args.total_count)
 device = args.cuda
 receptor_file = args.receptor                                   #4UNN.pdbqt
 receptor_name = receptor_file.split('/')[-1].split('.')[0]     #4UNN
 is_demo = args.is_demo
 result_dir = args.result_dir
-
 
 
 check_dup = defaultdict(bool)
@@ -124,7 +118,7 @@ else:
 save_af = args.save_af == "True"
 print("Using device: ", device)
 
-directory_path = 'gp_runs/{}-'.format(feat)+rec+'/'+af+'/run'+str(run)
+directory_path = result_dir + '/MEMES'
 
 try:
     os.makedirs(directory_path)
@@ -132,13 +126,17 @@ except:
     pass
 
 with open(directory_path+'/config.txt','w') as f:
-    f.write("periter:	"+str(periter)+"\n")
-    f.write("initial:	"+str(initial)+"\n")
+    f.write("rec:	"+str(receptor_name)+"\n")
     f.write("feature:	"+str(feat)+"\n")
+    f.write("acquisition function:  "+af+"\n")
+    f.write("\n")
+    f.write("n_cluster: "+str(n_cluster)+"\n")
+    f.write("initial:	"+str(initial)+"\n")
+    f.write("periter:	"+str(periter)+"\n")
     f.write("capital:   "+str(capital)+"\n")
+    f.write("total count:   "+str(total_count)+"\n")
     f.write("eps:	"+str(eps)+"\n")
     f.write("beta:  "+str(beta)+"\n")
-    f.write("rec:	"+str(rec)+"\n")
     f.close()
 
 #TODO   feature 파일 연결
@@ -147,20 +145,21 @@ features_ = np.array(pickle_obj)
 
 features_ = np.nan_to_num(features_)
 
-features = np.memmap("data/features.npy", mode='w+', dtype='int8', shape=features_.shape)
+features = np.memmap("/screening/data/features.npy", mode='w+', dtype=features_.dtype, shape=features_.shape)
 features[:] = features_[:]
 del pickle_obj
 del features_
 
 features[:] = features - features.min()
-#features[:] = features/features.max()
+if feat == "Mol2vec":
+    features[:] = features/features.max()
 features[:] = 2 * features - 1
 print(features.shape)
 
 
 #TODO   클러스터 파일 선택
 ## loading cluster labels
-labels = np.loadtxt(f"data/labels{n_cluster}.txt")
+labels = np.loadtxt(f"/screening/data/labels{n_cluster}.txt")
 
 
 
@@ -220,7 +219,7 @@ class GP:
     def __init__(self, train_x, train_y, af, eps=0.05, beta=1):
         self.likelihood = gpytorch.likelihoods.GaussianLikelihood()
         self.dataset = TensorDataset(train_x, train_y)
-        self.loader = DataLoader(self.dataset, batch_size=1000)
+        self.loader = DataLoader(self.dataset, batch_size=batch_size)
         self.train_x, self.train_y = next(iter(self.loader))
         self.model = ExactGPModel(self.train_x, self.train_y, self.likelihood)
         self.eps = eps
@@ -279,7 +278,7 @@ class GP:
 
             epoch_loss = epoch_loss/len(self.loader)
 
-            pbar.set_description('Iter %d/%d - Loss: %.3f ' % (
+            pbar.set_description('??Iter %d/%d - Loss: %.3f ' % (
                 i + 1, training_iter, epoch_loss,
             ))
             if epoch_loss < prev_best_loss:
@@ -298,7 +297,9 @@ class GP:
         stds = np.array([])
         #20000 is system dependent. Change according to space in GPU
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -325,7 +326,9 @@ class GP:
         stds = np.array([])
         #20000 is system dependent. Change according to space in GPU
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -350,7 +353,9 @@ class GP:
         stds = np.array([])
         #20000 is system dependent. Change according to space in GPU
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -381,7 +386,9 @@ class GP:
         stds = np.array([])
         #20000 is system dependent. Change according to space in GPU
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0,len(features),eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -406,7 +413,9 @@ class GP:
         means = np.array([])
         stds = np.array([])
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -442,7 +451,9 @@ class GP:
         means = np.array([])
         stds = np.array([])
         eval_bs_size = 1000
-        for i in tqdm.tqdm(range(0, len(features), eval_bs_size)):
+        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+        pbar.set_description('??')
+        for i in pbar:
             test_x = features[i:i+eval_bs_size]
             test_x = torch.FloatTensor(test_x).to(device)
             with torch.no_grad(), gpytorch.settings.fast_pred_var():
@@ -536,13 +547,15 @@ train_x, train_y = torch.FloatTensor(X_sample), torch.FloatTensor(Y_sample)
 gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
 gp.train_gp(train_x, train_y)
 
-torch.save(gp.model, directory_path+"/model.pt")
+#torch.save(gp.model, directory_path+"/model.pt")
 print(gp.model)
 
 predicts = np.array([])
 gp.model.eval()
 gp.likelihood.eval()
-for i in tqdm.tqdm(range(0,len(features),1000)):
+pbar = tqdm.tqdm(range(0,len(features),1000))
+pbar.set_description('??')
+for i in pbar:
     pred_features = features[i:i+1000]
     pred_features = torch.FloatTensor(pred_features).to(device)
     with torch.no_grad(), gpytorch.settings.fast_pred_var():

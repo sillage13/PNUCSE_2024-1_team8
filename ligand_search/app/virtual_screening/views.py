@@ -30,7 +30,7 @@ def performTask(request):
         
         try:
             receptorPath = os.path.join(resultDir, receptor)
-            count = '100'  # or any appropriate value
+            count = '10000'  # or any appropriate value
             cmd =[]
 
             scriptPath = ''
@@ -56,7 +56,25 @@ def performTask(request):
                 ]
             elif method == 'MEMES':
                 scriptPath = '/screening/method/method_memes.py'
-                
+                cmd = [
+                    'python',
+                    scriptPath,
+                    #'--cuda', '',
+                    '--feature', request.session.get('representation'),
+                    # '--features_path', '',
+                    # '--smiles_path', '',
+                    '--iters', '3',
+                    '--capital', '10000',
+                    '--initial', '2000',
+                    '--periter', '2000',
+                    '--n_cluster', '1000',
+                    # '--batch_size', '',
+                    '--acquisition_func', request.session.get('af'),
+                    '--receptor', receptorPath,
+                    '--total_count', count,
+                    '--is_demo', is_demo,
+                    '--result_dir', resultDir
+                ]
             
 
             
@@ -88,7 +106,8 @@ def performTask(request):
             logFilePath = os.path.join(resultDir, "log.txt")
             
             with open(logFilePath, 'w') as f:
-                f.write(taskOutputs)
+                for line in taskOutputs:
+                    f.write(line)
 
     thread = threading.Thread(target=run_script)
     thread.start()
@@ -123,6 +142,11 @@ def demo(request):
 
         if not method:
             return render(request, 'demo.html', {'method_error_message': 'Please select a method.'})
+        elif method == 'MEMES':
+            representation = request.POST.get('representation')
+            af = request.POST.get('af')
+            if not representation or not af:
+                return render(request, 'demo.html', {'method_error_message': 'Please select representation and acquisition function.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -138,6 +162,9 @@ def demo(request):
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
         request.session['is_demo'] = "True"
+        if method == 'MEMES':
+            request.session['representation'] = representation
+            request.session['af'] = af
 
         return redirect(processing)
 
@@ -155,6 +182,11 @@ def search(request):
 
         if not method:
             return render(request, 'search.html', {'method_error_message': 'Please select a method.'})
+        elif method == 'MEMES':
+            representation = request.POST.get('representation')
+            af = request.POST.get('af')
+            if not representation or not af:
+                return render(request, 'search.html', {'method_error_message': 'Please select representation and acquisition function.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -168,6 +200,9 @@ def search(request):
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
         request.session['is_demo'] = "False"
+        if method == 'MEMES':
+            request.session['representation'] = representation
+            request.session['af'] = af
 
         return redirect(processing)
     return render(request, 'search.html')
