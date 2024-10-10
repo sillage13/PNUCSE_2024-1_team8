@@ -81,15 +81,15 @@
 
 .result_ul > li > div:nth-child(1) {
     width: 65%;
-    background-color: var(--green);
-    color: var(--on-green);    
+    background-color: var(--container);
+    color: var(--on-container);
 }
 
 .result_ul > li > div:nth-child(2) {
     width: 35%;
-    background-color: var(--container);
-    color: var(--on-container);
     justify-content: flex-end;
+    background-color: var(--green);
+    color: var(--on-green);    
 }
 
 .result_ul > li > div:nth-child(2) > div {
@@ -98,7 +98,7 @@
 
 .result_ul > li .material-symbols-outlined {
     font-size: 20px;
-    color: var(--on-container);
+    color: var(--on-green);
 }
 
 .result_ul .selected .material-symbols-outlined{
