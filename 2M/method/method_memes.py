@@ -95,7 +95,7 @@ if __name__ == "__main__":
     receptor_name = receptor_file.split('/')[-1].split('.')[0]  # 4UNN
     is_demo = (args.is_demo == "True")
     result_dir = args.result_dir
-    
+
     start_time = time.time()
 
     check_dup = defaultdict(bool)
@@ -118,28 +118,28 @@ if __name__ == "__main__":
     except:
         pass
 
-with open(directory_path+'/config.txt','w') as f:
-    f.write("rec:	"+str(receptor_name)+"\n")
-    f.write("feature:	"+str(feat)+"\n")
-    f.write("acquisition function:  "+af+"\n")
-    f.write("\n")
-    f.write("n_cluster: "+str(n_cluster)+"\n")
-    f.write("initial:	"+str(initial)+"\n")
-    f.write("periter:	"+str(periter)+"\n")
-    f.write("capital:   "+str(capital)+"\n")
-    f.write("total count:   "+str(total_count)+"\n")
-    f.write("eps:	"+str(eps)+"\n")
-    f.write("beta:  "+str(beta)+"\n")
-    f.close()
+    with open(directory_path+'/config.txt','w') as f:
+        f.write("rec:	"+str(receptor_name)+"\n")
+        f.write("feature:	"+str(feat)+"\n")
+        f.write("acquisition function:  "+af+"\n")
+        f.write("\n")
+        f.write("n_cluster: "+str(n_cluster)+"\n")
+        f.write("initial:	"+str(initial)+"\n")
+        f.write("periter:	"+str(periter)+"\n")
+        f.write("capital:   "+str(capital)+"\n")
+        f.write("total count:   "+str(total_count)+"\n")
+        f.write("eps:	"+str(eps)+"\n")
+        f.write("beta:  "+str(beta)+"\n")
+        f.close()
 
-    # TODO fingerprint 및 is_demo False 구현
+        # TODO fingerprint 및 is_demo False 구현
 
 
-    # features = np.memmap("data/features.npy", mode='w+', dtype='int8', shape=features_.shape)
-    # features = np.memmap(directory_path + '/' + 'features.npy', mode='w+', dtype=np.float32, shape=features_.shape)
-    # del pickle_obj
-    # del features_
-    # print(features.shape)
+        # features = np.memmap("data/features.npy", mode='w+', dtype='int8', shape=features_.shape)
+        # features = np.memmap(directory_path + '/' + 'features.npy', mode='w+', dtype=np.float32, shape=features_.shape)
+        # del pickle_obj
+        # del features_
+        # print(features.shape)
 
 
     # TODO   클러스터 파일 선택
@@ -148,7 +148,7 @@ with open(directory_path+'/config.txt','w') as f:
         labels = np.loadtxt(f"/screening/data/demo/labels{n_cluster}.txt")
         docking_dict = load_data("/screening/data/demo/smile_score_dict.dat")
         smiles = load_data("/screening/data/demo/smile_list.dat")
-        if feat == "mol2vec":
+        if feat == "Mol2vec":
             features = np.nan_to_num(np.array(joblib.load(features_path, mmap_mode='r')))
 
             features[:] = features - features.min()
@@ -286,84 +286,84 @@ with open(directory_path+'/config.txt','w') as f:
                 if early_stopping >= 10:
                     break
 
-    def compute_ei(self,id,best_val):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        #20000 is system dependent. Change according to space in GPU
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means,m)
-            stds = np.append(stds,s)
+        def compute_ei(self,id,best_val):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            #20000 is system dependent. Change according to space in GPU
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means,m)
+                stds = np.append(stds,s)
 
-        imp = means - best_val - self.eps
-        Z = imp/stds
-        eis = imp * norm.cdf(Z) + stds * norm.pdf(Z)
-        eis[stds == 0.0] = 0.0
-        if save_af:
-            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out',eis)
-        return eis
+            imp = means - best_val - self.eps
+            Z = imp/stds
+            eis = imp * norm.cdf(Z) + stds * norm.pdf(Z)
+            eis[stds == 0.0] = 0.0
+            if save_af:
+                np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out',eis)
+            return eis
     
-    def compute_pi(self, id, best_val):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        #20000 is system dependent. Change according to space in GPU
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means,m)
-            stds = np.append(stds,s)
-        
-        z = (best_val - means)/stds
-        pis = norm.cdf(-z)
-        if save_af:
-            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', pis)
-        return pis
+        def compute_pi(self, id, best_val):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            #20000 is system dependent. Change according to space in GPU
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means,m)
+                stds = np.append(stds,s)
+            
+            z = (best_val - means)/stds
+            pis = norm.cdf(-z)
+            if save_af:
+                np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', pis)
+            return pis
     
-    def compute_ucb(self, id, _):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        #20000 is system dependent. Change according to space in GPU
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means,m)
-            stds = np.append(stds,s)
+        def compute_ucb(self, id, _):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            #20000 is system dependent. Change according to space in GPU
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means,m)
+                stds = np.append(stds,s)
 
-            ucb = means + beta * stds
+                ucb = means + beta * stds
 
             if save_af:
                 np.savetxt(directory_path+'/' + af + 's_' + str(id)+'.out', ucb)
@@ -372,29 +372,29 @@ with open(directory_path+'/config.txt','w') as f:
         def compute_random(self, id, _):
             random = np.random.rand(len(features))
 
-        if save_af:
-            np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', random)
+            if save_af:
+                np.savetxt(directory_path+'/' + af +'s_' + str(id)+'.out', random)
     
-    def compute_greedy(self, id, _):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        #20000 is system dependent. Change according to space in GPU
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means,m)
-            stds = np.append(stds,s)
+        def compute_greedy(self, id, _):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            #20000 is system dependent. Change according to space in GPU
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means,m)
+                stds = np.append(stds,s)
 
             greedy = means
 
@@ -403,25 +403,25 @@ with open(directory_path+'/config.txt','w') as f:
             return greedy
 
 
-    def compute_haf(self, id, best_val, lambda_1=0.5, lambda_2=0.5):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means, m)
-            stds = np.append(stds, s)
+        def compute_haf(self, id, best_val, lambda_1=0.5, lambda_2=0.5):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means, m)
+                stds = np.append(stds, s)
 
             # Expected Improvement (EI)
             imp = means - best_val - self.eps
@@ -462,14 +462,14 @@ with open(directory_path+'/config.txt','w') as f:
             means = np.append(means, m)
             stds = np.append(stds, s)
 
-            # Entropy-Based Acquisition Function (EBAF)
-            entropy = -0.5 * np.log(2 * np.pi * np.e * stds**2)
+        # Entropy-Based Acquisition Function (EBAF)
+        entropy = -0.5 * np.log(2 * np.pi * np.e * stds**2)
 
-            if save_af:
-                np.savetxt(directory_path + '/' + af +
-                        's_' + str(id) + '.out', entropy)
+        if save_af:
+            np.savetxt(directory_path + '/' + af +
+                    's_' + str(id) + '.out', entropy)
 
-            return entropy
+        return entropy
 
 
     # Iterative algorithm
@@ -512,6 +512,7 @@ with open(directory_path+'/config.txt','w') as f:
                 Y_next.append(score)
             if count == periter:
                 break
+            
         if (len(X_next) == 0):
             print("break")
             break
@@ -543,42 +544,39 @@ with open(directory_path+'/config.txt','w') as f:
     gp = GP(train_x, train_y, af=af, eps=eps, beta=beta)
     gp.train_gp(train_x, train_y)
 
-#torch.save(gp.model, directory_path+"/model.pt")
-print(gp.model)
+    print(gp.model)
 
-predicts = np.array([])
-gp.model.eval()
-gp.likelihood.eval()
-pbar = tqdm.tqdm(range(0,len(features),1000))
-pbar.set_description('??')
-for i in pbar:
-    pred_features = features[i:i+1000]
-    pred_features = torch.FloatTensor(pred_features).to(device)
-    with torch.no_grad(), gpytorch.settings.fast_pred_var():
-        pred = gp.likelihood(gp.model(pred_features))
-        predicts = np.append(predicts, pred.mean.numpy())
+    predicts = np.array([])
+    gp.model.eval()
+    gp.likelihood.eval()
+    for i in tqdm.tqdm(range(0,len(features),1000)):
+        pred_features = features[i:i+1000]
+        pred_features = torch.FloatTensor(pred_features).to(device)
+        with torch.no_grad(), gpytorch.settings.fast_pred_var():
+            pred = gp.likelihood(gp.model(pred_features))
+            predicts = np.append(predicts, pred.mean.numpy())
 
-    high_predict_idx = np.array(predicts).argsort()[::-1]
+        high_predict_idx = np.array(predicts).argsort()[::-1]
 
-    average_predict = 0
-    average_score = 0
-    average_predict_top10 = 0
-    average_top10 = 0
-    predict_cnt = 0
-    for index in high_predict_idx:
-        if smiles[index] not in check_dup:
-            score = scoring_function(smiles[index], index)
-        else:
-            score = all_scores[smiles[index]]
-        average_predict += predicts[index]
-        average_score += score
-        if predict_cnt < 10:
-            average_predict_top10 += predicts[index]
-            average_top10 += score
-        predict_cnt += 1
+        average_predict = 0
+        average_score = 0
+        average_predict_top10 = 0
+        average_top10 = 0
+        predict_cnt = 0
+        for index in high_predict_idx:
+            if smiles[index] not in check_dup:
+                score = scoring_function(smiles[index], index)
+            else:
+                score = all_scores[smiles[index]]
+            average_predict += predicts[index]
+            average_score += score
+            if predict_cnt < 10:
+                average_predict_top10 += predicts[index]
+                average_top10 += score
+            predict_cnt += 1
 
-        if docking_count >= total_count:
-            break
+            if docking_count >= total_count:
+                break
 
     docking_result.sort(key=lambda x: (x[0], x[1]))
     top_ligands = docking_result[:10]
