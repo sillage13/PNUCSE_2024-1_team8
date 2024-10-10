@@ -141,8 +141,13 @@
 }
 
 @media (hover:hover)  and (pointer:fine) {
-    .material-symbols-outlined:hover {
+    #visualization > .material-symbols-outlined:hover {
         background-color: var(--container-hover);
+        border-radius: 12px;
+    }
+
+    .result_ul > li .material-symbols-outlined:hover {
+        background-color: var(--green-hover);
         border-radius: 12px;
     }
 }
