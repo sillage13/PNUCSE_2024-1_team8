@@ -76,7 +76,7 @@ def performTask(request):
                 # todo
                 feature = request.session.get('representation')
                 acquisition_func = request.session.get('af')
-                featuresPath = '/screening/data/demo/features.pkl' # if is_demo == 'True' else '/screening/data/features.pkl'
+                featuresPath = '/screening/data/demo/features.pkl' if feature == "Mol2vec" else '/screening/data/demo/fingerprints.dat'
                 cmd = [
                     'python',
                     scriptPath,

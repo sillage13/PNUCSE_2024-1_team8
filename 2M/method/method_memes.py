@@ -132,16 +132,6 @@ if __name__ == "__main__":
         f.write("beta:  "+str(beta)+"\n")
         f.close()
 
-        # TODO fingerprint 및 is_demo False 구현
-
-
-        # features = np.memmap("data/features.npy", mode='w+', dtype='int8', shape=features_.shape)
-        # features = np.memmap(directory_path + '/' + 'features.npy', mode='w+', dtype=np.float32, shape=features_.shape)
-        # del pickle_obj
-        # del features_
-        # print(features.shape)
-
-
     # TODO   클러스터 파일 선택
     # loading cluster labels
     if is_demo:
@@ -154,6 +144,12 @@ if __name__ == "__main__":
             features[:] = features - features.min()
             features[:] = features/features.max()
             features[:] = 2 * features - 1
+            print("Mol2vec")
+            
+        else:
+            features = np.array(pickle.load(open(features_path, "rb")))
+            print("Fingerprint")
+            
     else:
         smiles = list(Ligand.objects.values_list('ligand_smile', flat=True))
 

@@ -79,3 +79,21 @@ def cal_score(smile, receptor):
         return None
     
     return energy[0] 
+
+def wp(smile, receptor):
+    try:
+        ligand = smiles_to_pdbqt(smile)
+        v = Vina(sf_name='vina')
+        v.set_receptor(receptor)
+        v.set_ligand_from_string(ligand)
+
+        center_x, center_y, center_z = calculate_center_of_mass(ligand)
+        v.compute_vina_maps(center=[center_x, center_y, center_z], box_size=[60, 60, 60])
+
+        v.dock(exhaustiveness=32, n_poses=10)
+        v.write_poses("output.pdbqt", 10)
+    
+    except Exception as e:
+        print(f"Error processing {smile}: {e}")
+        return None
+    
