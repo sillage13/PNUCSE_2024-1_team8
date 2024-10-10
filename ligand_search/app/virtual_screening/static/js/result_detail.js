@@ -1,6 +1,7 @@
 $(document).ready(function() {
-    /*
-    let element = document.querySelector('#visalization');
+    console.log(receptorFile)
+    console.log(ligandFile)
+    let element = document.querySelector('#visualization');
     let config = {  };
     let viewer = $3Dmol.createViewer( element, config );
     jQuery.ajax( receptorFile, { 
@@ -11,7 +12,7 @@ $(document).ready(function() {
             viewer.render();                                    
         },
         error: function(hdr, status, err) {
-            console.error( "Failed to load PDB " + receptorFile + ": " + err );
+            console.error( "Failed to load Receptor " + receptorFile + ": " + err );
         },
     });
     jQuery.ajax( ligandFile, { 
@@ -21,10 +22,9 @@ $(document).ready(function() {
             viewer.render();                                    
         },
         error: function(hdr, status, err) {
-            console.error( "Failed to load PDB " + ligandFile + ": " + err );
+            console.error( "Failed to load Ligand " + ligandFile + ": " + err );
         },
     });
-    */
 
     $('.hidden-overflow_div').hover(
         function() {
