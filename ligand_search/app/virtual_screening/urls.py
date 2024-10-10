@@ -10,4 +10,5 @@ urlpatterns = [
     path('processing/', views.processing, name='processing'),
     path('perform-task/', views.performTask, name='perform-task'),
     path('get-task-status/', views.getTaskStatus, name='get-task-status'),
+    path('manage-ligand/import-from-db/', views.import_from_db, name='import-from-db'),
 ]

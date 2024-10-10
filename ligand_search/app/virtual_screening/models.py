@@ -6,6 +6,10 @@ class Ligand(models.Model):
     ligand_smile = models.TextField(unique=True)
     # 리간드 파일 생성 날짜
     created_at = models.DateTimeField(auto_now_add=True)
+    # 리간드 Fingerprint
+    fingerprint = models.BinaryField()
+    # 리간드 mol2vec
+    mol2vec = models.BinaryField()
     
     def __str__(self):
         return self.ligand_smile
@@ -29,25 +33,25 @@ class Result(models.Model):
 
     # Top 10 Ligand Smiles and Scores
     ligand_1 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_1')
-    score_1 = models.FloatField()
+    score_1 = models.FloatField(null=True, blank=True)
     ligand_2 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_2')
-    score_2 = models.FloatField()
+    score_2 = models.FloatField(null=True, blank=True)
     ligand_3 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_3')
-    score_3 = models.FloatField()
+    score_3 = models.FloatField(null=True, blank=True)
     ligand_4 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_4')
-    score_4 = models.FloatField()
+    score_4 = models.FloatField(null=True, blank=True)
     ligand_5 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_5')
-    score_5 = models.FloatField()
+    score_5 = models.FloatField(null=True, blank=True)
     ligand_6 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_6')
-    score_6 = models.FloatField()
+    score_6 = models.FloatField(null=True, blank=True)
     ligand_7 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_7')
-    score_7 = models.FloatField()
+    score_7 = models.FloatField(null=True, blank=True)
     ligand_8 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_8')
-    score_8 = models.FloatField()
+    score_8 = models.FloatField(null=True, blank=True)
     ligand_9 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_9')
-    score_9 = models.FloatField()
+    score_9 = models.FloatField(null=True, blank=True)
     ligand_10 = models.ForeignKey(Ligand, on_delete=models.SET_NULL, null=True, related_name='ligand_10')
-    score_10 = models.FloatField()
+    score_10 = models.FloatField(null=True, blank=True)
 
     # Search Method and Execution Time
     search_method = models.CharField(max_length=100)

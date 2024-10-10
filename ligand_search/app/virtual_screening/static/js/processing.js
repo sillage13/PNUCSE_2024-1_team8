@@ -59,8 +59,8 @@ $(document).ready(function () {
         if (!data.result.includes("complete")) {
           setTimeout(checkStatus, 1000);
         } else {
-          // Optionally, redirect to the results page
-          // window.location.href = "/results-list/";
+          // TODO
+          window.location.href = "/results-list/" + data.result_id + "/";
         }
       },
     });

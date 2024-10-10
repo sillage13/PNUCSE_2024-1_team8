@@ -3,6 +3,8 @@ import sys
 import django
 import argparse
 import random
+import json
+import time
 from utils import cal_score, load_data, save_data
 
 
@@ -11,6 +13,7 @@ sys.path.append("/app")  # Adjust to your Django project path
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "virtual_screening.settings")
 django.setup()
 
+from virtual_screening.models import Ligand
 
 # labels{n}.txt에서 클러스터 인덱스를 로드하는 함수
 def load_cluster_indices(filename):
@@ -126,27 +129,28 @@ def update_lowest_score_cluster(cluster_scores, cluster_smiles, score_dict, sele
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Docking script")
-    parser.add_argument('receptor', type=str, help='Path to the receptor file')
-    parser.add_argument('count', type=str, help='Docking count')
-    parser.add_argument('is_demo', type=bool, help='Is demo')
-    parser.add_argument('result_dir', type=str, help='Result directory')
+    parser.add_argument('--receptor', type=str, help='Path to the receptor file')
+    parser.add_argument('--count', type=str, help='Docking count')
+    parser.add_argument('--is_demo', type=str, help='Is demo')
+    parser.add_argument('--result_dir', type=str, help='Result directory')
     args = parser.parse_args()
     receptor = args.receptor
     count = int(args.count)
-    is_demo = args.is_demo
+    is_demo = (args.is_demo == "True")
     result_dir = args.result_dir
+    
+    start_time = time.time()
 
 
     if is_demo:
         if count >= 2104318:
             print("Too large count")
             exit(1)
-        score_dict = load_data("/screening/data/smile_score_dict.dat")
-        smile_list = load_data("/screening/data/smile_list.dat")
-        # smile_lidex = load_data("/screening/data/smile_index_dict.dat")
+        score_dict = load_data("/screening/data/demo/smile_score_dict.dat")
+        smile_list = load_data("/screening/data/demo/smile_list.dat")
         exist_cluster = [500, 1000, 2000, 4000, 8000]
         selected_cluster = min(exist_cluster, key=lambda x: abs(x - count/4))
-        cluster_indices = load_cluster_indices(f"/screening/data/labels{selected_cluster}.txt")
+        cluster_indices = load_cluster_indices(f"/screening/data/demo/labels{selected_cluster}.txt")
 
     else:
         smile_list = list(Ligand.objects.values_list('ligand_smile', flat=True))
@@ -173,5 +177,15 @@ if __name__ == "__main__":
     scores = [ligand[0] for ligand in top_ligands]
     avg_score = sum(scores) / len(scores)
     print(f"Average score of top10 ligands: {avg_score: .2f}")
+    
+    end_time = time.time()
+    execution_time = end_time - start_time
 
-    #TODO resulr_dir
+    output_data = {
+        'top_ligands': [{'smile': ligand[1], 'score': ligand[0]} for ligand in top_ligands],
+        'avg_score': avg_score,
+        'execution_time': execution_time
+    }
+    output_file = os.path.join(result_dir, 'result.json')
+    with open(output_file, 'w') as f:
+        json.dump(output_data, f)

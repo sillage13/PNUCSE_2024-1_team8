@@ -8,10 +8,12 @@ from openbabel import pybel
 def save_data(target, filename):
     with open(filename, 'wb') as f:
         pickle.dump(target, f)
+        
 
 def load_data(filename):
     with open(filename, 'rb') as f:
         return pickle.load(f)
+    
     
 def smiles_to_pdbqt(smiles):
     # SMILES를 3D 구조로 변환
@@ -30,6 +32,12 @@ def smiles_to_pdbqt(smiles):
     pdbqt = pdb_mol.write("pdbqt")
 
     return pdbqt
+
+
+def smiles_to_fingerprint(smiles):
+    fpGenerator = Chem.rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=1024, countSimulation=False)
+    
+    return fpGenerator.GetFingerprint(Chem.MolFromSmiles(smiles)).ToBitString()
 
 
 def calculate_center_of_mass(pdbqt_file):

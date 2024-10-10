@@ -9,8 +9,14 @@ class Command(BaseCommand):
     help = 'Imports ligand files into the database'
 
     def handle(self, *args, **kwargs):
-        with open(settings.DATA_DIR / "smile_list.dat", "rb") as file:
+        with open(settings.DATA_DIR / "demo/smile_list.dat", "rb") as file:
             smile_list = pickle.load(file)
+            
+        with open(settings.DATA_DIR / "demo/fingerprints.dat", "rb") as file:
+            fingerprints = pickle.load(file)
+        
+        with open(settings.DATA_DIR / "demo/features.pkl", "rb") as file:
+            smile_score_dict = pickle
 
         batch_size = 100000
         total = len(smile_list)

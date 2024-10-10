@@ -43,13 +43,11 @@ def cluster_fingerprints(fingerprints, n_clusters, batch_size=10000, random_stat
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Clustering script")
     parser.add_argument('k_values', type=int, help='Number of clusters', default=8000)
-    parser.add_argument('is_demo', type=bool, help='Is demo')
     
     args = parser.parse_args()
     
     # 클러스터 수
     k_values = args.k_values
-    is_demo = args.is_demo
     
     # 데이터 로드
     if is_demo:

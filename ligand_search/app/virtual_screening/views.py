@@ -1,15 +1,17 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from django.urls import reverse
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.files.storage import FileSystemStorage
+from django.core.management import call_command
 from django.conf import settings
+from django.contrib import messages
 from .models import Ligand, Result
 import subprocess
 import threading
 import shutil
 import datetime
 import os
+import json
 
 
 # Create your views here.
@@ -24,13 +26,28 @@ def performTask(request):
     receptor = request.session.get('receptor')
     resultDir = request.session.get('resultDir')
     is_demo = request.session.get('is_demo')
+    
+    receptorPath = os.path.join(resultDir, receptor)
+    
+    from django.utils import timezone
+    result = Result(
+        receptor_name=receptor,
+        receptor_file=receptorPath,
+        result_directory=resultDir,
+        search_method=method,
+        execution_time=0,
+        status='failed',
+        started_at=timezone.now(),        
+    )
+    
+    result.save()
+    request.session['result_id'] = result.id
 
     def run_script():
         global taskOutputs
         
         try:
-            receptorPath = os.path.join(resultDir, receptor)
-            count = '200000000'  # or any appropriate value
+            count = '20000'  # or any appropriate value
             cmd =[]
 
             scriptPath = ''
@@ -39,27 +56,47 @@ def performTask(request):
                 cmd = [
                     'python',
                     scriptPath,
-                    receptorPath,
-                    count,
-                    is_demo,
-                    resultDir
+                    '--receptor', receptorPath,
+                    '--count', count,
+                    '--is_demo', is_demo,
+                    '--result_dir', resultDir
                 ]
             elif method == 'Clustering':
                 scriptPath = '/screening/method/method_clustering.py'
                 cmd = [
                     'python',
                     scriptPath,
-                    receptorPath,
-                    count,
-                    is_demo,
-                    resultDir                    
+                    '--receptor', receptorPath,
+                    '--count', count,
+                    '--is_demo', is_demo,
+                    '--result_dir', resultDir                   
                 ]
             elif method == 'MEMES':
                 scriptPath = '/screening/method/method_memes.py'
+                # todo
+                # feature = request.session.get('feature')
+                # acquisitionFunc = request.session.get('af')
+                featuresPath = '/screening/data/demo/features.pkl' # if is_demo == 'True' else '/screening/data/features.pkl'
+                cmd = [
+                    'python',
+                    scriptPath,
+                    '--run', '1',
+                    '--rec', 'memes_data',
+                    '--cuda', 'cpu',
+                    '--feature', 'mol2vec', # todo
+                    '--features_path', featuresPath,
+                    '--iter', '6',
+                    '--capital', '30000',
+                    '--initial', '8000',
+                    '--periter', '2000',
+                    '--n_cluster', '4000',
+                    '--acquisition_func', 'ei', # todo
+                    '--receptor', receptorPath,
+                    '--total_count', count,
+                    '--is_demo', is_demo,
+                    '--result_dir', resultDir
+                ]
                 
-            
-
-            
 
             process = subprocess.Popen(
                 cmd,
@@ -77,16 +114,38 @@ def performTask(request):
 
             # process.stdout.close()
             process.wait()
+            
+            resultJsonPath = os.path.join(resultDir, "result.json")
+            if os.path.exists(resultJsonPath):
+                with open(resultJsonPath, 'r') as f:
+                    resultData = json.load(f)
 
-            # After processing is complete, you might want to save results to the database
-            # and redirect or notify the user
+                # Update the Result object
+                result = Result.objects.get(id=request.session.get('result_id'))
+                top_ligands = resultData['top_ligands']
+                execution_time = resultData.get('execution_time', 0)
+                result.execution_time = execution_time
+                result.status = 'successed'
+                result.ended_at = timezone.now()
+
+                # Create or get Ligand objects and set them in the Result object
+                for i, item in enumerate(top_ligands):
+                    ligand_smile = item['smile']
+                    score = item['score']
+                    ligand_obj, _ = Ligand.objects.get_or_create(ligand_smile=ligand_smile)
+                    setattr(result, f'ligand_{i+1}', ligand_obj)
+                    setattr(result, f'score_{i+1}', score)
+                    if i >= 9:
+                        break  # Only up to ligand_10
+
+                result.save()
 
         except Exception as e:
             taskOutputs += f"\nError: {str(e)}"
             print(f"Error: {str(e)}")
         finally:
-            taskOutputs += "\nProcessing complete"
-            print("Processing complete")
+            taskOutputs += "\ncomplete"
+            print("complete")
             
             logFilePath = os.path.join(resultDir, "log.txt")
             
@@ -96,19 +155,18 @@ def performTask(request):
     thread = threading.Thread(target=run_script)
     thread.start()
 
-    return JsonResponse({'status': 'started'})
+    return JsonResponse({'status': 'started', 'result_id': request.session.get('result_id')})
 
 
 def getTaskStatus(request):
     global taskOutputs
-    return JsonResponse({'result': taskOutputs})
+    return JsonResponse({'result': taskOutputs, 'result_id': request.session.get('result_id')})
 
 
 def processing(request):
     method = request.session.get('method')
     receptor = request.session.get('receptor')
     resultDir = request.session.get('resultDir')
-    is_demo = request.session.get('is_demo')
 
     if not method or not receptor or not resultDir:
         return redirect('demo')
@@ -125,7 +183,7 @@ def demo(request):
         receptor = request.POST.get('receptor')
 
         if not method:
-            return render(request, 'demo.html', {'error_message': 'Please select a method.'})
+            return render(request, 'demo.html', {'method_error_message': 'Please select a method.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -149,12 +207,15 @@ def demo(request):
 
 def search(request):
     if request.method == "POST":
+        try:    
+            receptor_file = request.FILES["receptor"]
+            receptor = receptor_file.name   
+        except:
+            return render(request, 'search.html', {'receptor_error_message': 'Please select a receptor file.'})
+        
         method = request.POST.get('method')
-        receptor_file = request.FILES["receptor"]
-        receptor = receptor_file.name
-
         if not method:
-            return render(request, 'search.html', {'error_message': 'Please select a method.'})
+            return render(request, 'search.html', {'method_error_message': 'Please select a method.'})
 
         timestamp = datetime.datetime.now().strftime('%Y%m%d-%H%M%S')
         resultDirName = f"{receptor}_{timestamp}_{method}"
@@ -167,10 +228,23 @@ def search(request):
         request.session['method'] = method
         request.session['receptor'] = receptor
         request.session['resultDir'] = resultDir
-        request.session['is_demo'] = "True"
+        request.session['is_demo'] = "False"
 
         return redirect(processing)
     return render(request, 'search.html')
+
+
+def import_from_db(request):
+    if request.method == 'POST':
+        try:
+            call_command('import_ligands')
+            messages.success(request, 'Successfully imported ligands from pre-made database.')
+        except Exception as e:
+            messages.error(request, f'Error importing ligands: {str(e)}')
+        
+        return redirect('manage-ligand')
+    
+    return redirect('manage-ligand')
 
 
 def manageLigand(request):
@@ -192,6 +266,8 @@ def manageLigand(request):
         if not ligand_smile:
             error_message = "Please enter ligand information."
             return render(request, 'manage_ligand.html', {'error_message': error_message, 'page_obj': page_obj})
+        
+        #TODO 올바른 리간드 체크
 
         if Ligand.objects.filter(ligand_smile=ligand_smile).exists():
             error_message = 'Ligand already exists.'
