@@ -28,6 +28,7 @@ $(document).ready(function () {
 
     $('.btn_div').hide()
     performTask();
+    var resultLen = 0
     
     function performTask() {
         var receptor = $("#results").data("receptor");
@@ -56,8 +57,10 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
                 var resultsDiv = $("#results");
-                for (idx in data.result) {
-                    var result = data.result.at(idx)
+                var isScrollDown = resultsDiv[0].scrollHeight - resultsDiv.scrollTop() <  resultsDiv.outerHeight() + 1
+                
+                for (let i = resultLen; i < data.result.length; i++) {
+                    var result = data.result.at(i)
                     //replace
                     result = result.replace("\n", "")
                     result = result.replace("<", "&lt;")
@@ -65,8 +68,16 @@ $(document).ready(function () {
                     while (result.includes("  "))
                         result = result.replace("  ", "&emsp;")
                     
+                    if (result.startsWith('??')) {
+                        result = result.replace("??", "")
+                        resultsDiv.children().last().remove()
+                    }
                     resultsDiv.append("<span>" + result + "</span>")
                 }
+                resultLen = data.result.length
+                //스크롤 이동
+                if (isScrollDown)
+                    resultsDiv.scrollTop(resultsDiv[0].scrollHeight)
                 
                 if (data.result.at(-1) != "Processing complete") {
                     setTimeout(checkStatus, 1000)
