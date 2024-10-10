@@ -274,14 +274,14 @@ with open(directory_path+'/config.txt','w') as f:
 
                 epoch_loss = epoch_loss/len(self.loader)
 
-            pbar.set_description('??Iter %d/%d - Loss: %.3f ' % (
-                i + 1, training_iter, epoch_loss,
-            ))
-            if epoch_loss < prev_best_loss:
-                prev_best_loss = epoch_loss
-                early_stopping = 0
-            else:
-                early_stopping += 1
+                pbar.set_description('??Iter %d/%d - Loss: %.3f ' % (
+                    i + 1, training_iter, epoch_loss,
+                ))
+                if epoch_loss < prev_best_loss:
+                    prev_best_loss = epoch_loss
+                    early_stopping = 0
+                else:
+                    early_stopping += 1
 
                 if early_stopping >= 10:
                     break
