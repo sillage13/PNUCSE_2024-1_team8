@@ -295,7 +295,7 @@ if __name__ == "__main__":
             #20000 is system dependent. Change according to space in GPU
             eval_bs_size = 1000
             pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-            pbar.set_description('??')
+            pbar.set_description('??EI ')
             for i in pbar:
                 test_x = features[i:i+eval_bs_size]
                 test_x = torch.FloatTensor(test_x).to(device)
@@ -324,7 +324,7 @@ if __name__ == "__main__":
             #20000 is system dependent. Change according to space in GPU
             eval_bs_size = 1000
             pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-            pbar.set_description('??')
+            pbar.set_description('??PI ')
             for i in pbar:
                 test_x = features[i:i+eval_bs_size]
                 test_x = torch.FloatTensor(test_x).to(device)
@@ -351,7 +351,7 @@ if __name__ == "__main__":
             #20000 is system dependent. Change according to space in GPU
             eval_bs_size = 1000
             pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-            pbar.set_description('??')
+            pbar.set_description('??UCB ')
             for i in pbar:
                 test_x = features[i:i+eval_bs_size]
                 test_x = torch.FloatTensor(test_x).to(device)
@@ -384,7 +384,7 @@ if __name__ == "__main__":
             #20000 is system dependent. Change according to space in GPU
             eval_bs_size = 1000
             pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-            pbar.set_description('??')
+            pbar.set_description('??Greedy ')
             for i in pbar:
                 test_x = features[i:i+eval_bs_size]
                 test_x = torch.FloatTensor(test_x).to(device)
@@ -411,7 +411,7 @@ if __name__ == "__main__":
             stds = np.array([])
             eval_bs_size = 1000
             pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-            pbar.set_description('??')
+            pbar.set_description('??HAF ')
             for i in pbar:
                 test_x = features[i:i+eval_bs_size]
                 test_x = torch.FloatTensor(test_x).to(device)
@@ -443,34 +443,34 @@ if __name__ == "__main__":
             return haf
 
 
-    def compute_ebaf(self, id, _):
-        self.model.eval()
-        self.likelihood.eval()
-        means = np.array([])
-        stds = np.array([])
-        eval_bs_size = 1000
-        pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
-        pbar.set_description('??')
-        for i in pbar:
-            test_x = features[i:i+eval_bs_size]
-            test_x = torch.FloatTensor(test_x).to(device)
-            with torch.no_grad(), gpytorch.settings.fast_pred_var():
-                observed_pred = self.likelihood(self.model(test_x))
-                m = observed_pred.mean
-                s = observed_pred.stddev
-            m = m.cpu().numpy()
-            s = s.cpu().numpy()
-            means = np.append(means, m)
-            stds = np.append(stds, s)
+        def compute_ebaf(self, id, _):
+            self.model.eval()
+            self.likelihood.eval()
+            means = np.array([])
+            stds = np.array([])
+            eval_bs_size = 1000
+            pbar = tqdm.tqdm(range(0,len(features),eval_bs_size))
+            pbar.set_description('??EBAF ')
+            for i in pbar:
+                test_x = features[i:i+eval_bs_size]
+                test_x = torch.FloatTensor(test_x).to(device)
+                with torch.no_grad(), gpytorch.settings.fast_pred_var():
+                    observed_pred = self.likelihood(self.model(test_x))
+                    m = observed_pred.mean
+                    s = observed_pred.stddev
+                m = m.cpu().numpy()
+                s = s.cpu().numpy()
+                means = np.append(means, m)
+                stds = np.append(stds, s)
 
-        # Entropy-Based Acquisition Function (EBAF)
-        entropy = -0.5 * np.log(2 * np.pi * np.e * stds**2)
+            # Entropy-Based Acquisition Function (EBAF)
+            entropy = -0.5 * np.log(2 * np.pi * np.e * stds**2)
 
-        if save_af:
-            np.savetxt(directory_path + '/' + af +
-                    's_' + str(id) + '.out', entropy)
+            if save_af:
+                np.savetxt(directory_path + '/' + af +
+                        's_' + str(id) + '.out', entropy)
 
-        return entropy
+            return entropy
 
 
     # Iterative algorithm
