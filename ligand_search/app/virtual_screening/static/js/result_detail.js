@@ -1,8 +1,13 @@
 $(document).ready(function() {
-    console.log(receptorFile)
-    console.log(ligandFile)
-    let element = document.querySelector('#visualization');
-    let config = {  };
+    let element = document.querySelector('#visualization')
+    let root = document.querySelector(':root')
+    let rootStyles = getComputedStyle(root)
+    let backgroundColor = rootStyles.getPropertyValue('--background')
+
+    let config = { 
+        'id': 'visual_canvas',
+        'backgroundColor': backgroundColor,
+    };
     let viewer = $3Dmol.createViewer( element, config );
     jQuery.ajax( receptorFile, { 
         success: function(data) {
@@ -40,12 +45,17 @@ $(document).ready(function() {
     )
 
     $('#info_icon').click(function() {
-        $('.visual-info').toggle()
+        $('.visual-info:not(:first-child)').toggle()
         
         var txt = $(this).text()
         if (txt == "subtitles")
             $(this).text('subtitles_off')
         else
             $(this).text('subtitles')
+    })
+
+    $('#color_mode').click(function() {   
+        backgroundColor = rootStyles.getPropertyValue('--background')
+        viewer.setBackgroundColor(backgroundColor)
     })
 })
