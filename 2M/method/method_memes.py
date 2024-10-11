@@ -126,6 +126,7 @@ if __name__ == "__main__":
         f.write("n_cluster: "+str(n_cluster)+"\n")
         f.write("initial:	"+str(initial)+"\n")
         f.write("periter:	"+str(periter)+"\n")
+        f.write("iters: "+str(iters)+"\n")
         f.write("capital:   "+str(capital)+"\n")
         f.write("total count:   "+str(total_count)+"\n")
         f.write("eps:	"+str(eps)+"\n")
@@ -220,17 +221,17 @@ if __name__ == "__main__":
             self.eps = eps
             self.beta = beta
 
-            if af == "pi":
+            if af.lower() == "pi":
                 self.compute_af = self.compute_pi
-            elif af == "ucb":
+            elif af.lower() == "ucb":
                 self.compute_af = self.compute_ucb
-            elif af == "random":
+            elif af.lower() == "random":
                 self.compute_af = self.compute_random
-            elif af == "greedy":
+            elif af.lower() == "greedy":
                 self.compute_af = self.compute_greedy
-            elif af == "ebaf":
+            elif af.lower() == "ebaf":
                 self.compute_af = self.compute_ebaf
-            elif af == "haf":
+            elif af.lower() == "haf":
                 self.compute_af = self.compute_haf
             else:
                 self.compute_af = self.compute_ei
