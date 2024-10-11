@@ -549,7 +549,9 @@ if __name__ == "__main__":
     predicts = np.array([])
     gp.model.eval()
     gp.likelihood.eval()
-    for i in tqdm.tqdm(range(0,len(features),1000)):
+    pbar = tqdm.tqdm(range(0,len(features),1000))
+    pbar.set_description('??')
+    for i in pbar:
         pred_features = features[i:i+1000]
         pred_features = torch.FloatTensor(pred_features).to(device)
         with torch.no_grad(), gpytorch.settings.fast_pred_var():
