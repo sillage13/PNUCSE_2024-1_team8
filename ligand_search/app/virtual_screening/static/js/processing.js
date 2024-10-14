@@ -83,6 +83,8 @@ $(document).ready(function () {
                     setTimeout(checkStatus, 1000)
                 }
                 else {
+                    let url = "/result-detail/" + String(data.result_id)
+                    $('.btn_div a').attr("href", url)
                     $('.btn_div').show()
                 }
                 // resultsDiv.html(data.result.replace("\r", "<br>"));

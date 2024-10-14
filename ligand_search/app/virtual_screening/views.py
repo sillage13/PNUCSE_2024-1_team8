@@ -312,6 +312,13 @@ def results_list(request):
 
 def result_detail(request, result_id):
     result = get_object_or_404(Result, id=result_id)
+    ligand_id = request.GET.get("ligand", result.ligand_1.id)
+    ligand = get_object_or_404(Ligand, id=ligand_id)
+
+    # receptor_path = result.result_directory
+    # ligand_path = result.result_directory
+    receptor_path = "/screening/result/test/4UNN.pdb"
+    ligand_path = "/screening/result/test/output.xyz"
 
     ligands_scores = [
         {'ligand': result.ligand_1, 'score': result.score_1},
@@ -329,5 +336,7 @@ def result_detail(request, result_id):
     return render(request, 'result_detail.html', {
         'result': result,
         'ligands_scores': ligands_scores,
-        'ligand': result.ligand_1,
+        'ligand': ligand,
+        'receptor_path': receptor_path,
+        'ligand_path': ligand_path,
     })
