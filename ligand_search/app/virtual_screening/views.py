@@ -312,6 +312,9 @@ def results_list(request):
 
 def result_detail(request, result_id):
     result = get_object_or_404(Result, id=result_id)
+    if result.status == "failed":
+        return redirect("results-list")
+
     ligand_id = request.GET.get("ligand", result.ligand_1.id)
     ligand = get_object_or_404(Ligand, id=ligand_id)
 
