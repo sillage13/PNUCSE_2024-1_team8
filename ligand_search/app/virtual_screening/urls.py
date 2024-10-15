@@ -14,4 +14,5 @@ urlpatterns = [
     path('perform-task/', views.performTask, name='perform-task'),
     path('get-task-status/', views.getTaskStatus, name='get-task-status'),
     path('manage-ligand/import-from-db/', views.import_from_db, name='import-from-db'),
+    path('visualization', views.visualization, name='visualization')
 ] + static(settings.RESULT_DIR.as_posix(), document_root=settings.RESULT_DIR.as_posix())

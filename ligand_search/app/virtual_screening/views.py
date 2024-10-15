@@ -12,7 +12,11 @@ import shutil
 import datetime
 import os
 import json
+import sys
 
+sys.path.append("/screening/method")
+
+from utils import save_output_xyz, save_receptor_pdb
 
 # Create your views here.
 taskOutputs = []
@@ -318,11 +322,6 @@ def result_detail(request, result_id):
     ligand_id = request.GET.get("ligand", result.ligand_1.id)
     ligand = get_object_or_404(Ligand, id=ligand_id)
 
-    # receptor_path = result.result_directory
-    # ligand_path = result.result_directory
-    receptor_path = "/screening/result/test/4UNN.pdb"
-    ligand_path = "/screening/result/test/output.xyz"
-
     ligands_scores = [
         {'ligand': result.ligand_1, 'score': result.score_1},
         {'ligand': result.ligand_2, 'score': result.score_2},
@@ -339,7 +338,23 @@ def result_detail(request, result_id):
     return render(request, 'result_detail.html', {
         'result': result,
         'ligands_scores': ligands_scores,
-        'ligand': ligand,
-        'receptor_path': receptor_path,
-        'ligand_path': ligand_path,
+        'ligand': ligand
     })
+
+def visualization(request):
+    data = json.loads(request.body)
+    smiles = data.get('smiles')
+    ligand_id = data.get('id')
+    receptor = data.get('receptor')
+    result_dir = data.get('result_dir')
+
+    receptor_path = os.path.join(result_dir, "receptor.pdb")
+    ligand_path = os.path.join(result_dir, f"output{ligand_id}.xyz")
+
+    if not os.path.isfile(ligand_path):
+        save_output_xyz(smiles, ligand_id, receptor, result_dir)
+
+    if not os.path.isfile(receptor_path):
+        save_receptor_pdb(receptor, result_dir)
+
+    return JsonResponse({'receptor_path': receptor_path, 'ligand_path': ligand_path})

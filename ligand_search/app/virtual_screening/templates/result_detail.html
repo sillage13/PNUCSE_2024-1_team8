@@ -3,13 +3,16 @@
 {% block head %}
     <script src="https://3Dmol.org/build/3Dmol-min.js"></script>
     <script>
-        let receptorFile = "{{ receptor_path }}"
-        let ligandFile = "{{ ligand_path }}"
+        let ligand_smile = "{{ ligand.ligand_smile }}"
+        let ligand_id = "{{ ligand.id }}"
+        let receptor_name = "{{ result.receptor_name }}"
+        let result_directory = "{{ result.result_directory }}"
     </script>
     {% load static %}
     <script src="{% static 'js/result_detail.js' %}"></script>
     <link rel="stylesheet" href="{% static 'css/result_detail.css' %}">
     <link rel="stylesheet" href="{% static 'css/flow.css' %}">
+    <link rel="stylesheet" href="{% static 'css/loading.css' %}">
 {% endblock head %}
 
 {% block content %}
@@ -23,6 +26,15 @@
                 {% endif %}
             </div>
             <div id="visualization"></div>
+            <div class="sk-center">
+                <div class="sk-fold">
+                    <div class="sk-fold-cube"></div>
+                    <div class="sk-fold-cube"></div>
+                    <div class="sk-fold-cube"></div>
+                    <div class="sk-fold-cube"></div>
+                </div>
+                <div>Generating a file&hellip;</div>
+            </div>
         </div> 
         <div class="result">
             <div class="category">Top10 Ligands</div>
