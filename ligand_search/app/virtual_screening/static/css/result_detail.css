@@ -101,6 +101,10 @@
     flex: 1;
 }
 
+.result_ul .selected > div:nth-child(1) {
+    border: 2px solid var(--green);
+}
+
 .result_ul > li .material-symbols-outlined {
     font-size: 20px;
     color: var(--on-green);
