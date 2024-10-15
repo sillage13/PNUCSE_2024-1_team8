@@ -3,6 +3,7 @@ from vina import Vina
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from openbabel import pybel
+import os
 
 
 def save_data(target, filename):
@@ -80,20 +81,31 @@ def cal_score(smile, receptor):
     
     return energy[0] 
 
-def wp(smile, receptor):
+def save_output_xyz(smile, ligandID, receptor, dirPath):
     try:
         ligand = smiles_to_pdbqt(smile)
         v = Vina(sf_name='vina')
-        v.set_receptor(receptor)
+        v.set_receptor(os.path.join(dirPath, receptor))
         v.set_ligand_from_string(ligand)
 
         center_x, center_y, center_z = calculate_center_of_mass(ligand)
         v.compute_vina_maps(center=[center_x, center_y, center_z], box_size=[60, 60, 60])
 
         v.dock(exhaustiveness=32, n_poses=10)
-        v.write_poses("output.pdbqt", 10)
+        pose = v.poses(n_poses=1)
+
+        mol = pybel.readstring("pdbqt", pose)
+        mol.write("xyz", os.path.join(dirPath, f"output{ligandID}.xyz"), overwrite=True)
     
     except Exception as e:
         print(f"Error processing {smile}: {e}")
         return None
     
+def save_receptor_pdb(receptor, dirPath):
+    try:
+        mol = next(pybel.readfile("pdbqt", os.path.join(dirPath, receptor)))
+        mol.write("pdb", os.path.join(dirPath, "receptor.pdb"), overwrite=True)
+
+    except Exception as e:
+        print(f"Error processing {receptor}: {e}")
+        return None
