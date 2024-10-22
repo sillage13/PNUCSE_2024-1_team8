@@ -28,14 +28,18 @@ def cluster_fingerprints(fingerprints, n_clusters, batch_size=10000, random_stat
     kmeans.partial_fit(initial_batch)
 
     # 나머지 데이터에 대해 부분 피팅
-    for start in tqdm(range(batch_size, n_samples, batch_size)):
+    pbar = tqdm(range(batch_size, n_samples, batch_size))
+    pbar.set_description("?? ")
+    for start in pbar:
         end = min(start + batch_size, n_samples)
         batch = fingerprints[indices[start:end]]
         kmeans.partial_fit(batch)
 
     # 최종 예측
     labels = np.zeros(n_samples, dtype=int)
-    for start in tqdm(range(0, n_samples, batch_size)):
+    pbar = tqdm(range(0, n_samples, batch_size))
+    pbar.set_description("?? ")
+    for start in pbar:
         end = min(start + batch_size, n_samples)
         batch = fingerprints[start:end]
         labels[start:end] = kmeans.predict(batch)
