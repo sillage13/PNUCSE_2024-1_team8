@@ -67,8 +67,6 @@ def assign_cluster_scores(smile_list, score_dict, cluster_indices):
                     docking_result.append((score, smile))
                     cluster_scores[cluster] = score
 
-    print(selected_smiles)
-
     return cluster_scores, cluster_smiles, selected_smiles
 
 
