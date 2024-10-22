@@ -7,9 +7,11 @@ matplotlib==3.9.1
 pillow==10.4.0
 rdkit==2024.3.3
 scikit-learn==1.5.1
-scipy==1.14.0
+scipy==1.13.1
 pandas==2.2.2
 torch==2.4.0
 gpytorch==1.12
 tqdm==4.66.4
 vina==1.2.5
+gensim==4.3.3
+mol2vec==0.2.2

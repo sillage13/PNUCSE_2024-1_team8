@@ -16,10 +16,53 @@ import sys
 
 sys.path.append("/screening/method")
 
-from utils import save_output_xyz, save_receptor_pdb
+from utils import save_output_xyz, save_receptor_pdb, smiles_to_fingerprint, smiles_to_mol2vec
 
 # Create your views here.
 taskOutputs = []
+
+def performCluster(request):
+    global taskOutputs
+    taskOutputs.clear()
+    
+    def run_script():
+        global taskOutputs
+        
+        try:
+            cmd = [
+                'python',
+                '/screening/method/make_cluster.py',
+            ]
+
+            process = subprocess.Popen(
+                cmd,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.STDOUT,
+                universal_newlines=True,
+                bufsize=1
+            )
+
+            # Read the output line by line
+            for line in process.stdout:
+                # Append the line to the task output
+                taskOutputs.append(line)
+
+            # process.stdout.close()
+            process.wait()
+        except Exception as e:
+            taskOutputs.append(f"Error: {str(e)}")
+        finally:
+            taskOutputs.append("Processing complete")
+            print("complete")
+            
+    thread = threading.Thread(target=run_script)
+    thread.start()
+
+    return JsonResponse({'status': 'started'})
+
+
+def makeCluster(request):
+    return render(request, 'make_cluster.html')
 
 
 def performTask(request):
@@ -77,7 +120,6 @@ def performTask(request):
                 ]
             elif method == 'MEMES':
                 scriptPath = '/screening/method/method_memes.py'
-                # todo
                 feature = request.session.get('representation')
                 acquisition_func = request.session.get('af')
                 featuresPath = '/screening/data/demo/features.pkl' if feature == "Mol2vec" else '/screening/data/demo/fingerprints.dat'
@@ -286,13 +328,23 @@ def manageLigand(request):
             error_message = "Please enter ligand information."
             return render(request, 'manage_ligand.html', {'error_message': error_message, 'page_obj': page_obj})
         
-        #TODO 올바른 리간드 체크
+        # Test if the SMILES string is valid
+        try:
+            fp = smiles_to_fingerprint(ligand_smile)
+            mv = smiles_to_mol2vec(ligand_smile)
+        except Exception as e:
+            error_message = "Please enter a valid SMILES string."
+            return render(request, 'manage_ligand.html', {'error_message': error_message, 'page_obj': page_obj})
+        
+        if fp is None or mv is None:
+            error_message = "Please enter a valid SMILES string."
+            return render(request, 'manage_ligand.html', {'error_message': error_message, 'page_obj': page_obj})
 
         if Ligand.objects.filter(ligand_smile=ligand_smile).exists():
             error_message = 'Ligand already exists.'
             return render(request, 'manage_ligand.html', {'error_message': error_message, 'page_obj': page_obj})
 
-        ligand = Ligand(ligand_smile=ligand_smile)
+        ligand = Ligand(ligand_smile=ligand_smile, fingerprint=fp.tobytes(), mol2vec=mv.tobytes())
         ligand.save()
 
         return redirect('manage-ligand')

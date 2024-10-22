@@ -31,7 +31,7 @@ if __name__ == "__main__":
         all_smiles = list(Ligand.objects.values_list('ligand_smile', flat=True))
 
     if feature == 'Mol2vec':
-        model = word2vec.Word2Vec.load("/screenong/data/model_300dim.pkl")
+        model = word2vec.Word2Vec.load("/screening/data/model_300dim.pkl")
 
         for i, smiles in enumerate(all_smiles):
             mol = Chem.MolFromSmiles(smiles)

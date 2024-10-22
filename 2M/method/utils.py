@@ -1,8 +1,11 @@
 import pickle
+import numpy as np
 from vina import Vina
 from rdkit import Chem
 from rdkit.Chem import AllChem
 from openbabel import pybel
+from mol2vec.features import mol2alt_sentence, MolSentence, DfVec
+from gensim.models import word2vec
 import os
 
 
@@ -38,7 +41,43 @@ def smiles_to_pdbqt(smiles):
 def smiles_to_fingerprint(smiles):
     fpGenerator = Chem.rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=1024, countSimulation=False)
     
-    return fpGenerator.GetFingerprint(Chem.MolFromSmiles(smiles)).ToBitString()
+    fp = fpGenerator.GetFingerprint(Chem.MolFromSmiles(smiles))
+    
+    fp_array = np.array(list(fp.ToBitString()), dtype = 'int8')
+    
+    return fp_array
+
+
+def sentences2vec(sentences, model, unseen=None):
+    keys = set(model.wv.key_to_index.keys())
+    vec = []
+
+    if unseen:
+        unseen_vec = model.wv.word_vec(unseen)
+    
+    for sentence in sentences:
+        if unseen:
+            vec.append(sum([model.wv.word_vec(y) if y in set(sentence) & keys
+                        else unseen_vec for y in sentence]))
+        else:
+            vec.append(sum([model.wv.word_vec(y) for y in sentence 
+                            if y in set(sentence) & keys]))
+    
+    return vec
+
+def smiles_to_mol2vec(smiles):
+    model = word2vec.Word2Vec.load("/screening/data/model_300dim.pkl")
+    
+    mol = Chem.MolFromSmiles(smiles)
+    sentence = MolSentence(mol2alt_sentence(mol, 1))
+    del mol
+
+    vec = sentences2vec([sentence], model, unseen="UNK")
+    del sentence
+    vec = DfVec(vec[0]).vec
+    vec = vec.astype(np.float16)
+    
+    return vec
 
 
 def calculate_center_of_mass(pdbqt_file):

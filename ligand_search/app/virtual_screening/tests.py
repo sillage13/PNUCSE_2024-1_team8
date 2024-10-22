@@ -33,3 +33,12 @@ from django.test import TestCase
 # class LigandModelTest(TestCase):
 #     def test_create_ligand(self):
 #         smiles = 
+
+from virtual_screening.models import Ligand
+class LigandModelPrintTest(TestCase):
+    def test_print(self):
+        from virtual_screening.models import Ligand
+        ligands = list(Ligand.objects.values_list('ligand_smile', flat=True))
+        
+        print(ligands[0])
+        print("asdfqwerzxcv")

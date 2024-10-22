@@ -14,7 +14,7 @@
     </div>
 
     <div class="add_btn_div">
-        <form action="{% url 'import-from-db' %}" method="post">
+        <form action="{% url 'import-from-db' %}" method="POST">
             {% csrf_token %}
             <button type="submit" id="addFromDB" class="add_btn">Add Ligand From Pre-Made Database</button>
         </form>
@@ -38,6 +38,14 @@
             <li class="submit_li"><input class="submit_btn" type="submit" value="Add"></li>
         </ul>
     </form>
+
+    <div class="add_btn_div">
+        <form action="{% url 'make-cluster' %}" method="POST">
+            {% csrf_token %}
+            <button type="submit" id="makeClusterFiles" class="add_btn">Make Cluster Files</button>
+        </form>
+        <span class="material-symbols-outlined">database</span>
+    </div>
 </div>
 
 <div class="content">

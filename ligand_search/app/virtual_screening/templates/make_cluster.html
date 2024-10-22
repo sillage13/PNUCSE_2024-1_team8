@@ -1,0 +1,17 @@
+<!-- processing.html -->
+
+{% extends "base.html" %}
+
+{% block head %}
+    {% load static %}
+    <script src="{% static 'js/make_cluster.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'css/make_cluster.css' %}">
+{% endblock head %}
+
+{% block content %}
+<div class="content">
+  <div id="results"></div>
+  <div class="btn_div"><a href="{% url 'manage-ligand' %}"><button>Return</button></a></div>
+</div>
+
+{% endblock content %}

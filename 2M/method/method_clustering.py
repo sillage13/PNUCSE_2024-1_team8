@@ -1,5 +1,6 @@
 import os
 import sys
+import numpy as np
 import django
 import argparse
 import random
@@ -14,11 +15,6 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "virtual_screening.settings")
 django.setup()
 
 from virtual_screening.models import Ligand
-
-# labels{n}.txt에서 클러스터 인덱스를 로드하는 함수
-def load_cluster_indices(filename):
-    with open(filename, 'r') as f:
-        return [int(line.strip()) for line in f]
 
 # 각 클러스터에서 2개의 무작위 SMILES에 대한 평균 점수를 계산하는 함수
 def assign_cluster_scores(smile_list, score_dict, cluster_indices):
@@ -67,6 +63,8 @@ def assign_cluster_scores(smile_list, score_dict, cluster_indices):
                     docking_result.append((cluster_scores[cluster], smiles[0]))
                 else:
                     cluster_scores[cluster] = 0
+                    
+    print(selected_smiles)
 
     return cluster_scores, cluster_smiles, list(selected_smiles)
 
@@ -141,6 +139,7 @@ if __name__ == "__main__":
     
     start_time = time.time()
 
+    exist_cluster = [500, 1000, 2000, 4000, 8000]
 
     if is_demo:
         if count >= 2104318:
@@ -148,17 +147,22 @@ if __name__ == "__main__":
             exit(1)
         score_dict = load_data("/screening/data/demo/smile_score_dict.dat")
         smile_list = load_data("/screening/data/demo/smile_list.dat")
-        exist_cluster = [500, 1000, 2000, 4000, 8000]
         selected_cluster = min(exist_cluster, key=lambda x: abs(x - count/4))
-        cluster_indices = load_cluster_indices(f"/screening/data/demo/labels{selected_cluster}.txt")
+        cluster_indices = np.loadtxt(f"/screening/data/demo/labels{selected_cluster}.txt")
 
     else:
+        score_dict = dict()
         smile_list = list(Ligand.objects.values_list('ligand_smile', flat=True))
-        #TODO 데이터 연결
-        # 클러스터 파일 선택
-        # 
+        selected_cluster = min(exist_cluster, key=lambda x: abs(x - count/4))
+        cluster_indices = np.loadtxt(f"/screening/data/labels{selected_cluster}.txt")
     
-
+    if len(smile_list) != len(cluster_indices):
+        print(
+            "Number of labels does not match number of ligands. "
+            "Please create cluster files from the Manage Ligand page and try again."
+        )
+        exit(1)
+    
     docking_result = list()
 
     # 클러스터 별로 2개의 SMILES를 선택하고 초기 점수를 할당
