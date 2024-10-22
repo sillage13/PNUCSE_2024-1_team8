@@ -52,6 +52,7 @@ input[type=file], select {
     background-color: var(--background);
     display: none;
     z-index: 3;
+    padding-bottom: 30px;
 }
 
 .select_ul > li {
@@ -92,6 +93,7 @@ input[type=file], select {
 }
 
 .form_ul > .submit_li {
+    margin-top: 10px;
     justify-content: right;
     z-index: 0;
 }
