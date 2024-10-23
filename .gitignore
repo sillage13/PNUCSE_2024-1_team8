@@ -326,6 +326,6 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,visualstudiocode,python,django
 *:Zone.Identifier
 
-2M/data/*
-2M/data.zip
+# 2M/data/*
+2M/data.zips
 2M/result/*
