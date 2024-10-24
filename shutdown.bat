@@ -1,2 +1,2 @@
-cd ligand_search
+cd 08\ligand_search
 docker-compose down

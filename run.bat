@@ -1,5 +1,5 @@
 @echo off
-cd ligand_search
+cd 08\ligand_search
 
 :: Start Docker Compose
 docker-compose up -d
